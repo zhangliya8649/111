@@ -21,19 +21,19 @@
                 <input type='password' placeholder='密码'>
                 <div class='pwd-eye-icon'></div>
               </div>
-              <div class='code'>
+              <div class='form-list code'>
                 <input type='text' placeholder='请输入您看到的验证码'>
-                <div class='img-code'></div>
+                <div class='img-code'>3424</div>
                 <div class='get-code'>看不清？换一张</div>
               </div>
               <div class='form-list login'>
                 登录
               </div>
-              <div class='register'>
+              <div class='form-list register'>
                 没有账号？
                 <router-link to='/register' class='register-btn'>去注册！</router-link>
               </div>
-              <div class='other-login clear'>
+              <div class='form-list other-login clear'>
                 <div class='spap-login'>
                   <div class='spap-icon'></div>
                   司派授权登录
@@ -54,9 +54,6 @@
   export default {
     name: 'login',
     components: {
-
-    },
-    data() {
 
     },
     methods: {
@@ -86,8 +83,6 @@
       left: 50%;
       width: 520px;
       height: 520px;
-      padding-left: 50px;
-      padding-right: 50px;
       padding-top: 42px;
       margin-left: -260px;
       background: #fff;
@@ -99,44 +94,53 @@
         color: #F58523;
       }
       .form {
+        padding-left: 50px;
+        padding-right: 50px;
         > div {
           margin-bottom: 19px;
         }
         .form-list {
           width: 420px;
           height: 45px;
+          margin-right: auto;
+          margin-left: auto;
+          background-color: #F8F9FC;
           line-height: 45px;
           border-radius: 2px;
           .icon {
+            float: left;
             width: 50px;
             height: 45px;
             background-repeat: no-repeat;
             background-position: center;
-            .user-icon {
+            &.user-icon {
               background-image: url('../../assets/login/user-icon.jpg');
             }
-            .pwd-icon {
+            &.pwd-icon {
               background-image: url('../../assets/login/pwd-icon.jpg')
             }
           }
           input {
             width: 300px;
             height: 45px;
+            background-color: #F8F9FC;
             font-size: 14px;
             color: #CCCCCC;
+            outline: none;
           }
         }
         .user {
-          background: rgba(0,0,0,0.40);
+
         }
         .pwd {
-          background: rgba(0,0,0,0.40);
           .pwd-eye-icon {
+            float: right;
             width: 50px;
             height: 45px;
             background-repeat: no-repeat;
             background-position: center;
             background-image: url('../../assets/login/eye.png');
+            cursor: pointer;
             &.open {
               background-image: url('../../assets/login/eye-open.png');
             }
@@ -147,11 +151,37 @@
           text-align: center;
           font-size: 14px;
           color: #FFFFFF;
+          cursor: pointer;
+        }
+        .code {
+          background: transparent;
+          input, div {
+            float: left;
+            font-size: 14px;
+          }
+          input {
+            padding-left: 20px;
+            width: 180px;
+            margin-right: 10px;
+          }
+          .img-code {
+            width: 90px;
+            margin-right: 10px;
+            background-color: #F8F9FC;
+          }
+          .get-code {
+            width: 100px;
+            height: 45px;
+            line-height: 45px;
+            color: #26242A;
+            cursor: pointer;
+          }
         }
         .register {
           height: 20px;
           line-height: 20px;
           margin-bottom: 48px;
+          background: transparent;
           font-size: 14px;
           color: #26242A;
           .register-btn {
@@ -159,6 +189,7 @@
           }
         }
         .other-login {
+          background: transparent;
           > div {
             float: left;
             box-sizing: border-box;
@@ -167,9 +198,11 @@
             border-radius: 100px;
             line-height: 42px;
             font-size: 14px;
+            cursor: pointer;
             > div {
+              float: left;
               width: 50px;
-              height: 45px;
+              height: 42px;
               background-repeat: no-repeat;
               background-position: center;
             }
@@ -177,16 +210,16 @@
           .spap-login {
             border: 1px solid #4393F9;
             margin-right: 40px;
+            color: #4393F9;
             .spap-icon {
               background-image: url('../../assets/login/spap.png');
-              color: #4393F9;
             }
           }
           .phone-login {
             border: 1px solid #F58523;
+            color: #F58523;
             .phone-icon {
               background-image: url('../../assets/login/phone.png');
-              color: #F58523;
             }
           }
         }
