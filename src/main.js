@@ -3,16 +3,20 @@
 import Vue from 'vue'
 import router from './router'
 import App from './App'
-// import Header from '@/components/header/header'
-// import Footer from '@/components/footer/footer'
+import Action from './request/Action.js'
+import Http from './request/http.js'
+
 
 Vue.config.productionTip = false
+
+Vue.prototype.Http = Http
+Vue.prototype.Action = Action
+
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
-  // components: {App, Header, Footer},
   components: {App},
   template: '<App/>'
 })

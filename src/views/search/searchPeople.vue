@@ -47,8 +47,13 @@
 <script>
   export default {
     name: 'searchPeople',
-    components: {
-
+    mounted: function() {
+      let param = {searchName: 'dasd',tags: 1,pageNum: 1};
+      this.Http.post(this.Action.SearchList, param, (data) => {
+        console.log(data);
+      }, (err) => {
+        console.log(err);
+      })
     },
     methods: {
 
