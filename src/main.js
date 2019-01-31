@@ -3,9 +3,10 @@
 import Vue from 'vue'
 import router from './router'
 import App from './App'
-// import Header from '@/components/header/header'
-// import Footer from '@/components/footer/footer'
+import ElementUI from'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 
+Vue.use(ElementUI)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

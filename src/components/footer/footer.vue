@@ -29,7 +29,7 @@
 
 <style lang='less' scoped>
   .footer {
-    width: 1920px;
+    width: 100%;
     height: 172px;
     box-sizing: border-box;
     padding-top: 43px;

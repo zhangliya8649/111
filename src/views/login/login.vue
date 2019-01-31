@@ -26,7 +26,7 @@
                 <div class='img-code'>3424</div>
                 <div class='get-code'>看不清？换一张</div>
               </div>
-              <div class='form-list login'>
+              <div class='form-list login' @click="login">
                 登录
               </div>
               <div class='form-list register'>
@@ -57,7 +57,9 @@
 
     },
     methods: {
-
+      login(){
+        this.$router.push({path:'Personal'})
+      }
     }
   }
 </script>

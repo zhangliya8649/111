@@ -34,7 +34,7 @@
 
 <style lang='less' scoped>
   .header {
-    width: 1920px;
+    width: 100%;
     height: 56px;
     line-height: 56px;
     background: rgb(51, 51, 51);

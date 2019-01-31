@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '../views/home/home.vue'
 import Login from '../views/login/login.vue'
+import Personal from '../views/personal/personal.vue'
+import MakeSure from '../views/personal/makeSureInfo/makeSureInfo.vue'
 
 Vue.use(Router)
 export default new Router({
@@ -15,7 +17,17 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
-    }
+    },
+    {
+      path: '/Personal',
+      name: 'Personal',
+      component: Personal
+    },
+    {
+      path: '/MakeSure',
+      name: 'MakeSure',
+      component: MakeSure
+    },
   ],
   mode: 'history'
 })
