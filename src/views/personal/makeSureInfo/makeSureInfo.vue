@@ -8,39 +8,48 @@
                 </div>
                 <div class="search-box">
                     <div class="search">
-                        <el-input class="input" v-model="input" placeholder="请输入内容">
                             <i slot="prefix" class="el-input__icon el-icon-search"></i>
-                        </el-input>
-                        <el-button class="search-btn">搜索</el-button>
+                            <input type="text" class="input" placeholder="请输入影视人名称">
+                            <el-button class="search-btn">搜索</el-button>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="makeSure-content w1180">
+            <Actor v-if="this.active == 0 ||this.active == 1"></Actor>
+            <CompanyMan v-if="this.active == 2 ||this.active == 3"></CompanyMan>
+            <Outer v-if="this.active == 4"></Outer>
+        </div>
     </div>
 </template>
 <script>
+import Actor from './actor/actor'
+import CompanyMan from './CompanyMan/CompanyMan'
+import Outer from './outer/outer'
 export default {
+    components:{Actor,CompanyMan,Outer},
     data(){
         return{
             active:0,//初始化选中按钮
-            tabs:[
-                {name:'影视人'},
+            tabs:[          //切换菜单
+                {name:'影视人'},    
                 {name:'演艺人'},
                 {name:'影视公司负责人'},
-                 {name:'演艺公负责人'},
+                 {name:'演艺公司负责人'},
                 {name:'非业内人士'}
             ]
         }
     },
     methods:{
-         tabMenu(index){
+        tabMenu(index){
             this.active = index;
-        },
+        }
     }
 }
 </script>
 <style lang="less" scoped>
     .makeSureInfo{
+        height: 1200px;
         .makeSureInfoHeader{
                 background-color: #FAF8F7;
                 height: 200px;  
@@ -69,16 +78,25 @@ export default {
                     }
                 }
                 .search-box{
-                    width: 692px;
+                    width: 840px;
                     height: 56px;
                     .search{
+                        height: 100%;
+                        width: 100%;
+                        background-color: #fff;
+                        display: flex;
+                        justify-content: space-between;
+                        .el-icon-search{
+                            height: 100%;
+                            width: 56px;
+                            font-size: 21px;
+                            color: #000;
+                        }
                         .input{
-                            .el-input__inner{
-                                border: none!important;
-                                border-radius: 0!important;
-                                outline: none!important;
-                                height: 56px;
-                            }
+                            outline: none;
+                            border: none;
+                            height: 100%;
+                            width: 100%;
                         }
                         .search-btn{
                             height: 56px;

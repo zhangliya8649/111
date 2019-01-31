@@ -189,6 +189,7 @@
     </div>
 </template>
 <script>
+let works = require('../../../assets/img/video.png')
 import Works from './works/works'
 import Dialog from './dialog/dialog'
 export default {
@@ -233,7 +234,7 @@ export default {
             //表格数据
             tableData1: [{
                 date: '2016-05-02',
-                name: '王小虎',
+                name: '王小虎1',
                 address: '上海市普陀区金沙江路 1518 弄'
             }, {
                 date: '2016-05-04',
@@ -267,12 +268,12 @@ export default {
             }],
             //作品展示
             worksData:[
-                {src:'../../../../../static/video.png',name:'来电狂想',time:'2018.12.30',des:''},
-                {src:'../../../../../static/video.png',name:'来电狂想',time:'2018.12.30',des:''},
-                {src:'../../../../../static/video.png',name:'来电狂想',time:'2018.12.30',des:''},
-                {src:'../../../../../static/video.png',name:'来电狂想',time:'2018.12.30',des:''},
-                {src:'../../../../../static/video.png',name:'来电狂想',time:'2018.12.30',des:''},
-                {src:'../../../../../static/video.png',name:'来电狂想',time:'2018.12.30',des:''}
+                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
+                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
+                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
+                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
+                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
+                {src:works,name:'来电狂想',time:'2018.12.30',des:''}
                 ],
                 //密码表单
              ruleForm: {
