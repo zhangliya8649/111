@@ -47,7 +47,7 @@
             </li>
             <li class=''>
               <p class='num'><span>2000</span>+</p>
-              <p class='name'>较短的文案说明</p>
+              <p class='name'>奖惩信息</p>
             </li>
          </ul>
       </div>
