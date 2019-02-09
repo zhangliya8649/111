@@ -92,12 +92,14 @@
 <style lang='less' scoped>
   .bg {
     position: relative;
-    width: 1920px;
+    width: 100%;
     height: 724px;
     background-image: url('../../assets/home/yxc-bg.png');
     background-repeat: no-repeat;
-    overflow: hidden;
+    background-position: top center;
+    background-size: 1920px 724px;
     .bg-par {
+      width: 1200px;
       img {
         display: block;
       }
