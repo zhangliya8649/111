@@ -1,24 +1,24 @@
 <template>
   <div>
-    <div class='search-par'>
+    <div class='search-par' :data-id='list.id'>
       <div class='search-people clear w1180'>
         <div class='img'>
-          <router-link to=''><img src='' /></router-link>
+          <router-link to=''><img :src='list.celebrityHeadUrl' /></router-link>
         </div>
         <div class='desc'>
           <div class='tit'>
-              佟大为
+              {{list.celebrityName}}
               <router-link to='' class='operator'>未认证</router-link>
           </div>
           <div class='con'>
             <div class='list'>
-              职业: 演员/配音
+              职业: 演员/配音 {{list.occupation}}
             </div>
             <div class='list'>
-              职业证书:
+              职业证书: {{list.certificate}}
             </div>
             <div class='list'>
-              所属机构:
+              所属机构: {{list.agency}}
             </div>
             <div class='role clear'>
               <div class='role-list'>影视人</div>
@@ -27,15 +27,15 @@
           </div>
         </div>
         <div class='jc-list credit'>
-          <div class='num'>B</div>
+          <div class='num'>{{list.rating}}</div>
           <div class='icon-txt'>信用等级</div>
         </div>
         <div class='jc-list honor'>
-          <div class='num'>5</div>
+          <div class='num'>5{{list.commendCount}}</div>
           <div class='icon-txt'>荣誉</div>
         </div>
         <div class='jc-list no-honor'>
-          <div class='num'>0</div>
+          <div class='num'>0{{list.loseCreditCount}}</div>
           <div class='icon-txt'>失信信息</div>
         </div>
       </div>
@@ -47,14 +47,13 @@
 <script>
   export default {
     name: 'searchPeople',
+
+    props: ['list'],
+
     mounted: function() {
-      let param = {searchName: 'dasd',tags: 1,pageNum: 1};
-      this.Http.post(this.Action.SearchList, param, (data) => {
-        console.log(data);
-      }, (err) => {
-        console.log(err);
-      })
+
     },
+
     methods: {
 
     }
@@ -63,8 +62,6 @@
 
 <style lang='less' scoped>
   .search-par {
-    padding-top: 20px;
-    padding-bottom: 20px;
     .search-people {
         box-sizing: border-box;
         height: 246px;

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for='(item, index) in listData' :key='index'>
-       <search-company v-bind:list='item'></search-company>
+       <search-people v-bind:list='item'></search-people>
     </div>
     <div class='page'>
 
@@ -10,16 +10,26 @@
 </template>
 
 <script>
-  import searchCompany from '../../search/searchCompany.vue'
+  import searchPeople from '../../search/searchPeople.vue'
 
   export default {
-    name: 'movieCompany',
+    name: 'people',
 
-    components: {
-      searchCompany
+    data() {
+      return {
+
+      }
     },
 
     props: ['listData'],
+
+    components: {
+      searchPeople
+    },
+
+    mounted: function() {
+
+    },
 
     methods: {
 
@@ -28,6 +38,5 @@
 </script>
 
 <style lang='less' scoped>
-
 
 </style>
