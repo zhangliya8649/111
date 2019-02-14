@@ -25,8 +25,8 @@ export default {
             //切换按钮
             tabs:[
                 {name:'个人中心'},
-                {name:'我的收藏'},
-                {name:'消息中心'}
+                // {name:'我的收藏'},
+                // {name:'消息中心'}
             ],
         }
     },
@@ -50,6 +50,9 @@ export default {
                         background-color: #F58523;
                         border: #F58523;
                         color: #fff;
+                        height: 40px;
+                        widows: 100px;
+                        border-radius: 0;
                     }
                     .unactive{
                         border: none;

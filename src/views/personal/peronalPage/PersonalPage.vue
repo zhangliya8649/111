@@ -85,22 +85,28 @@
                         <el-form-item label="证书时间：" label-width='90px'>
                             <el-input v-model="basicInfo.certificatetime" placeholder="请选择您的证书时间"></el-input>
                         </el-form-item>
-                        <el-form-item label="代表作品：" label-width='90px'>
+                        <el-row type="flex" class="row-bg" justify="center">
+                            <el-col :span="8">
+                                <el-form-item label="代表作品：" label-width='90px'>
                             <el-input v-model="basicInfo.works" placeholder="请输入您的代表作品"></el-input>
                         </el-form-item>
-                        <el-form-item align='right'>
-                            <el-button @click="editSure">确认</el-button>
-                        </el-form-item>
+                            </el-col>
+                            <el-col :span="8" :offset="8" style="paddingLeft:19.5%">
+                                <el-form-item>
+                                    <el-button class="editInfo" @click="editSure">确认</el-button>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
                     </el-form>
                 </div>
             </div>
             <div class="papel">
                 <div class="btn">
-                    <el-button class="papelBtn">添加经历</el-button>
+                    <el-button class="papelBtn" @click="addExp">添加经历</el-button>
                 </div>
                 <p class="title">从业信息（执业经历）</p>
-                <div class="content">
-                    
+                <div class="content exp">
+                    <TimeLine v-for="(data,index) in msg" :msg='data' :key='index'></TimeLine>
                 </div>
             </div>
             <div class="papel">
@@ -157,8 +163,8 @@
                 </div>
             </div>
             <div class="works">
-                <p class="works-title">作品（与XXX相关的，共有XXX部）</p>
-                <p class="works-title more-works" @click="moreWorks">更多作品<i class="el-icon-d-arrow-right"></i></p>
+                <p class="works-title">作品（与XXX相关的，共有XXX部作品）</p>
+                <p class="works-title more-works" @click="moreWorks">添加作品</p>
                 <div class="works-box">
                     <Works v-for="(data,index) in worksData" :data='data' :key='index'></Works>
                 </div>
@@ -185,6 +191,7 @@
             </div>
             <!-- 弹窗 -->
             <Dialog :showDialog='2' ref='dialog'></Dialog>
+            <ExpDialog ref='expDialog'></ExpDialog>
         </div>
     </div>
 </template>
@@ -192,8 +199,10 @@
 let works = require('../../../assets/img/video.png')
 import Works from './works/works'
 import Dialog from './dialog/dialog'
+import ExpDialog from './expDialog/expDialog'
+import TimeLine from './timeLine/timeLine'
 export default {
-    components:{Works,Dialog},
+    components:{Works,Dialog,ExpDialog,TimeLine},
     data(){
         //写验证规则
         var validateOldPass = (rule, value, callback) => {
@@ -293,6 +302,12 @@ export default {
                     { validator: validateCheckPass, trigger: 'blur' }
                 ]
             },
+            msg:[
+                {time:'2018-02-13',info:'2313421312'},
+                {time:'2018-02-14',info:'2313421312'},
+                {time:'2018-02-15',info:'2313421312'},
+                {time:'2018-02-16',info:'2313421312'},
+            ]
         }
     },
     methods:{
@@ -304,11 +319,14 @@ export default {
         addInfo(num){
             this.$refs.dialog.openDialog(num)
         },
-        editSure(){
+        editSure(){     //确认修改
             this.showBasicInfo = true
         },
-        moreWorks(){
+        moreWorks(){      //更多作品
             this.$router.push({path:'MakeSure'})
+        },
+        addExp(){
+            this.$refs.expDialog.openExp()
         }
     }
 }
@@ -335,7 +353,6 @@ export default {
                 }
                 .title{
                     height: 16px;
-                    width: 100%;
                     margin-left: 38px;
                     border-left: 2px solid #F58523;
                     font-size: 16px;
@@ -356,8 +373,21 @@ export default {
                         margin-top: 25px;
                         color: #333;
                         font-size: 14px;
-                        font-family: PingFangSC-Regular;
+                        font-family: 'PingFangSC-Regular';
                     }
+                    .editInfo{
+                        background-color: #F58523;
+                        border: 1px solid #F58523;
+                        color: #fff;
+                        border-radius: 0;
+                    }
+                }
+                .exp{
+                    display: flex;
+                    justify-content: space-between;
+                    margin-right:45px; 
+                    overflow-x: scroll;
+                    // margin: 144px 45px 184px 38px;
                 }
                 .table{
                     margin-left: 22px;
@@ -367,7 +397,7 @@ export default {
                 .works-title{
                     color: #F58523;
                     font-size: 16px;
-                    font-family: PingFang-SC-Medium;
+                    font-family: 'PingFang-SC-Medium';
 
                 }
                 .more-works{
@@ -387,7 +417,7 @@ export default {
                 height: 293px;
                 margin-bottom: 80px;
                 .title{
-                    font-family: PingFang-SC-Medium;
+                    font-family: 'PingFang-SC-Medium';
                     font-size: 18px;
                     color: #000000;
                     letter-spacing: 0;

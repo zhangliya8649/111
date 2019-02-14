@@ -6,18 +6,19 @@
                     <span>请选择您的身份：</span>
                     <el-button v-for="(tab,index) in tabs" :key='index' :class="active == index ? 'activeBtn' : 'unactive'" @click="tabMenu(index)">{{tab.name}}</el-button>
                 </div>
-                <div class="search-box">
+                <div class="search-box" v-if="this.active != 4">
                     <div class="search">
                             <i slot="prefix" class="el-input__icon el-icon-search"></i>
-                            <input type="text" class="input" placeholder="请输入影视人名称">
+                            <input type="text" class="input" :placeholder="this.active == 0 || this.active == 1 ? actorPlace : companyPlace">
                             <el-button class="search-btn">搜索</el-button>
                     </div>
                 </div>
+                <span v-if="this.active == 2 || this.active == 3" class="findNot" @click="findNot">查询后未找到？</span>
             </div>
         </div>
         <div class="makeSure-content w1180">
             <Actor v-if="this.active == 0 ||this.active == 1"></Actor>
-            <CompanyMan v-if="this.active == 2 ||this.active == 3"></CompanyMan>
+            <CompanyMan v-if="this.active == 2 ||this.active == 3" ref='companyMan'></CompanyMan>
             <Outer v-if="this.active == 4"></Outer>
         </div>
     </div>
@@ -37,12 +38,17 @@ export default {
                 {name:'影视公司负责人'},
                  {name:'演艺公司负责人'},
                 {name:'非业内人士'}
-            ]
+            ],
+            actorPlace:'请输入影视人名称',      //演艺人查询
+            companyPlace:'请输入您的公司名称后选择对应公司进行认证',        //公司查询
         }
     },
     methods:{
         tabMenu(index){
             this.active = index;
+        },
+        findNot(){
+            this.$refs.companyMan.findNot()
         }
     }
 }
@@ -52,7 +58,9 @@ export default {
         height: 1200px;
         .makeSureInfoHeader{
                 background-color: #FAF8F7;
-                height: 200px;  
+                // height: 200px;  
+                padding: 0 0 40px 0;
+                box-sizing: border-box;
             .w1180{
                 padding-top: 54px;
                 .btnGroup{
@@ -68,6 +76,9 @@ export default {
                         background-color: #F58523;
                         border: #F58523;
                         color: #fff;
+                        border-radius: 0;
+                        height: 40px;
+                        padding: 0 30px;
                     }
                     .unactive{
                         border: none;
@@ -80,6 +91,7 @@ export default {
                 .search-box{
                     width: 840px;
                     height: 56px;
+                    display: inline-block;
                     .search{
                         height: 100%;
                         width: 100%;
@@ -107,6 +119,15 @@ export default {
                             border-radius: 0;
                         }
                     }
+                }
+                .findNot{
+                    font-family: PingFang-SC-Medium;
+                    font-size: 16px;
+                    color: #666666;
+                    letter-spacing: 0;
+                    vertical-align: bottom;
+                    margin-left: 20px;
+                    cursor: pointer;
                 }
             }
         }
