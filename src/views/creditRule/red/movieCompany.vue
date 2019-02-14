@@ -1,41 +1,34 @@
 <template>
   <div>
-    <div class='search-par' :data-id='list.id'>
+    <div class='company'>
       <div class='search-people clear w1180'>
         <div class='img'>
-          <router-link to=''><img :src='list.celebrityHeadUrl' /></router-link>
+          <router-link to=''><img src='' /></router-link>
         </div>
         <div class='desc'>
           <div class='tit'>
-              {{list.celebrityName}}
+              北京眼缘儿大街小巷科技有限公司
               <router-link to='' class='operator'>未认证</router-link>
           </div>
           <div class='con'>
             <div class='list'>
-              职业: 演员/配音 {{list.occupation}}
+              企业证书: qw12435454
             </div>
             <div class='list'>
-              职业证书: {{list.certificate}}
-            </div>
-            <div class='list'>
-              所属机构: {{list.agency}}
-            </div>
-            <div class='role clear'>
-              <div class='role-list'>影视人</div>
-              <div class='role-list'>制片人</div>
+              通讯地址: 北京朝阳区望京SOHO
             </div>
           </div>
         </div>
         <div class='jc-list credit'>
-          <div class='num'>{{list.rating}}</div>
+          <div class='num'>B</div>
           <div class='icon-txt'>信用等级</div>
         </div>
         <div class='jc-list honor'>
-          <div class='num'>5{{list.commendCount}}</div>
+          <div class='num'>5</div>
           <div class='icon-txt'>荣誉</div>
         </div>
         <div class='jc-list no-honor'>
-          <div class='num'>0{{list.loseCreditCount}}</div>
+          <div class='num'>0</div>
           <div class='icon-txt'>失信信息</div>
         </div>
       </div>
@@ -47,13 +40,9 @@
 <script>
   export default {
     name: 'searchPeople',
-
-    props: ['list'],
-
-    mounted: function() {
+    components: {
 
     },
-
     methods: {
 
     }
@@ -62,6 +51,8 @@
 
 <style lang='less' scoped>
   .search-par {
+    padding-top: 20px;
+    padding-bottom: 20px;
     .search-people {
         box-sizing: border-box;
         height: 246px;
@@ -108,25 +99,6 @@
               a {
                 color: #4393F9;
               }
-            }
-          }
-          .role {
-            margin-top: 60px;
-            .role-list {
-              float: left;
-              box-sizing: border-box;
-              width: 68px;
-              height: 28px;
-              border: 1px solid #F58523;
-              border-radius: 4px;
-              line-height: 28px;
-              margin-right: 10px;
-              text-align: center;
-              font-size: 14px;
-              color: #F58523;
-            }
-            .role-list:last-child {
-              margin-right: 0;
             }
           }
         }

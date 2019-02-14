@@ -1,34 +1,34 @@
 <template>
   <div>
-    <div class='search-par'>
+    <div class='search-par' :data-id='list.id'>
       <div class='search-people clear w1180'>
         <div class='img'>
-          <router-link to=''><img src='' /></router-link>
+          <router-link to=''><img :src='list.businessLicense' /></router-link>
         </div>
         <div class='desc'>
           <div class='tit'>
-              北京眼缘儿大街小巷科技有限公司
+              {{list.name}}
               <router-link to='' class='operator'>未认证</router-link>
           </div>
           <div class='con'>
             <div class='list'>
-              企业证书: qw12435454
+              企业证书: {{list.creditCode}}
             </div>
             <div class='list'>
-              通讯地址: 北京朝阳区望京SOHO
+              通讯地址: {{list.address}}
             </div>
           </div>
         </div>
         <div class='jc-list credit'>
-          <div class='num'>B</div>
+          <div class='num'>{{list.rating}}</div>
           <div class='icon-txt'>信用等级</div>
         </div>
         <div class='jc-list honor'>
-          <div class='num'>5</div>
+          <div class='num'>{{list.commendCount}}</div>
           <div class='icon-txt'>荣誉</div>
         </div>
         <div class='jc-list no-honor'>
-          <div class='num'>0</div>
+          <div class='num'>{{list.loseCreditCount}}</div>
           <div class='icon-txt'>失信信息</div>
         </div>
       </div>
@@ -39,7 +39,10 @@
 
 <script>
   export default {
-    name: 'searchPeople',
+    name: 'searchCompany',
+
+    props: ['list'],
+
     components: {
 
     },
@@ -51,8 +54,6 @@
 
 <style lang='less' scoped>
   .search-par {
-    padding-top: 20px;
-    padding-bottom: 20px;
     .search-people {
         box-sizing: border-box;
         height: 246px;

@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div class='search-par' :data-id='list.id'>
-      <div class='search-people clear w1180'>
+    <div class='works'>
+      <div class='search-type w1180'>
         <div class='img'>
-          <router-link to=''><img :src='list.subjectUrl' /></router-link>
+          <router-link to=''><img src='' /></router-link>
         </div>
         <div class='desc'>
           <div class='tit'>
-            {{list.subjectName}}
+            《来电狂想》
           </div>
           <div class='con'>
             <div class='list'>
@@ -26,7 +26,7 @@
               制片国家/地区: 中国大陆
             </div>
             <div class='list'>
-              上映日期: {{list.releaseData}}
+              上映日期: 2018-12-28(中国大陆)
             </div>
             <div class='list'>
               片长: 103分钟
@@ -45,10 +45,7 @@
 
 <script>
   export default {
-    name: 'searchWorks',
-
-    props: ['list'],
-
+    name: 'searchPeople',
     components: {
 
     },
@@ -60,6 +57,8 @@
 
 <style lang='less' scoped>
   .search-par {
+    padding-top: 20px;
+    padding-bottom: 20px;
     .search-people {
         box-sizing: border-box;
         height: 246px;
