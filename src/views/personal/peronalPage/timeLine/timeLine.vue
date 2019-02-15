@@ -1,29 +1,39 @@
 <template>
     <div class="timeLine">
-        <Card :info='msg.info' v-if="showCard"></Card>
-        <div class="hide" v-else></div>
+        <div class="showTop" v-if="index % 2 == 0">
+            <CardT :info='msg.info'></CardT>
+            <p class="time" style="marginTop:10px">{{msg.time}}</p>
+        </div>
+        <div class="hideTop" v-else>
+            <div class="hide"></div>
+            <p class="time" style="marginTop:10px;height:22px"></p>
+        </div>  
         <div class="timeLineBox">
-            <img class="point" @click="point" src="../../../../assets/img/point.png">
+            <img class="point" src="../../../../assets/img/point.png">
             <div class="line">
             </div>
         </div>
-        <p class="time">{{msg.time}}</p>
+        <div class="showBottom" v-if="index % 2 != 0">
+             <p class="time" style="marginBottom:10px">{{msg.time}}</p>
+            <CardB :info='msg.info' v-if="index % 2 != 0"></CardB>
+        </div>
+        <div class="hideBottom" v-else>
+            <p class="time" style="marginBottom:10px;height:22px"></p>
+            <div class="hide"></div>
+        </div>
     </div>
 </template>
 <script>
-import Card from './card/card'
+import CardT from './card/cardT'
+import CardB from './card/cardB'
 export default {
-    components:{Card},
-    props:['msg'],
+    components:{CardT,CardB},
+    props:['msg','index'],
     data(){
         return{
-            showCard:false,     //显示卡片信息
         }
     },
     methods:{
-        point(){            //点击显示
-            this.showCard = true;
-        }
     }
 }
 </script>
@@ -42,7 +52,6 @@ export default {
             margin: 10px 0;
             .point{
                 vertical-align: middle;
-                cursor: pointer;
             }
             .line{
                 background-color: rgba(0,0,0,0.04);

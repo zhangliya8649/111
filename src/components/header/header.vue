@@ -12,7 +12,12 @@
           <li class='credit'>
             <router-link to='/credit'>信用中心</router-link>
           </li>
-          <li class='loginRegister'>
+          <li class="user" v-if="isLogin">
+            <router-link to="/personal">{{userName}}</router-link>
+            <span>|</span>
+            <a>退出</a>
+          </li>
+          <li class='loginRegister' v-else>
             <router-link to='/login'>登录</router-link>
             <span>|</span>
             <router-link to='/register'>注册</router-link>
@@ -26,6 +31,12 @@
 <script>
   export default {
     name: 'header',
+    data(){
+      return{
+        userName:'admin',   //用户名称
+        isLogin:false,      //是否登陆
+      }
+    },
     methods: {
 
     }
@@ -86,6 +97,29 @@
         }
         .loginRegister {
            a {
+            padding-left: 0;
+            padding-right: 0;
+           }
+           a:first-child {
+            padding-left: 15px;
+            &:active, &:hover, &.router-link-active {
+              padding-right: 0;
+              padding-left: 11px;
+            }
+           }
+           a:last-child {
+            padding-right: 15px;
+            &:active, &:hover, &.router-link-active {
+              padding-left: 0;
+              padding-right: 11px;
+            }
+           }
+           span {
+            font-size: 12px;
+           }
+        }
+        .user{
+          a {
             padding-left: 0;
             padding-right: 0;
            }

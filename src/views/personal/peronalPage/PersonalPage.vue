@@ -106,7 +106,7 @@
                 </div>
                 <p class="title">从业信息（执业经历）</p>
                 <div class="content exp">
-                    <TimeLine v-for="(data,index) in msg" :msg='data' :key='index'></TimeLine>
+                    <TimeLine v-for="(data,index) in msg" :msg='data' :index='index' :key='index'></TimeLine>
                 </div>
             </div>
             <div class="papel">
@@ -192,6 +192,7 @@
             <!-- 弹窗 -->
             <Dialog :showDialog='2' ref='dialog'></Dialog>
             <ExpDialog ref='expDialog'></ExpDialog>
+            <ChoseWorks ref='choseWorks'></ChoseWorks>
         </div>
     </div>
 </template>
@@ -201,8 +202,9 @@ import Works from './works/works'
 import Dialog from './dialog/dialog'
 import ExpDialog from './expDialog/expDialog'
 import TimeLine from './timeLine/timeLine'
+import ChoseWorks from './choseWorks/choseWorks'
 export default {
-    components:{Works,Dialog,ExpDialog,TimeLine},
+    components:{Works,Dialog,ExpDialog,TimeLine,ChoseWorks},
     data(){
         //写验证规则
         var validateOldPass = (rule, value, callback) => {
@@ -282,7 +284,7 @@ export default {
                 {src:works,name:'来电狂想',time:'2018.12.30',des:''},
                 {src:works,name:'来电狂想',time:'2018.12.30',des:''},
                 {src:works,name:'来电狂想',time:'2018.12.30',des:''},
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''}
+                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
                 ],
                 //密码表单
              ruleForm: {
@@ -302,11 +304,13 @@ export default {
                     { validator: validateCheckPass, trigger: 'blur' }
                 ]
             },
-            msg:[
-                {time:'2018-02-13',info:'2313421312'},
-                {time:'2018-02-14',info:'2313421312'},
-                {time:'2018-02-15',info:'2313421312'},
-                {time:'2018-02-16',info:'2313421312'},
+            msg:[                                       //时间轴数据
+                {time:'2018-02-13',info:'个人信息个人信息个人信息个人信息个人信息1'},
+                {time:'2018-02-14',info:'个人信息个人信息个人信息个人信息2'},
+                {time:'2018-02-15',info:'个人信息个人信息个人信息个人信息个人信息3'},
+                {time:'2018-02-16',info:'个人信息个人信息个人信息个人信息4'},
+                {time:'2018-02-16',info:'个人信息个人信息个人信息个人信息个人信息5'},
+                {time:'2018-02-16',info:'个人信息个人信息个人信息个人信息个人信息个人信息个人信息个人信息6'},
             ]
         }
     },
@@ -323,7 +327,7 @@ export default {
             this.showBasicInfo = true
         },
         moreWorks(){      //更多作品
-            this.$router.push({path:'MakeSure'})
+            this.$refs.choseWorks.openDialog()
         },
         addExp(){
             this.$refs.expDialog.openExp()
@@ -387,6 +391,7 @@ export default {
                     justify-content: space-between;
                     margin-right:45px; 
                     overflow-x: scroll;
+                    height: 320px;
                     // margin: 144px 45px 184px 38px;
                 }
                 .table{
