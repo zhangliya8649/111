@@ -11,30 +11,27 @@
           </div>
           <div class='con'>
             <div class='list'>
-              导演：<span><router-link to='' class=''>于淼</router-link></span>
+              导演：<span v-for='item in list.subjectDirectors'><router-link to='/credit/works' class=''>{{item.celebrityName}}</router-link></span>
             </div>
             <div class='list'>
-              编剧: <span><router-link to='' class=''>李潇</router-link>&nbsp;/&nbsp;<router-link to='' class=''>王思</router-link>&nbsp;/&nbsp;<router-link to='' class=''>王欢</router-link></span>
+              编剧: <span v-for='item in list.subjectAdaptors'><router-link to='/credit/works' class=''>{{item.celebrityName}}</router-link>&nbsp;/&nbsp;</span>
             </div>
             <div class='list'>
-              导演：<span><router-link to='' class=''>佟大为</router-link>&nbsp;/&nbsp;<router-link to='' class=''>马丽</router-link>&nbsp;/&nbsp;<router-link to='' class=''>霍思燕</router-link>&nbsp;/&nbsp;
-                          <router-link to='' class=''>田雨</router-link>&nbsp;/&nbsp;<router-link to='' class=''>王思</router-link>&nbsp;/&nbsp;<router-link to='' class=''>王欢</router-link>&nbsp;/&nbsp;
-                          <router-link to='' class=''>更多</router-link>
-              </span>
+              导演：<span v-for='item in list.subjectProtagonists'><router-link to='/credit/works' class=''>{{item.celebrityName}}</router-link>&nbsp;/&nbsp;</span>
             </div>
             <div class='list'>
-              制片国家/地区: 中国大陆
+              制片国家/地区: {{list.producerCountry}}
             </div>
             <div class='list'>
-              上映日期: {{list.releaseData}}
+              上映日期: {{list.releaseDate}}
             </div>
             <div class='list'>
-              片长: 103分钟
+              片长: {{list.subjectLength}}
             </div>
           </div>
         </div>
         <div class='honor'>
-          <div class='num'>5</div>
+          <div class='num'>{{list.commendCount}}</div>
           <div class='icon-txt'>荣誉</div>
         </div>
       </div>
@@ -44,6 +41,7 @@
 </template>
 
 <script>
+
   export default {
     name: 'searchWorks',
 
@@ -113,7 +111,7 @@
             color: #9B9B9B;
           }
         }
-      }
+    }
   }
 
 </style>
