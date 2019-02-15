@@ -4,7 +4,7 @@
          <search-people v-bind:list='item'></search-people>
       </div>
       <div class='page'>
-
+        <el-pagination background layout='prev, pager, next' :total='6'></el-pagination>
       </div>
     </div>
 </template>
@@ -38,4 +38,7 @@
 
 <style lang='less' scoped>
 
+</style>
+<style>
+  @import "../../../../static/css/page.css"
 </style>

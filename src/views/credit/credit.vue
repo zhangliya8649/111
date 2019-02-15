@@ -13,8 +13,8 @@
       </div>
     </div>
     <child class='search-result' :is='curCom' :listData='dataObj'>
-
     </child>
+    <router-view></router-view>
   </div>
 
 </template>
@@ -142,7 +142,7 @@
   }
   .search-result {
     padding-top: 18px;
-    padding-bottom: 64px;
+    padding-bottom: 30px;
     background: #fff;
   }
 </style>

@@ -3,9 +3,12 @@ import Router from 'vue-router'
 import Home from '../views/home/home.vue'
 import Login from '../views/login/login.vue'
 import Credit from '../views/credit/credit.vue'
+import worksDetail from '../views/credit/works/worksDetail.vue'
+import peopleDetail from '../views/credit/people/peopleDetail.vue'
+import companyDetail from '../views/credit/company/companyDetail.vue'
 import Personal from '../views/personal/personal.vue'
 import MakeSure from '../views/personal/makeSureInfo/makeSureInfo.vue'
-import Register from '../views/search/searchPeople.vue'
+import Register from '../views/credit/company/companyDetail.vue'
 
 Vue.use(Router)
 export default new Router({
@@ -23,8 +26,30 @@ export default new Router({
     {
       path: '/credit',
       name: 'Credit',
-      component: Credit
+      component: Credit,
+      children: [
+        {
+          path: 'works',
+          name: 'worksDetail',
+          component: worksDetail
+        },
+        {
+          path: '/people',
+          name: 'peopleDetail',
+          component: peopleDetail
+        },
+        {
+          path: '/company',
+          name: 'companyDetail',
+          component: companyDetail
+        }
+      ]
     },
+    // {
+    //   path: '/credit/works',
+    //   name: 'worksDetail',
+    //   component: worksDetail
+    // },
     {
       path: '/Personal',
       name: 'Personal',
