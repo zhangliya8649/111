@@ -11,10 +11,10 @@
             </div>
             <div class='con'>
               <div class='list'>
-                导演：<span v-for='item in list.subjectDirectors'><router-link to='/works' class=''>{{item.celebrityName}}</router-link></span>
+                导演：<router-link to='/works' class='' v-for='(item, index) in list.subjectDirectors' :key='index'>{{item.celebrityName}}</router-link>
               </div>
               <div class='list'>
-                编剧: <span v-for='item in list.subjectAdaptors'><router-link to='/works' class=''>{{item.celebrityName}}</router-link>&nbsp;/&nbsp;</span>
+                编剧: <router-link to='/works' class='' v-for='item in list.subjectAdaptors' :key='index'>{{item.celebrityName}}</router-link>
               </div>
               <div class='list'>
                 主演：<span v-for='item in list.subjectProtagonists'><router-link to='/works' class=''>{{item.celebrityName}}</router-link>&nbsp;/&nbsp;</span>
@@ -49,7 +49,7 @@
       </div>
       <div class='people-detail'>
         <div class='tit'>来电狂响演职员</div>
-        <div class='con'>
+        <div class='con clear'>
           <div class='list'>
             <div class='img'>
 
@@ -79,13 +79,27 @@
     },
 
     mounted: function() {
-      console.log(111111111111111111111);
-      this.Http.post(this.Action.SearchWorksById, {subjectId: 123123}, (data) => {
+      /*
+     let param = {
+        celebrityId: 1048026,
+        identityType: 1
+      };
+      this.Http.post(this.Action.SearchPersonById, param, (data) => {
         console.log(data);
         this.list = data;
       }, (err) => {
         console.log(err);
       })
+      */
+      let param = {
+              subjectId: 1291543
+            };
+            this.Http.post(this.Action.SearchWorkById, param, (data) => {
+              console.log(data);
+              this.list = data;
+            }, (err) => {
+              console.log(err);
+            })
     },
 
     methods: {

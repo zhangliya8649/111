@@ -6,12 +6,10 @@
            <el-button v-for="(subItem, index) in item.con" :key='index' :class="index == 0 ? 'active' : ''" @click='tabMenu(index, $event)'>{{subItem.name}}</el-button>
         </div>
       </div>
-      <div v-for='(item, index) in listData' :key='index'>
+      <div v-for='(item, index) in dataObj.list' :key='index'>
          <search-works v-bind:list='item'></search-works>
       </div>
-      <div class='page'>
-        <el-pagination background layout='prev, pager, next' :total='6'></el-pagination>
-      </div>
+      <el-pagination background layout='prev, pager, next' :total='dataObj.total' @current-change='changeCurrentPage' v-if='dataObj.total ? true : false'></el-pagination>
     </div>
 </template>
 <script>
@@ -23,6 +21,9 @@
     data() {
       return {
         curIndex: 0,
+        page: 1,
+        dataObj: {},
+        type: 'key',
         searchType: [
           {
             type: 'subtype',
@@ -56,18 +57,26 @@
       }
     },
 
-    props: ['listData'],
+    props: [],
 
     components: {
       searchWorks
     },
 
     mounted: function() {
-
+      let param = {
+        tags: 2,
+        pageNum: 1
+      };
+      this.getList(param);
     },
 
     methods: {
       tabMenu(index, event) {
+        let param = {
+                  subtype: 'tv',
+                  pageNum: 1
+                };
         let el = event.currentTarget;
         if(el.classList.contains('active')) {
           return;
@@ -80,6 +89,38 @@
           }
         }
         el.classList.add('active');
+      },
+
+      //二级搜索列表
+      getListByKey(param) {
+        this.Http.post(this.Action.SearchWorksListByKey, param, (data) => {
+          this.dataObj = data;
+        }, (err) => {
+          console.log(err);
+        })
+      },
+
+      //一级搜索列表
+      getList(param) {
+        this.Http.post(this.Action.SearchList, param, (data) => {
+          this.dataObj = data;
+        }, (err) => {
+          console.log(err);
+        })
+      },
+
+      //分页
+      changeCurrentPage(val) {
+        let param = {};
+        param.pageNum = val;
+        if(this.type == 'key') {
+          param.tags = 2;
+          this.getList(param);
+        }else {
+          param.subtype = 'movie';
+          getListByKey(param);
+        }
+
       }
     }
   }
@@ -115,10 +156,6 @@
         }
       }
     }
-  }
-  .page {
-    margin-top: 26px;
-    text-align: center;
   }
 
 </style>

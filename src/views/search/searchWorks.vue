@@ -3,35 +3,35 @@
     <div class='search-par' :data-id='list.id'>
       <div class='search-people clear w1180'>
         <div class='img'>
-          <router-link to=''><img :src='list.subjectUrl' /></router-link>
+          <router-link to='/credit/works'><img :src='list.subjectUrl' /></router-link>
         </div>
         <div class='desc'>
           <div class='tit'>
-            {{list.subjectName}}
+            《{{list.subjectName}}》
           </div>
           <div class='con'>
             <div class='list'>
-              导演：<span v-for='item in list.subjectDirectors'><router-link to='/credit/works' class=''>{{item.celebrityName}}</router-link></span>
+              导演：<router-link to='/credit/works'  v-for='(item, index) in list.subjectDirectors' :key='index' class='active'>{{item.celebrityName}}<span class='line'>/</span></router-link>
             </div>
             <div class='list'>
-              编剧: <span v-for='item in list.subjectAdaptors'><router-link to='/credit/works' class=''>{{item.celebrityName}}</router-link>&nbsp;/&nbsp;</span>
+              编剧: <router-link to='/credit/works' v-for='(item, index) in list.subjectAdaptors' :key='index' class='active'>{{item.celebrityName}}<span class='line'>/</span></router-link>
             </div>
             <div class='list'>
-              导演：<span v-for='item in list.subjectProtagonists'><router-link to='/credit/works' class=''>{{item.celebrityName}}</router-link>&nbsp;/&nbsp;</span>
+              主演：<router-link to='/credit/works' v-for='(item, index) in list.subjectProtagonists' :key='index' class='active'>{{item.celebrityName}}<span class='line'>/</span></router-link>
             </div>
             <div class='list'>
-              制片国家/地区: {{list.producerCountry}}
+              制片国家/地区: <router-link to='/credit/works' v-for='(item, index) in list.producerCountry' :key='index' class=''>{{item}}<span class='line'>/</span></router-link>
             </div>
             <div class='list'>
-              上映日期: {{list.releaseDate}}
+              上映日期: <router-link to='/credit/works' v-for='(item, index) in list.releaseDate' :key='index' class=''>{{item}}<span class='line'>/</span></router-link>
             </div>
             <div class='list'>
-              片长: {{list.subjectLength}}
+              片长: <router-link to='/credit/works' v-for='(item, index) in list.subjectLength' :key='index' class=''>{{item}}<span class='line'>/</span></router-link>
             </div>
           </div>
         </div>
         <div class='honor'>
-          <div class='num'>{{list.commendCount}}</div>
+          <div class='num'>{{list.commendCount ? list.commendCount : 0}}</div>
           <div class='icon-txt'>荣誉</div>
         </div>
       </div>
@@ -50,7 +50,12 @@
     components: {
 
     },
+
     methods: {
+
+    },
+
+    mounted: function() {
 
     }
   }
@@ -75,19 +80,37 @@
           margin-right: 22px;
           width: 135px;
           height: 199px;
+          img {
+            width: 100%;
+          }
         }
         .desc {
           .tit {
             margin-bottom: 33px;
             font-size: 18px;
+            font-weight: bold;
           }
           .list {
             height: 22px;
             line-height: 22px;
             font-size: 14px;
-            span {
-              a {
+            a {
+              color: #000;
+              .line {
+                padding-left: 3px;
+                padding-right: 3px;
+              }
+              &.active {
                 color: #4393F9;
+                .line {
+                  color: #000;
+                }
+              }
+            }
+
+            a:last-child {
+              .line {
+                display: none;
               }
             }
           }

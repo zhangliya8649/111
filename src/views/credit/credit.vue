@@ -7,14 +7,13 @@
         </div>
         <div class='search-ipt clear'>
           <div class='search-icon'></div>
-          <input type='text' placeholder='请输入艺人名称，检索艺人信用信息'>
+          <input type='text' :placeholder='curTip'>
           <div class='search-btn'>搜索</div>
         </div>
       </div>
     </div>
-    <child class='search-result' :is='curCom' :listData='dataObj'>
+    <child class='search-result' :is='curCom'>
     </child>
-    <router-view></router-view>
   </div>
 
 </template>
@@ -40,14 +39,16 @@
       return {
         curIndex: 0,
         curCom: 'hotPeople',
+        curTip: '请输入艺人名称，检索艺人信用信息',
         dataObj: {},
+        page: 1,
         tabs: [
-          {name: '热点人群', comName: 'hotPeople'},
-          {name: '作品', comName: 'works'},
-          {name: '影视企业', comName: 'movieCompany'},
-          {name: '影视人', comName: 'moviePeople'},
-          {name: '演艺企业', comName: 'movieCompany'},
-          {name: '演艺人', comName: 'tvPeople'}
+          {name: '热点人群', comName: 'hotPeople', tip: '请输入艺人名称，检索艺人信用信息'},
+          {name: '作品', comName: 'works', tip: '请输入作品名称'},
+          {name: '影视企业', comName: 'movieCompany', tip: '请输入企业名称查看信用信息'},
+          {name: '影视人', comName: 'moviePeople', tip: '请输入艺人名称，检索艺人信用信息'},
+          {name: '演艺企业', comName: 'movieCompany', tip: '请输入企业名称查看信用信息'},
+          {name: '演艺人', comName: 'tvPeople', tip: '请输入艺人名称，检索艺人信用信息'}
         ]
       }
     },
@@ -64,7 +65,8 @@
     methods: {
       getData: function(param) {
         this.Http.post(this.Action.SearchList, param, (data) => {
-          this.dataObj = data.list;
+          console.log(data);
+          this.dataObj = data;
         }, (err) => {
           console.log(err);
         })
@@ -78,9 +80,14 @@
         };
         this.curIndex = index;
         this.curCom = this.tabs[index].comName;
+        this.curTip = this.tabs[index].tip;
         this.getData(param);
-      }
-    }
+      },
+
+
+    },
+
+
   }
 </script>
 

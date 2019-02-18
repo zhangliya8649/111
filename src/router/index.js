@@ -26,30 +26,23 @@ export default new Router({
     {
       path: '/credit',
       name: 'Credit',
-      component: Credit,
-      children: [
-        {
-          path: 'works',
-          name: 'worksDetail',
-          component: worksDetail
-        },
-        {
-          path: '/people',
-          name: 'peopleDetail',
-          component: peopleDetail
-        },
-        {
-          path: '/company',
-          name: 'companyDetail',
-          component: companyDetail
-        }
-      ]
+      component: Credit
     },
-    // {
-    //   path: '/credit/works',
-    //   name: 'worksDetail',
-    //   component: worksDetail
-    // },
+    {
+      path: '/credit/works',
+      name: 'worksDetail',
+      component: worksDetail
+    },
+    {
+      path: '/credit/people',
+      name: 'peopleDetail',
+      component: peopleDetail
+    },
+    {
+      path: '/credit/company',
+      name: 'companyDetail',
+      component: companyDetail
+    },
     {
       path: '/Personal',
       name: 'Personal',

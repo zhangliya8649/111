@@ -8,11 +8,13 @@
         <div class='desc'>
           <div class='tit'>
               {{list.celebrityName}}
-              <router-link to='' class='operator'>未认证</router-link>
+              <router-link to='' class='operator' v-if='list.claimState == 1'>未认领</router-link>
+              <router-link to='' class='operator' v-else-if='list.claimState == 2'>审核中</router-link>
+              <span class='operator' v-if='list.claimState == 3'>已认领</span>
           </div>
           <div class='con'>
             <div class='list'>
-              职业: 演员/配音 {{list.occupation}}
+              职业: {{list.occupation}}
             </div>
             <div class='list'>
               职业证书: {{list.certificate}}
@@ -31,11 +33,11 @@
           <div class='icon-txt'>信用等级</div>
         </div>
         <div class='jc-list honor'>
-          <div class='num'>5{{list.commendCount}}</div>
+          <div class='num'>{{list.commendCount}}</div>
           <div class='icon-txt'>荣誉</div>
         </div>
         <div class='jc-list no-honor'>
-          <div class='num'>0{{list.loseCreditCount}}</div>
+          <div class='num'>{{list.loseCreditCount}}</div>
           <div class='icon-txt'>失信信息</div>
         </div>
       </div>
@@ -51,7 +53,7 @@
     props: ['list'],
 
     mounted: function() {
-
+      console.log(this.list[0]);
     },
 
     methods: {
