@@ -6,12 +6,10 @@
          <el-button v-for="(subItem, index) in item.con" :key='index' :class="index == 0 ? 'active' : ''" @click='tabMenu(index, $event)'>{{subItem.name}}</el-button>
       </div>
     </div>
-    <div v-for='(item, index) in listData' :key='index'>
+    <div v-for='(item, index) in dataObj.list' :key='index'>
        <search-company v-bind:list='item'></search-company>
     </div>
-    <div class='page'>
-      <el-pagination background layout='prev, pager, next' :total='6'></el-pagination>
-    </div>
+    <el-pagination background layout='prev, pager, next' :total='dataObj.total' @current-change='changeCurrentPage' v-if='dataObj.total ? true : false'></el-pagination>
   </div>
 </template>
 
@@ -25,8 +23,17 @@
       searchCompany
     },
 
+    mounted: function() {
+      let param = {
+        tags: 3,
+        pageNum: 1
+      };
+      this.getList(param);
+    },
+
     data() {
       return {
+        dataObj: {},
         curIndex: 0,
         searchType: [
           {
@@ -96,7 +103,7 @@
       }
     },
 
-    props: ['listData'],
+    props: [],
 
     methods: {
       tabMenu(index, event) {
@@ -112,6 +119,20 @@
           }
         }
         el.classList.add('active');
+      },
+
+      //根据不同条件搜索列表
+      getList(param) {
+        this.Http.post(this.Action.SearchList, param, (data) => {
+          this.dataObj = data;
+        }, (err) => {
+          console.log(err);
+        })
+      },
+
+      //分页
+      changeCurrentPage(val) {
+
       }
     }
   }
