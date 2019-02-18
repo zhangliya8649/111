@@ -5,13 +5,13 @@
         <div class='contact'>
           <span>Tel：010-84922996</span>
           <span>Mail：service@shixinyun.com</span>
-          <span>QQ：2161045552</span>
+          <span>QQ：</span>
         </div>
         <div class='copyright'>
           <span>版权所有 © 2014-2016</span>
           <span>北京时信互联网络科技有限公司</span>
           <span>京公网安备 11010502033657号</span>
-          <span>京ICP备16000263号-1</span>
+          <span>京ICP备</span>
         </div>
       </div>
       <div class='code'>

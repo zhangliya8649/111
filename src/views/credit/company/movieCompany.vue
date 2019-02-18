@@ -121,13 +121,13 @@
         el.classList.add('active');
       },
 
-      //根据不同条件搜索列表
+      //一级搜索列表
       getList(param) {
-        this.Http.post(this.Action.SearchList, param, (data) => {
+        this.Http.post(this.Action.SearchList, param).then((data) => {
           this.dataObj = data;
-        }, (err) => {
-          console.log(err);
-        })
+        }).catch((res) => {
+          console.log(res);
+        });
       },
 
       //分页

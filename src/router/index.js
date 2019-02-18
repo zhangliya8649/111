@@ -8,7 +8,7 @@ import peopleDetail from '../views/credit/people/peopleDetail.vue'
 import companyDetail from '../views/credit/company/companyDetail.vue'
 import Personal from '../views/personal/personal.vue'
 import MakeSure from '../views/personal/makeSureInfo/makeSureInfo.vue'
-import Register from '../views/credit/company/companyDetail.vue'
+import Register from '../views/login/login.vue'
 
 Vue.use(Router)
 export default new Router({
