@@ -49,6 +49,7 @@ export default {
     methods:{
         makeSure(){
             console.log(111)
+            this.dialogFormVisible = false
         },
         openDialog(num){
             if(num == '1'){//判断按钮类型

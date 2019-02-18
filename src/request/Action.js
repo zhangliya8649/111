@@ -9,4 +9,6 @@ export default {
 
   // 作品
   SearchWorksById: '/c10/subject/get/by_id',   //根据作品列表id查询详情
+  //图片验证码
+  imgCode:'/c10/account/img/code/get',
 }

@@ -4,6 +4,8 @@
 import axios from 'axios'
 import QS from 'qs'
 import Action from './Action'
+import { resolve } from 'upath';
+import { rejects } from 'assert';
 
 const TIME_OUT_MS = 60 * 1000 // 默认请求超时时间
 
@@ -30,32 +32,34 @@ export default {
      * @param response 请求成功回调
      * @param exception 异常的回调函数
      */
-  request (url, data, type, response, exception) {
-    axios({
-      method: type,
-      url: Action.BaseUrl + url,
-      data: data,
-      timeout: TIME_OUT_MS,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    }).then(
-      (dataObj) => {
-        if (dataObj.data.code == 200) {
-          response(dataObj.data.data)
-        } else {
-          // 错误处理，待写
-          response(dataObj.data)
+  request (type, url, data,) {
+    let promise = new Promise((resolve,reject) => {
+        axios({
+        method: type,
+        url: Action.BaseUrl + url,
+        data: data,
+        timeout: TIME_OUT_MS,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
         }
-      }
-    ).catch(
-      (err) => {
-        if (exception) {
-          exception(err)
-        } else {
-          console.log(err)
+        }).then(
+        (dataObj) => {
+            if (dataObj.data.code == 200) {
+            resolve(dataObj.data.data)
+            } else {
+            // 错误处理，待写
+                switch (dataObj.data.code) {
+                    case 400 : resolve('参数错误');break;
+                    case 404 : resolve('地址错误');break;
+                }
+            }
         }
-      }
-    )
+        ).catch(
+        (err) => {
+            reject(err)
+        }
+        )
+    })
+    return promise
   }
 }

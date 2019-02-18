@@ -93,6 +93,7 @@ export default {
     methods:{
         makeSure(){         //提交
             console.log(111)
+            this.dialogFormVisible = false
         },
         openExp(){          //打开弹窗
             this.dialogFormVisible = true

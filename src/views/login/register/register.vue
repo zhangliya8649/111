@@ -6,10 +6,15 @@
                 <div class='icon user-icon'></div>
                 <input type='text' placeholder='请输入手机号'>
               </div>
+              <div class='form-list code'>
+                <input type='text' placeholder='请输入您看到的验证码'>
+                <div class='img-code'><img :src="imgCode"></div>
+                <div class='get-code'>看不清？换一张</div>
+              </div>
               <div class='form-list pwd'>
                 <div>
                     <div class='icon ver-icon'></div>
-                    <input type='password' class="verificationCode" placeholder='请输入验证码'>
+                    <input class="verificationCode" placeholder='请输入验证码'>
                 </div>
                 <button class="getCode">获取验证码</button>
               </div>
@@ -28,7 +33,7 @@
               </div>
               <div class='form-list register'>
                 已有账号？
-                <san class='regist' @click="login">去登录</san>
+                <span class='regist' @click="login">去登录</span>
               </div>
               <div class='form-list other-login clear'>
                 <div class='spap-login' @click="spapLogin">
@@ -47,7 +52,7 @@
 export default {
     data(){
         return{
-
+          imgCode:'',       //图片验证码
         }
     },
     methods:{
@@ -62,7 +67,18 @@ export default {
         },
         login(){                   //注册
             this.$emit('toggleLogin',0)
-        }
+        },
+        //获取图片验证码
+        getImgCode(){
+          this.Http.request('post',this.Action.imgCode).then((res) => {
+            this.imgCode = res.imgCode
+          }).catch((res) => {
+            console.log(err)
+          })
+        },
+    },
+    mounted(){
+      this.getImgCode()
     }
 }
 </script>
@@ -73,7 +89,6 @@ export default {
       top: 174px;
       left: 50%;
       width: 520px;
-      height: 634px;
       padding-top: 42px;
       margin-left: -260px;
       background: #fff;
@@ -167,8 +182,13 @@ export default {
           }
           .img-code {
             width: 90px;
+            height: 45px;
             margin-right: 10px;
             background-color: #F8F9FC;
+            img{
+              width: 100%;
+              height: 100%;
+            }
           }
           .get-code {
             width: 100px;
