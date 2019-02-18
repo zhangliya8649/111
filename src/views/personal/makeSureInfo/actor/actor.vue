@@ -82,16 +82,7 @@ export default {
         return{
             input:'',   //双向绑定搜索
             userInfo:{
-                name:'乔杉',
-                isSure:0,
-                userImg:userImg,
-                job:'演员/配音',
-                jobCertificate:'08768',
-                company:'北京演员影视传媒有限公司',
-                identity:'影视人',
-                class:'A',
-                goal:'5',
-                not: '0'
+               
             },
             isSure:0,   //是否认领
             userImg: userImg,   //用户的照片    
@@ -103,8 +94,24 @@ export default {
         }
     },
     methods:{
-        goSure(){
+        goSure(){       //认领
             this.$refs.dialog.showDialog()
+        },
+        search(num){       //找到人
+            if(num == 0 || num == 1){
+                this.userInfo = {
+                    name:'乔杉',
+                    isSure:0,
+                    userImg:userImg,
+                    job:'演员/配音',
+                    jobCertificate:'08768',
+                    company:'北京演员影视传媒有限公司',
+                    identity:'影视人',
+                    class:'A',
+                    goal:'5',
+                    not: '0'
+                }
+            }
         }
     }
 }

@@ -45,7 +45,7 @@ export default {
     },
     methods:{
         login(){
-            this.$router.push({path:'Personal'})
+            this.$router.push({path:'MakeSure'})
         },
         spapLogin(){            //司派登陆
             this.$emit('toggleLogin',1)

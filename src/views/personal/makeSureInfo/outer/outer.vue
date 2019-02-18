@@ -138,10 +138,10 @@ export default {
         };
         return{
             personalInfo:{      //信息双向绑定
-                name:'',
-                sex:'',
-                age:'',
-                telphone:''
+                name:'乔杉',
+                sex:'男',
+                age:'38',
+                telphone:'1453424233'
             },
             password:{          //密码双向绑定
                 oldPass:'',
@@ -173,14 +173,15 @@ export default {
             });
         },
         editPass(formName){             //确认修改密码
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    console.log(this.$refs[formName])
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
+            // this.$refs[formName].validate((valid) => {
+            //     if (valid) {
+            //         console.log(this.$refs[formName])
+            //     } else {
+            //         console.log('error submit!!');
+            //         return false;
+            //     }
+            // });
+            this.$router.push({path:'Personal'})
         }
     }
 }

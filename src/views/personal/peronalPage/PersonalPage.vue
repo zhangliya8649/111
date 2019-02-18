@@ -93,7 +93,7 @@
                             </el-col>
                             <el-col :span="8" :offset="8" style="paddingLeft:19.5%">
                                 <el-form-item>
-                                    <el-button class="editInfo" @click="editSure">确认</el-button>
+                                    <el-button class="editInfo" @click="editSureInfo">确认</el-button>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -184,7 +184,7 @@
                             <el-input class="input" v-model.number="ruleForm.checkPass"></el-input>
                         </el-form-item>
                         <el-form-item align='right'>
-                            <el-button class="editPwd">确认修改</el-button>
+                            <el-button class="editPwd" @click="editSurePass">确认修改</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -323,7 +323,7 @@ export default {
         addInfo(num){
             this.$refs.dialog.openDialog(num)
         },
-        editSure(){     //确认修改
+        editSureInfo(){     //确认修改个人信息
             this.showBasicInfo = true
         },
         moreWorks(){      //更多作品
@@ -331,6 +331,9 @@ export default {
         },
         addExp(){
             this.$refs.expDialog.openExp()
+        },
+        editSurePass(){         //确认修改密码
+            
         }
     }
 }

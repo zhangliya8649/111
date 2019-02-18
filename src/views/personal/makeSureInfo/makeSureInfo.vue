@@ -10,14 +10,14 @@
                     <div class="search">
                             <i slot="prefix" class="el-input__icon el-icon-search"></i>
                             <input type="text" class="input" :placeholder="this.active == 0 || this.active == 1 ? actorPlace : companyPlace">
-                            <el-button class="search-btn">搜索</el-button>
+                            <el-button class="search-btn" @click="search">搜索</el-button>
                     </div>
                 </div>
                 <span v-if="this.active == 2 || this.active == 3" class="findNot" @click="findNot">查询后未找到？</span>
             </div>
         </div>
         <div class="makeSure-content w1180">
-            <Actor v-if="this.active == 0 ||this.active == 1"></Actor>
+            <Actor v-if="this.active == 0 ||this.active == 1" ref="actor"></Actor>
             <CompanyMan v-if="this.active == 2 ||this.active == 3" ref='companyMan'></CompanyMan>
             <Outer v-if="this.active == 4"></Outer>
         </div>
@@ -47,8 +47,15 @@ export default {
         tabMenu(index){
             this.active = index;
         },
-        findNot(){
+        findNot(){          //查询后未找到
             this.$refs.companyMan.findNot()
+        },
+        search(){           //搜索
+            if(this.active == 0 || this.active == 1){
+                this.$refs.actor.search(this.active)
+            }else{
+                this.$refs.companyMan.search(this.active)
+            }
         }
     }
 }

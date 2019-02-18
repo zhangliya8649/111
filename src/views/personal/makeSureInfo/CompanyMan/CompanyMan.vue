@@ -98,8 +98,8 @@
                         <el-input v-model="findCompany.url" placeholder="请输入贵公司在天眼查的查询结果页链接"></el-input>
                     </el-form-item>
                     <el-form-item class="btn-box">
-                        <button class="btn submit" @click="submitForm('FindCompany')">提交</button>
-                        <button class="btn cancel">取消</button>
+                        <button class="btn submit" @click="submitForm('FindCompany')">提 交</button>
+                        <button class="btn cancel" @click="cancel">取 消</button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -129,11 +129,7 @@ export default {
         }
         return{
             find:true, //是否查询到公司
-            tableData:[{
-                name: '北京眼缘影视传媒有限公司',
-                class: 'A级',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }],
+            tableData:[],
             tableData1:[{     //未查询到占位
                 name: 'xxx',
                 class: '0级',
@@ -143,7 +139,13 @@ export default {
                     name:'',
                     url:''
             },
-            fileList:[],      //文件上传
+            fileList:[{
+                name: 'food.jpeg',
+                url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                }, {
+                name: 'food2.jpeg',
+                url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+            }],      //文件上传
             rule:{              //验证规则
                 name:[
                     { validator: validateName, trigger: 'blur' }
@@ -186,6 +188,18 @@ export default {
         },
         handleClick2(){     //未找到公司占位
             return false
+        },
+        cancel(){           //取消查找
+            this.find = true
+        },
+        search(num){           //找到公司
+            if(num == 2 || num == 3){
+                this.tableData = [{
+                    name: '北京眼缘影视传媒有限公司',
+                    class: 'A级',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }]
+            }
         }
     }
 }
