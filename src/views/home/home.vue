@@ -17,7 +17,6 @@
                 <div class='search-icon'></div>
               </div>
               <ul class='search-type clear center'>
-                <li class='all' data-type=''>全部</li>
                 <li class='popular-people' data-type=''>热点人群</li>
                 <li class='works' data-type=''>作品</li>
                 <li class='movie-company' data-type=''>影视企业</li>
@@ -153,6 +152,7 @@
           }
           .actor {
             margin-right: 0;
+            padding-top: 0;
           }
         }
       }

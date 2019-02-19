@@ -14,15 +14,20 @@ export default {
   /*
     * post请求
     * */
+<<<<<<< HEAD
   post (url, data = {}, response, exception) {
     this.request(url, QS.stringify(data), 'post', response, exception)
+=======
+  post (url, data) {
+    return this.request(url, QS.stringify(data), 'post')
+>>>>>>> 276991f944bb8d353cf75af858ff60ee5eabbb9b
   },
 
   /*
     * get请求
     * */
-  get (url, data, response, exception) {
-    this.request(url, data, 'get', response, exception)
+  get (url, data) {
+    return this.request(url, data, 'get')
   },
 
   /*
@@ -32,7 +37,7 @@ export default {
      * @param response 请求成功回调
      * @param exception 异常的回调函数
      */
-  request (type, url, data,) {
+  request (url, data, type) {
     let promise = new Promise((resolve,reject) => {
         axios({
         method: type,

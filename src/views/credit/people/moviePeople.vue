@@ -173,13 +173,13 @@
         el.classList.add('active');
       },
 
-      //根据不同条件搜索列表
+      //一级搜索列表
       getList(param) {
-        this.Http.post(this.Action.SearchList, param, (data) => {
+        this.Http.post(this.Action.SearchList, param).then((data) => {
           this.dataObj = data;
-        }, (err) => {
-          console.log(err);
-        })
+        }).catch((res) => {
+          console.log(res);
+        });
       },
 
       //根据条件查影视人
@@ -188,10 +188,10 @@
           identityType: 1,
           pageNum: 1
         };
-        this.Http.post(this.Action.SearchWorksListByKey, param, (data) => {
+        this.Http.post(this.Action.SearchWorksListByKey, param).then((data) => {
           console.log('根据电影条件查询列表：');
           console.log(data);
-        }, (err) => {
+        }).catch((err) => {
           console.log(err);
         })
       },

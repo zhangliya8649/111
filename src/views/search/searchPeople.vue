@@ -53,7 +53,7 @@
     props: ['list'],
 
     mounted: function() {
-      console.log(this.list[0]);
+
     },
 
     methods: {
