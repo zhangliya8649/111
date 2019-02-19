@@ -38,7 +38,7 @@
         this.Http.post(this.Action.SearchList, param).then((data) => {
           this.dataObj = data;
         }).catch((res) => {
-
+          console.log(res);
         });
       },
 

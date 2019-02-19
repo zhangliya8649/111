@@ -2,7 +2,6 @@
  * Created by zhangliya on 2019/1/30.
  */
 import axios from 'axios'
-import QS from 'qs'
 import Action from './Action'
 import { resolve } from 'upath';
 import { rejects } from 'assert';
@@ -10,10 +9,13 @@ import { rejects } from 'assert';
 const TIME_OUT_MS = 60 * 1000 // 默认请求超时时间
 
 export default {
-    post(url,data){
-        return this.request(url, QS.stringify(data), 'post')
+  /*
+   * post请求
+   * */
+    post(url, data){
+        return this.request(url, data, 'post')
     },
-    
+
   /*
     * get请求
     * */
@@ -39,21 +41,21 @@ export default {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
         }).then(
-        (res) => {
-            if (res.data.code == 200) {
-            resolve(res.data.data)
-            } else {
-            // 错误处理，待写
-                switch (dataObj.data.code) {
-                    case 400 : resolve('参数错误');break;
-                    case 404 : resolve('地址错误');break;
-                }
-            }
-        }
+          (res) => {
+              if (res.code == 200) {
+                  resolve(res.data)
+              } else {
+              // 错误处理，待写
+                  switch (res.code) {
+                      case 400 : resolve('参数错误');break;
+                      case 404 : resolve('地址错误');break;
+                  }
+              }
+          }
         ).catch(
-        (err) => {
-            reject(err)
-        }
+          (err) => {
+              reject(err)
+          }
         )
     })
     return promise

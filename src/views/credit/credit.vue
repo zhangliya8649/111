@@ -59,11 +59,6 @@
 
     methods: {
       tabMenu(index, event) {
-        let param = {
-          searchName: '',
-          tags: index + 1,
-          pageNum: 1
-        };
         this.curIndex = index;
         this.curCom = this.tabs[index].comName;
         this.curTip = this.tabs[index].tip;
