@@ -2,27 +2,22 @@
   <div>
     <div class='bg'>
         <div class='bg-par w1180 clear'>
-          <img src='../../assets/home/yxc-bg1.jpg' title='影信查' />
-          <img src='../../assets/home/yxc-bg2.jpg' title='影信查' />
-          <img src='../../assets/home/yxc-bg3.jpg' title='影信查' />
-          <img src='../../assets/home/yxc-bg4.jpg' title='影信查' />
-          <img src='../../assets/home/yxc-bg5.jpg' title='影信查' />
-          <img src='../../assets/home/yxc-bg6.jpg' title='影信查' />
+          <img src='../../assets/home/yxc-bg1.jpg' alt='影信查' />
+          <img src='../../assets/home/yxc-bg2.jpg' alt='影信查' />
+          <img src='../../assets/home/yxc-bg3.jpg' alt='影信查' />
+          <img src='../../assets/home/yxc-bg4.jpg' alt='影信查' />
+          <img src='../../assets/home/yxc-bg5.jpg' alt='影信查' />
+          <img src='../../assets/home/yxc-bg6.jpg' alt='影信查' />
         </div>
         <div class='search-par'>
            <div class='title'>影视行业信用信息服务平台</div>
            <div class='search'>
               <div class='search-ipt'>
-                <input type='text' placeholder='输入艺人信息，检索艺人信用信息'>
-                <div class='search-icon'></div>
+                <input type='text' v-model='searchKey' :placeholder='curTip'>
+                <div class='search-icon' @click='getResult'></div>
               </div>
               <ul class='search-type clear center'>
-                <li class='popular-people' data-type=''>热点人群</li>
-                <li class='works' data-type=''>作品</li>
-                <li class='movie-company' data-type=''>影视企业</li>
-                <li class='movie-people' data-type=''>影视人</li>
-                <li class='actor-company' data-type=''>演艺企业</li>
-                <li class='actor' data-type=''>演艺人</li>
+                <li :class="curIndex == index ? 'active' : ''" v-for="(tab, index) in tabs" :key='index' @click='tabMenu(index, $event)' :data-type='curIndex'>{{tab.name}}</li>
               </ul>
            </div>
         </div>
@@ -79,10 +74,50 @@
   import CountUp from '../../components/CountUp.vue'
   export default {
     name: 'home',
+
     components: {
       CountUp
     },
+
+    data() {
+      return {
+        searchKey: '',
+        curIndex: 0,
+        curCom: 'searchPeople',
+        curTip: '请输入艺人名称，检索艺人信用信息',
+        dataObj: {},
+        page: 1,
+        tabs: [
+          {name: '热点人群', comName: 'searchPeople', tip: '请输入艺人名称，检索艺人信用信息'},
+          {name: '作品', comName: 'searchWorks', tip: '请输入作品名称'},
+          {name: '影视企业', comName: 'searchCompany', tip: '请输入企业名称查看信用信息'},
+          {name: '影视人', comName: 'searchPeople', tip: '请输入艺人名称，检索艺人信用信息'},
+          {name: '演艺企业', comName: 'searchCompany', tip: '请输入企业名称查看信用信息'},
+          {name: '演艺人', comName: 'searchPeople', tip: '请输入艺人名称，检索艺人信用信息'}
+        ]
+      }
+    },
+
     methods: {
+      //跳转到搜索页面
+      getResult() {
+        let pageData = {
+          curCom: this.curCom,
+          curIndex: this.curIndex + 1,
+          searchKey: this.searchKey
+        }
+        this.$router.push({
+            path: '/search',
+            query: {pageData: JSON.stringify(pageData)}
+        })
+      },
+
+      //搜索条件选择
+      tabMenu(index, event) {
+        this.curIndex = index;
+        this.curCom = this.tabs[index].comName;
+        this.curTip = this.tabs[index].tip;
+      },
 
     }
   }
@@ -149,6 +184,9 @@
             float:left;
             margin-right: 18px;
             cursor: pointer;
+            &.active {
+              color: #F58523;
+            }
           }
           .actor {
             margin-right: 0;

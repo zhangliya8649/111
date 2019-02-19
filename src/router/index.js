@@ -9,6 +9,7 @@ import companyDetail from '../views/credit/company/companyDetail.vue'
 import Personal from '../views/personal/personal.vue'
 import MakeSure from '../views/personal/makeSureInfo/makeSureInfo.vue'
 import Register from '../views/login/login.vue'
+import Search from '../views/search/search.vue'
 
 Vue.use(Router)
 export default new Router({
@@ -57,6 +58,11 @@ export default new Router({
       path: '/register',
       name: 'Register',
       component: Register
+    },
+    {
+      path: '/search',
+      name: 'Search',
+      component: Search
     }
   ],
   mode: 'history'
