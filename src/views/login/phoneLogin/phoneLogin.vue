@@ -6,12 +6,17 @@
                 <div class='icon user-icon'></div>
                 <input type='text' placeholder='请输入手机号'>
               </div>
+              <div class='form-list code'>
+                <input type='text' placeholder='请输入您看到的验证码'>
+                <div class='img-code'><img :src="imgCode"></div>
+                <div class='get-code'>看不清？换一张</div>
+              </div>
               <div class='form-list pwd'>
                 <div>
                     <div class='icon pwd-icon'></div>
                     <input type='password' class="verificationCode" placeholder='请输入验证码'>
                 </div>
-                <button class="getCode">获取验证码</button>
+                <button class="getCode" @click="getPhoneCode">获取验证码</button>
               </div>
               <div class='form-list login' @click="login">
                 登录
@@ -37,7 +42,7 @@
 export default {
     data(){
         return{
-
+            imgCode:'',         //图片验证码
         }
     },
     methods:{
@@ -52,6 +57,9 @@ export default {
         },
         regist(){                   //注册
             this.$emit('toggleLogin',3)
+        },
+        getPhoneCode(){             //获取手机验证码
+            this.Http('post',)
         }
     }
 }
@@ -63,7 +71,6 @@ export default {
       top: 174px;
       left: 50%;
       width: 520px;
-      height: 520px;
       padding-top: 42px;
       margin-left: -260px;
       background: #fff;

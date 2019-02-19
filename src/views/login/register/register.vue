@@ -70,11 +70,11 @@ export default {
         },
         //获取图片验证码
         getImgCode(){
-          this.Http.request('post',this.Action.imgCode).then((res) => {
-            this.imgCode = res.imgCode
-          }).catch((res) => {
-            console.log(err)
-          })
+          // this.$Http.post(this.Action.imgCode).then((res) => {
+          //   console.log(res)
+          // }).catch((err) => {
+
+          // })
         },
     },
     mounted(){

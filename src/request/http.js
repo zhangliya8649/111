@@ -14,7 +14,7 @@ export default {
   /*
     * post请求
     * */
-  post (url, data, response, exception) {
+  post (url, data = {}, response, exception) {
     this.request(url, QS.stringify(data), 'post', response, exception)
   },
 
@@ -43,9 +43,9 @@ export default {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
         }).then(
-        (dataObj) => {
-            if (dataObj.data.code == 200) {
-            resolve(dataObj.data.data)
+        (res) => {
+            if (res.data.code == 200) {
+            resolve(res.data.data)
             } else {
             // 错误处理，待写
                 switch (dataObj.data.code) {

@@ -71,7 +71,7 @@
 <script>
 let userImg = require('../../../../assets/img/userInfo.png')
 let notSureIcon = require('../../../../assets/img/notSure.png')
-let SuredIcon = require('../../../../assets/img/Sured.png')
+let SuredIcon = require('../../../../assets/img/sured.png')
 let classIcon = require('../../../../assets/img/class.png')
 let goalIcon = require('../../../../assets/img/goal.png')
 let notIcon = require('../../../../assets/img/not.png')

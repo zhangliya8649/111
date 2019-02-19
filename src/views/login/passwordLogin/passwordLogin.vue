@@ -8,12 +8,12 @@
               </div>
               <div class='form-list pwd'>
                 <div class='icon pwd-icon'></div>
-                <input type='password' placeholder='密码'>
-                <div class='pwd-eye-icon'></div>
+                <input :type='type' placeholder='密码'>
+                <div :class='["pwd-eye-icon",open]' @click="openEye"></div>
               </div>
               <div class='form-list code'>
                 <input type='text' placeholder='请输入您看到的验证码'>
-                <div class='img-code'>3424</div>
+                <div class='img-code'><img :src="imgCode"></div>
                 <div class='get-code'>看不清？换一张</div>
               </div>
               <div class='form-list login' @click="login">
@@ -40,7 +40,10 @@
 export default {
     data(){
         return{
-
+            isOpen:false,   //判断是否显示密码
+            open: '',       //密码显示
+            type:'password',  //密码框类型
+            imgCode:'',       //图片验证码
         }
     },
     methods:{
@@ -55,6 +58,11 @@ export default {
         },
         regist(){                   //注册
             this.$emit('toggleLogin',3)
+        },
+        openEye(){                   //显示密码
+            this.isOpen = !this.isOpen
+            this.isOpen ? this.open = 'open' : this.open = ''
+            this.isOpen ? this.type = 'text' : this.type = 'password'
         }
     }
 }
