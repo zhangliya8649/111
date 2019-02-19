@@ -10,19 +10,10 @@ import { rejects } from 'assert';
 const TIME_OUT_MS = 60 * 1000 // 默认请求超时时间
 
 export default {
-
-  /*
-    * post请求
-    * */
-<<<<<<< HEAD
-  post (url, data = {}, response, exception) {
-    this.request(url, QS.stringify(data), 'post', response, exception)
-=======
-  post (url, data) {
-    return this.request(url, QS.stringify(data), 'post')
->>>>>>> 276991f944bb8d353cf75af858ff60ee5eabbb9b
-  },
-
+    post(url,data){
+        return this.request(url, QS.stringify(data), 'post')
+    },
+    
   /*
     * get请求
     * */
