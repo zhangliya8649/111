@@ -43,11 +43,11 @@ export default {
         }
         }).then(
           (res) => {
-              if (res.code == 200) {
-                  resolve(res.data)
+              if (res.data.code == 200) {
+                  resolve(res.data.data)
               } else {
               // 错误处理，待写
-                  switch (res.code) {
+                  switch (res.data.code) {
                       case 400 : resolve('参数错误');break;
                       case 404 : resolve('地址错误');break;
                   }

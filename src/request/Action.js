@@ -21,6 +21,8 @@ export default {
   // 登陆注册
   // 1.账号密码登陆
   passwordLogin:'/c10/account/login/by_pwd',
+  // 2.获取手机验证码
+  getPhoneCode:'/c10/account/send/code',
 }
 
 

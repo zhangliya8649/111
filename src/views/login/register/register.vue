@@ -4,28 +4,29 @@
            <div class='form'>
               <div class='form-list user'>
                 <div class='icon user-icon'></div>
-                <input type='text' placeholder='请输入手机号'>
+                <input type='text' placeholder='请输入手机号' v-model="phone">
               </div>
               <div class='form-list code'>
-                <input type='text' placeholder='请输入您看到的验证码'>
+                <input type='text' placeholder='请输入您看到的验证码' v-model="imgCode">
                 <div class='img-code'><img :src="imgCode"></div>
                 <div class='get-code'>看不清？换一张</div>
               </div>
               <div class='form-list pwd'>
                 <div>
                     <div class='icon ver-icon'></div>
-                    <input class="verificationCode" placeholder='请输入验证码'>
+                    <input class="verificationCode" placeholder='请输入验证码' v-model="phoneCode">
                 </div>
-                <button class="getCode">获取验证码</button>
+                <button class="getCode" @click="getPhoneCode" v-if="getCode">获取验证码</button>
+                <button class="getCode agin" v-else>{{seconds}}秒后再次获取</button>
               </div>
               <div class='form-list password'>
                 <div class='icon pwd-icon'></div>
-                <input type='password' placeholder='请设置登录密码'>
+                <input type='password' placeholder='请设置登录密码' v-model="password">
                 <div class='pwd-eye-icon'></div>
               </div>
               <div class='form-list password'>
                 <div class='icon pwd-icon'></div>
-                <input type='password' placeholder='请再次输入密码'>
+                <input type='password' placeholder='请再次输入密码' v-model="checkPass">
                 <div class='pwd-eye-icon'></div>
               </div>
               <div class='form-list login' @click="login">
@@ -53,6 +54,13 @@ export default {
     data(){
         return{
           imgCode:'',       //图片验证码
+          codeId:'',        //图片验证码id
+          phone:'',         //手机号码
+          phoneCode:'',     //手机验证码
+          password:'',      //登陆密码
+          checkPass:'',     //检查登陆密码
+          seconds:'60',       //倒计时
+          getCode:true,       //显示获取验证码
         }
     },
     methods:{
@@ -70,11 +78,26 @@ export default {
         },
         //获取图片验证码
         getImgCode(){
-         this.Http.post(this.Action.imgCode).then((data) => {
-          console.log(data)
-        }).catch((res) => {
-          console.log(res);
-        });
+         this.Http.post(this.Action.imgCode).then((res) => {
+            this.imgCode = res.imgPath
+            this.codeId = res.imgId
+          }).catch((res) => {
+            console.log(res);
+          });
+        },
+        //获取手机验证码
+        getPhoneCode(){
+          // let data = {
+          //   phone : this.phone,
+          //   imgId : this.imgId,
+          //   imgCode : this.imgCode
+          // }
+          // this.Http.post(this.Action.getPhoneCode,data).then((res) => {
+          //   console.log()
+          // }).catch((res) => {
+
+          // })
+          this.getCode = false
         },
     },
     mounted(){
@@ -154,6 +177,9 @@ export default {
             text-align: center;
             outline: none;
             cursor: pointer;
+            &.agin{
+              background-color: #CCCCCC;
+            }
           }
         }
         .pwd{
