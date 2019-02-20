@@ -81,6 +81,9 @@
           margin-right: 22px;
           width: 135px;
           height: 199px;
+          img {
+            width: 100%;
+          }
         }
         .desc {
           width: 264px;

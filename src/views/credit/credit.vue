@@ -54,34 +54,14 @@
     },
 
     mounted: function() {
-      let param = {
-        searchName: '',
-        tags: 1,
-        pageNum: 1
-      };
-      this.getData(param);
+
     },
 
     methods: {
-      getData: function(param) {
-        this.Http.post(this.Action.SearchList, param, (data) => {
-          console.log(data);
-          this.dataObj = data;
-        }, (err) => {
-          console.log(err);
-        })
-      },
-
       tabMenu(index, event) {
-        let param = {
-          searchName: '',
-          tags: index + 1,
-          pageNum: 1
-        };
         this.curIndex = index;
         this.curCom = this.tabs[index].comName;
         this.curTip = this.tabs[index].tip;
-        this.getData(param);
       },
 
 
