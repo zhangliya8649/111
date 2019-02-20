@@ -22,7 +22,6 @@
       return {
         curIndex: 0,
         page: 1,
-        dataObj: {},
         type: 'key',
         searchType: [
           {
@@ -57,18 +56,22 @@
       }
     },
 
-    props: [],
+    props: ['dataObj'],
 
     components: {
       searchWorks
     },
 
-    mounted: function() {
+    created: function() {
       let param = {
         tags: 2,
         pageNum: 1
       };
       this.getList(param);
+    },
+
+    mounted: function() {
+
     },
 
     methods: {
@@ -103,7 +106,7 @@
       //一级搜索列表
       getList(param) {
         this.Http.post(this.Action.SearchList, param).then((data) => {
-          this.dataObj = data;
+          this.$emit('update:dataObj', data);
         }).catch((res) => {
           console.log(res);
         });
@@ -138,6 +141,8 @@
     .type-list {
       margin-bottom: 18px;
       .list-tit {
+        display: inline-block;
+        width: 56px;
         font-weight: bold;
       }
       button {

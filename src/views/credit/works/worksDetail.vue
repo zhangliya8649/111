@@ -1,41 +1,44 @@
 <template>
     <div class='detail w1180'>
+      <div class='detail-tit'>
+        <span class='subject'>{{list.subjectName}}</span>（2018）
+      </div>
       <div class='basic-detail clear'>
         <div class='search-people clear'>
           <div class='img'>
-            <router-link to=''><img :src='list.subjectUrl' /></router-link>
+            <img :src='list.subjectUrl'/>
           </div>
           <div class='desc'>
             <div class='tit'>
-              豆瓣评分{{list.subjectBaseInfo.score}}
+              豆瓣评分{{list.score}}
             </div>
             <div class='con'>
               <div class='list'>
-                导演：<router-link to='/works' class='' v-for='(item, index) in list.subjectDirectors' :key='index'>{{item.celebrityName}}</router-link>
+                导演：<a href='javascript:;' @click='openDetail(item.id)' class='active' v-for='item in list.subjectDirectors'>{{item.celebrityName}}<span class='line'>/</span></a>
               </div>
               <div class='list'>
-                编剧: <router-link to='/works' class='' v-for='item in list.subjectAdaptors' :key='index'>{{item.celebrityName}}</router-link>
+                编剧: <a href='javascript:;' @click='openDetail(item.id)' class='active' v-for='item in list.subjectAdaptors'>{{item.celebrityName}}<span class='line'>/</span></a>
               </div>
               <div class='list'>
-                主演：<span v-for='item in list.subjectProtagonists'><router-link to='/works' class=''>{{item.celebrityName}}</router-link>&nbsp;/&nbsp;</span>
+                主演：<a href='javascript:;' @click='openDetail(item.id)' class='active' v-for='item in list.subjectProtagonists'>{{item.celebrityName}}<span class='line'>/</span></a>
               </div>
               <div class='list'>
-                类型: <span v-for='item in list.subjectBaseInfo.genres'>{{item}}&nbsp;/&nbsp;</span>
+                类型: <a href='javascript:;' v-for='item in list.genres'>{{item}}<span class='line'>/</span></a>
               </div>
               <div class='list'>
-                制片国家/地区: {{list.subjectBaseInfo.producerCountry}}
+                制片国家/地区: <a href='javascript:;' v-for='item in list.producerCountry'>{{item}}<span class='line'>/</span></a>
               </div>
               <div class='list'>
-                语言: <span v-for='item in list.subjectBaseInfo.subjectLanguage'>{{item}}&nbsp;/&nbsp;</span>
+                语言: <a href='javascript:;' v-for='item in list.subjectLanguage'>{{item}}<span class='line'>/</span></a>
               </div>
               <div class='list'>
-                上映日期: {{list.subjectBaseInfo.releaseDate}}
+                上映日期: <a href='javascript:;' v-for='item in list.releaseDate'>{{item}}<span class='line'>/</span></a>
               </div>
               <div class='list'>
-                片长: {{list.subjectBaseInfo.subjectLength}}
+                片长: <a href='javascript:;' v-for='item in list.subjectLength'>{{item}}<span class='line'>/</span></a>
               </div>
               <div class='list'>
-                又名: {{list.subjectBaseInfo.aliasName}}
+                又名: <a href='javascript:;' v-for='item in list.aliasName'>{{item}}<span class='line'>/</span></a>
               </div>
             </div>
           </div>
@@ -44,18 +47,35 @@
       <div class='intro-detail'>
         <div class='tit'>影片介绍</div>
         <div class='con'>
-          {{list.subjectBaseInfo.subjectIntroduce}}
+          {{list.subjectIntroduce}}
         </div>
       </div>
       <div class='people-detail'>
         <div class='tit'>来电狂响演职员</div>
         <div class='con clear'>
-          <div class='list'>
-            <div class='img'>
-
-            </div>
-            <div class='name'>李雪</div>
+          <div class='list' v-for='item in list.subjectDirectors'>
+            <a href='javascript:;' @click=openDetail(item.id)>
+              <img v-if = 'item.celebrityHeadUrl != "None"' :src='item.celebrityHeadUrl'/>
+              <img v-else src='../../../assets/credit/default-man.png'/>
+            </a>
+            <div class='name'>{{item.celebrityName}}</div>
             <div class='rule'>导演</div>
+          </div>
+          <div class='list' v-for='item in list.subjectAdaptors'>
+            <a href='javascript:;' @click=openDetail(item.id)>
+              <img v-if = 'item.celebrityHeadUrl != "None"' :src='item.celebrityHeadUrl'/>
+              <img v-else src='../../../assets/credit/default-man.png'/>
+            </a>
+            <div class='name'>{{item.celebrityName}}</div>
+            <div class='rule'>编剧</div>
+          </div>
+          <div class='list' v-for='item in list.subjectProtagonists'>
+            <a href='javascript:;' @click=openDetail(item.id)>
+              <img v-if = 'item.celebrityHeadUrl != "None"' :src='item.celebrityHeadUrl'/>
+              <img v-else src='../../../assets/credit/default-man.png'/>
+            </a>
+            <div class='name'>{{item.celebrityName}}</div>
+            <div class='rule'>主演</div>
           </div>
         </div>
       </div>
@@ -78,32 +98,33 @@
 
     },
 
+    created: function() {
+      this.getDataDetail(this.$route.query.id);
+    },
+
     mounted: function() {
-      /*
-     let param = {
-        celebrityId: 1048026,
-        identityType: 1
-      };
-      this.Http.post(this.Action.SearchPersonById, param, (data) => {
-        console.log(data);
-        this.list = data;
-      }, (err) => {
-        console.log(err);
-      })
-      */
-      let param = {
-              subjectId: 1291543
-            };
-            this.Http.post(this.Action.SearchWorkById, param, (data) => {
-              console.log(data);
-              this.list = data;
-            }, (err) => {
-              console.log(err);
-            })
+
     },
 
     methods: {
+        getDataDetail(id) {
+          let param = {
+            subjectId: id
+          };
+          this.Http.post(this.Action.SearchWorkById, param).then((data) => {
+            this.list = data.subjectBaseInfo;
+          }).catch((err) => {
+            console.log(err);
+          })
+        },
 
+        openDetail(id) {
+          //跳转到人物详情
+          this.$router.push({
+            path: '/credit/people',
+            query: {id: id}
+          })
+        }
     }
   }
 </script>
@@ -114,7 +135,17 @@
     padding-bottom: 112px;
     font-size: 14px;
     color: #4A4A4A;
+    .detail-tit {
+      margin-bottom: 36px;
+      font-size: 36px;
+      .subject {
+        font-weight: bold;
+        color: #000;
+      }
+    }
     .basic-detail {
+      height: 360px;
+      margin-bottom: 63px;
       .search-people {
           box-sizing: border-box;
           width: 100%;
@@ -123,10 +154,13 @@
           > div {
             float: left;
           }
-          .img {
+          img {
             margin-right: 22px;
             width: 240px;
             height: 355px;
+            img {
+              width: 100%;
+            }
           }
           .desc {
             .tit {
@@ -136,9 +170,22 @@
               height: 22px;
               line-height: 22px;
               color: #000;
-              span {
-                a {
+              a {
+                color: #000;
+                .line {
+                  padding-left: 3px;
+                  padding-right: 3px;
+                }
+                &.active {
                   color: #4393F9;
+                  .line {
+                    color: #000;
+                  }
+                }
+              }
+              a:last-child {
+                .line {
+                  display: none;
                 }
               }
             }
@@ -153,10 +200,10 @@
     .intro-detail {
       margin-bottom: 64px;
       .tit {
-        margin-bottom: 30px;
+        margin-bottom: 20px;
       }
       .con {
-
+        text-indent: 28px;
       }
     }
     .people-detail {
@@ -169,7 +216,7 @@
           width: 180px;
           margin-right: 20px;
           font-size: 16px;
-          .img {
+          img {
             width: 180px;
             height: 254px;
             background: blue;

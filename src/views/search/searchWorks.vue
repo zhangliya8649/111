@@ -3,7 +3,7 @@
     <div class='search-par' :data-id='list.id'>
       <div class='search-people clear w1180'>
         <div class='img'>
-          <router-link to='/credit/works'><img :src='list.subjectUrl' /></router-link>
+          <a href='javascript:;' @click='openWorkDetail(list.id)'><img :src='list.subjectUrl'/></a>
         </div>
         <div class='desc'>
           <div class='tit'>
@@ -11,22 +11,22 @@
           </div>
           <div class='con'>
             <div class='list'>
-              导演：<router-link to='/credit/works'  v-for='(item, index) in list.subjectDirectors' :key='index' class='active'>{{item.celebrityName}}<span class='line'>/</span></router-link>
+              导演：<a href='javascript:;' @click='openPeopleDetail(item.id)' v-for='item in list.subjectDirectors' class='active'>{{item.celebrityName}}<span class='line'>/</span></a>
             </div>
             <div class='list'>
-              编剧: <router-link to='/credit/works' v-for='(item, index) in list.subjectAdaptors' :key='index' class='active'>{{item.celebrityName}}<span class='line'>/</span></router-link>
+              编剧: <a href='javascript:;' @click='openPeopleDetail(item.id)' v-for='item in list.subjectAdaptors' class='active'>{{item.celebrityName}}<span class='line'>/</span></a>
             </div>
             <div class='list'>
-              主演：<router-link to='/credit/works' v-for='(item, index) in list.subjectProtagonists' :key='index' class='active'>{{item.celebrityName}}<span class='line'>/</span></router-link>
+              主演：<a href='javascript:;' @click='openPeopleDetail(item.id)' v-for='item in list.subjectProtagonists' class='active'>{{item.celebrityName}}<span class='line'>/</span></a>
             </div>
             <div class='list'>
-              制片国家/地区: <router-link to='/credit/works' v-for='(item, index) in list.producerCountry' :key='index' class=''>{{item}}<span class='line'>/</span></router-link>
+              制片国家/地区: <a href='javascript:;' v-for='item in list.producerCountry' class=''>{{item}}<span class='line'>/</span></a>
             </div>
             <div class='list'>
-              上映日期: <router-link to='/credit/works' v-for='(item, index) in list.releaseDate' :key='index' class=''>{{item}}<span class='line'>/</span></router-link>
+              上映日期: <a href='javascript:;' v-for='item in list.releaseDate' class=''>{{item}}<span class='line'>/</span></a>
             </div>
             <div class='list'>
-              片长: <router-link to='/credit/works' v-for='(item, index) in list.subjectLength' :key='index' class=''>{{item}}<span class='line'>/</span></router-link>
+              片长: <a href='javascript:;' v-for='item in list.subjectLength' class=''>{{item}}<span class='line'>/</span></a>
             </div>
           </div>
         </div>
@@ -52,7 +52,19 @@
     },
 
     methods: {
+      openWorkDetail(id) {
+        this.$router.push({
+          path: '/credit/works',
+          query: {id: id}
+        });
+      },
 
+      openPeopleDetail(id) {
+        this.$router.push({
+          path: '/credit/people',
+          query: {id: id}
+        });
+      }
     },
 
     mounted: function() {

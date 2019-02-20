@@ -1,9 +1,14 @@
 <template>
     <div class='search'>
-      <div v-for='(item, index) in dataObj.list' :key='index'>
-         <search-child :list='item' :is='pageData.curCom'></search-child>
+      <div class='list-par' v-if='dataObj.total && dataObj.total > 0'>
+        <div v-for='(item, index) in dataObj.list' :key='index'>
+           <search-child :list='item' :is='pageData.curCom'></search-child>
+        </div>
       </div>
-      <el-pagination background layout='prev, pager, next' :total='dataObj.total' @current-change='changeCurrentPage' v-if='dataObj.total ? true : false'></el-pagination>
+      <div class='no-result' v-else>
+        暂无查询数据
+      </div>
+      <el-pagination background layout='prev, pager, next' :total='dataObj.total' @current-change='changeCurrentPage' v-if='dataObj.total > 10'></el-pagination>
     </div>
 </template>
 <script>
@@ -38,6 +43,8 @@
     },
 
     mounted: function() {
+      console.log(this.dataObj);
+      console.log(this.dataObj.total);
       let param = {
         searchName: this.pageData.searchKey,
         tags: this.pageData.curIndex,
@@ -74,6 +81,12 @@
   .search {
     padding-top: 60px;
     padding-bottom: 30px;
+    .no-result {
+      height: 600px;
+      text-align: center;
+      font-size: 14px;
+      color: #4a4a4a;
+    }
   }
 </style>
 <style>

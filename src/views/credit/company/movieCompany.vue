@@ -33,7 +33,6 @@
 
     data() {
       return {
-        dataObj: {},
         curIndex: 0,
         searchType: [
           {
@@ -103,7 +102,7 @@
       }
     },
 
-    props: [],
+    props: ['dataObj'],
 
     methods: {
       tabMenu(index, event) {
@@ -124,7 +123,7 @@
       //一级搜索列表
       getList(param) {
         this.Http.post(this.Action.SearchList, param).then((data) => {
-          this.dataObj = data;
+          this.$emit('update:dataObj', data);
         }).catch((res) => {
           console.log(res);
         });

@@ -14,11 +14,11 @@
 
     data() {
       return {
-        dataObj: {}
+
       }
     },
 
-    props: [],
+    props: ['dataObj'],
 
     components: {
       searchPeople
@@ -36,7 +36,7 @@
       //根据不同条件搜索列表
       getList(param) {
         this.Http.post(this.Action.SearchList, param).then((data) => {
-          this.dataObj = data;
+          this.$emit('update:dataObj', data);
         }).catch((res) => {
           console.log(res);
         });

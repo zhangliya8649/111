@@ -3,14 +3,17 @@
     <div class='search-par' :data-id='list.id'>
       <div class='search-people clear w1180'>
         <div class='img'>
-          <router-link to=''><img :src='list.celebrityHeadUrl' /></router-link>
+          <a href='javascript:;' @click='openDetail(list.id)'>
+            <img v-if = 'list.celebrityHeadUrl != "None"' :src='list.celebrityHeadUrl'/>
+            <img v-else src='../../assets/credit/default-man.png'/>
+          </a>
         </div>
         <div class='desc'>
           <div class='tit'>
-              {{list.celebrityName}}
-              <router-link to='' class='operator' v-if='list.claimState == 1'>未认领</router-link>
-              <router-link to='' class='operator' v-else-if='list.claimState == 2'>审核中</router-link>
-              <span class='operator' v-if='list.claimState == 3'>已认领</span>
+              <a href='javascript:;' @click='openDetail(list.id)'>{{list.celebrityName}}</a>
+              <router-link to='/register' class='operator' v-if='list.claimState == 1'>未认领</router-link>
+              <router-link to='/register' class='operator' v-else-if='list.claimState == 2'>审核中</router-link>
+              <span class='operator' v-else-if='list.claimState == 3'>已认领</span>
           </div>
           <div class='con'>
             <div class='list'>
@@ -57,7 +60,13 @@
     },
 
     methods: {
-
+      openDetail(id) {
+        console.log(typeof id);
+        this.$router.push({
+          path: '/credit/people',
+          query: {id: id}
+        });
+      }
     }
   }
 </script>
@@ -91,6 +100,9 @@
           .tit {
             margin-bottom: 20px;
             font-size: 24px;
+            a {
+              color: #000;
+            }
             .operator {
               padding-left: 15px;
               height: 15px;

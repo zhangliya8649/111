@@ -21,7 +21,6 @@
 
     data() {
       return {
-        dataObj: {},
         curIndex: 0,
         searchType: [
           {
@@ -145,7 +144,7 @@
       }
     },
 
-    props: [],
+    props: ['dataObj'],
 
     components: {
       searchPeople
@@ -178,7 +177,7 @@
       //一级搜索列表
       getList(param) {
         this.Http.post(this.Action.SearchList, param).then((data) => {
-          this.dataObj = data;
+          this.$emit('update:dataObj', data);
         }).catch((res) => {
           console.log(res);
         });
@@ -224,6 +223,8 @@
     .type-list {
       margin-bottom: 18px;
       .list-tit {
+        display: inline-block;
+        width: 70px;
         font-weight: bold;
       }
       button {
@@ -242,15 +243,9 @@
         }
       }
     }
-    .type-list[data-type='bj'], .type-list[data-type='tj'], .type-list[data-type='hb'] {
-      .list-tit {
-        display: inline-block;
-        width: 42px;
-      }
-    }
     .type-list[data-type='bj'] {
-      button:nth-child(14) {
-       margin-left: 124px;
+      button:nth-child(13) {
+       margin-left: 152px;
       }
     }
     .type-list[data-type='tj'] {
@@ -258,7 +253,7 @@
         visibility: hidden;
       }
       button:nth-child(14) {
-       margin-left: 124px;
+       margin-left: 152px;
       }
     }
     .type-list[data-type='hb'] {
@@ -266,7 +261,7 @@
         visibility: hidden;
       }
       button:last-child {
-       margin-left: 124px;
+       margin-left: 152px;
       }
     }
   }
