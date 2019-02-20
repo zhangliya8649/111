@@ -3,9 +3,10 @@ import Action from './Action'
 // import VueCookie from 'vue-cookie'
 import qs from 'qs'
 
+
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 
-
+axios.defaults.timeout = 10000;   // 超时时间
 axios.defaults.baseURL = Action.BaseUrl;
 
 
@@ -18,6 +19,7 @@ axios.interceptors.request.use((config) => {
     if(config.method == 'post'){
         config.data = qs.stringify(config.data)
     }
+    console.log(config)
     return config
 },(err) => {
     console.log(err)

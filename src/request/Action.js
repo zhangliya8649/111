@@ -15,7 +15,12 @@ export default {
   SearchWorksListByKey: '/c10/subject/list',    //根据条件查作品列表
   SearchWorkById: '/c10/subject/get/by_id',
   //图片验证码
-  imgCode:'/c10/account/img/code/get'
+  imgCode:'/c10/account/img/code/get',
+  
+
+  // 登陆注册
+  // 1.账号密码登陆
+  passwordLogin:'/c10/account/login/by_pwd',
 }
 
 

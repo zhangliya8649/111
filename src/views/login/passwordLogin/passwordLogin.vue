@@ -4,15 +4,15 @@
            <div class='form'>
               <div class='form-list user'>
                 <div class='icon user-icon'></div>
-                <input type='text' placeholder='请输入手机号'>
+                <input type='text' placeholder='请输入手机号' v-model="phone">
               </div>
               <div class='form-list pwd'>
                 <div class='icon pwd-icon'></div>
-                <input :type='type' placeholder='密码'>
+                <input :type='type' placeholder='密码' v-model="pwd">
                 <div :class='["pwd-eye-icon",open]' @click="openEye"></div>
               </div>
               <div class='form-list code'>
-                <input type='text' placeholder='请输入您看到的验证码'>
+                <input type='text' placeholder='请输入您看到的验证码' v-model="code">
                 <div class='img-code'><img :src="imgCode"></div>
                 <div class='get-code'>看不清？换一张</div>
               </div>
@@ -43,12 +43,24 @@ export default {
             isOpen:false,   //判断是否显示密码
             open: '',       //密码显示
             type:'password',  //密码框类型
-            imgCode:'',       //图片验证码
+            imgCode:'',       //验证码的图片
+            phone:'',         //电话号码
+            pwd:'',           //密码
+            code:'',          //图片验证码
         }
     },
     methods:{
         login(){
-            this.$router.push({path:'MakeSure'})
+            let data = {
+              phone:this.phone,
+              pwd:this.pwd,
+              imgId:'1',
+              imgCode:this.code
+            }
+            this.$Http.post(this.Action.passwordLogin,data).then((res) => {
+              console.log(res)
+            })
+            // this.$router.push({path:'MakeSure'})
         },
         spapLogin(){            //司派登陆
             this.$emit('toggleLogin',1)
