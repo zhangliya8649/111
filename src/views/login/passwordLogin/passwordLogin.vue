@@ -57,9 +57,9 @@ export default {
               imgId:'1',
               imgCode:this.code
             }
-            this.$Http.post(this.Action.passwordLogin,data).then((res) => {
-              console.log(res)
-            })
+            // this.$Http.post(this.Action.passwordLogin,data).then((res) => {
+            //   console.log(res)
+            // })
             // this.$router.push({path:'MakeSure'})
         },
         spapLogin(){            //司派登陆

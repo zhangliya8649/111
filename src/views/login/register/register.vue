@@ -70,12 +70,11 @@ export default {
         },
         //获取图片验证码
         getImgCode(){
-          let data = {}
-          this.$Http.post(this.Action.imgCode,data,{headers:{"Host":'125.208.1.66'}}).then((res) => {
-            console.log(res)
-          }).catch((err) => {
-
-          })
+         this.Http.post(this.Action.imgCode).then((data) => {
+          console.log(data)
+        }).catch((res) => {
+          console.log(res);
+        });
         },
     },
     mounted(){

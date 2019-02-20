@@ -7,8 +7,6 @@ import Action from './request/Action'
 import Http from './request/http'
 
 
-import Axios from 'axios'
-import './request/config'
 
 
 Vue.use(ElementUI)
@@ -16,7 +14,6 @@ Vue.config.productionTip = false
 
 Vue.prototype.Http = Http
 Vue.prototype.Action = Action
-Vue.prototype.$Http = Axios
 
 new Vue({
     el: '#app',
