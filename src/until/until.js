@@ -7,6 +7,10 @@ class Util {
       let user = JSON.parse(sessionStorage.getItem('userInfo')) ? JSON.parse(sessionStorage.getItem('userInfo')) : null
       return user
     }
+    getUserId(){
+      let user = JSON.parse(sessionStorage.getItem('userInfo')) ? JSON.parse(sessionStorage.getItem('userInfo')).user.id : null
+      return user
+    }
     //克隆
     cloneObj(obj){
       var str, newobj = obj.constructor === Array ? [] : {};

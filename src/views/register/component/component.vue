@@ -78,6 +78,7 @@ export default {
                 type:'success',
                 message:'注册成功'
               })
+              this.$router.push({path:'/Login'})
             }).catch((err) => {
               console.log(err)
             })

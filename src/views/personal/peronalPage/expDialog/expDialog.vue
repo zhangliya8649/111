@@ -92,8 +92,9 @@ export default {
         add(){              //添加
             console.log(this.form)
             let addMsg = {
-                time:Until.timestampToTime(this.time),
-                info:this.info,
+                celebrityId:Until.getUserId(),
+                workTime:Until.timestampToTime(this.time),
+                content:this.info,
             }
             this.tableData.push(addMsg)
             this.msg.push(addMsg)
@@ -108,7 +109,7 @@ export default {
         //获取用户从业信息
         getUserJobInfo(){
             let data = {
-                celebrityId:Until.getUser().user.id,
+                celebrityId:Until.getUserId(),
                 token:Until.getUser().token
             }
             this.Http.post(this.Action.jobInfo,data).then((res) => {
