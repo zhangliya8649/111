@@ -12,8 +12,8 @@
           <li class='credit'>
             <router-link to='/credit'>信用中心</router-link>
           </li>
-          <li class="user" v-if="isLogin">
-            <router-link to="/personal">{{userName}}</router-link>
+          <li class="user" v-if="$store.getters.isLogin">
+            <router-link to="/personal">{{$store.getters.getUserName ? $store.getters.getUserName.user.nickName : ''}}</router-link>
             <span>|</span>
             <a @click="logOut">退出</a>
           </li>
@@ -44,8 +44,8 @@ import Until from '../../until/until.js'
   export default {
     data(){
       return{
-        userName:this.$store.getters.getUserName ? this.$store.getters.getUserName.user.nickName : '',   //用户信息
-        isLogin:this.$store.getters.isLogin,      //是否登陆
+        userName:'',   //用户信息
+        isLogin:false,      //是否登陆
         dialogVisible:false,//显示提示
       }
     },
