@@ -8,8 +8,8 @@ import peopleDetail from '../views/credit/people/peopleDetail.vue'
 import companyDetail from '../views/credit/company/companyDetail.vue'
 import Personal from '../views/personal/personal.vue'
 import MakeSure from '../views/personal/makeSureInfo/makeSureInfo.vue'
-import Register from '../views/login/login.vue'
 import Search from '../views/search/search.vue'
+import Register from '../views/register/regist.vue'
 
 Vue.use(Router)
 export default new Router({
@@ -23,6 +23,11 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
     },
     {
       path: '/credit',
@@ -53,11 +58,6 @@ export default new Router({
       path: '/MakeSure',
       name: 'MakeSure',
       component: MakeSure
-    },
-    {
-      path: '/register',
-      name: 'Register',
-      component: Register
     },
     {
       path: '/search',

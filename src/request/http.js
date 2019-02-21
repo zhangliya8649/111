@@ -46,10 +46,12 @@ export default {
               if (res.data.code == 200) {
                   resolve(res.data.data)
               } else {
-              // 错误处理，待写
                   switch (res.data.code) {
-                      case 400 : resolve('参数错误');break;
-                      case 404 : resolve('地址错误');break;
+                      case 400 : reject('参数错误');break;
+                      case 404 : reject('地址错误');break;
+                      case 10001 : reject('图片验证码错误');break;
+                      case 10011 : reject('手机号未注册');break;
+                      default : reject(res);break;
                   }
               }
           }

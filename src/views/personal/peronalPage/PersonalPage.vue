@@ -9,39 +9,39 @@
                 <div class="content" v-if='showBasicInfo'>
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">姓名：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">乔杉</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.user}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">性别：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">男</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.sex}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">年龄：</div></el-col>
-                        <el-col :span="5"><div class="grid-content bg-purple">31</div></el-col>
+                        <el-col :span="5"><div class="grid-content bg-purple">{{basicInfo.age}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">祖籍：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">中国</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.region}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">公司：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">北京眼缘影视有限公司</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.company}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">职务：</div></el-col>
-                        <el-col :span="5"><div class="grid-content bg-purple">好好好</div></el-col>
+                        <el-col :span="5"><div class="grid-content bg-purple">{{basicInfo.workClass}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">学历：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">本科</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.Record}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">职业：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">演员</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.job}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">政治面貌：</div></el-col>
-                        <el-col :span="5"><div class="grid-content bg-purple">党员</div></el-col>
+                        <el-col :span="5"><div class="grid-content bg-purple">{{basicInfo.Political}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">执业时间：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">2012.08.09</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.workTime}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">职业证书：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">084322</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.workBook}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">证书时间：</div></el-col>
-                        <el-col :span="5"><div class="grid-content bg-purple">2019.09.09</div></el-col>
+                        <el-col :span="5"><div class="grid-content bg-purple">{{basicInfo.bookTime}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">代表作品：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">设计部</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.classicWork}}</div></el-col>
                     </el-row>
                 </div>
                 <div class="content" v-else>
@@ -56,16 +56,16 @@
                             <el-input v-model="basicInfo.age" placeholder="请输入您的年龄"></el-input>
                         </el-form-item>
                         <el-form-item label="祖籍：" label-width='90px'>
-                            <el-input v-model="basicInfo.country" placeholder="请输入您的祖籍"></el-input>
+                            <el-input v-model="basicInfo.region" placeholder="请输入您的祖籍"></el-input>
                         </el-form-item>
                         <el-form-item label="公司：" label-width='90px'>
                             <el-input v-model="basicInfo.company" placeholder="请输入公司名称"></el-input>
                         </el-form-item>
                         <el-form-item label="职务：" label-width='90px'>
-                            <el-input v-model="basicInfo.level" placeholder="请输入您的职务"></el-input>
+                            <el-input v-model="basicInfo.workClass" placeholder="请输入您的职务"></el-input>
                         </el-form-item>
                         <el-form-item label="学历：" label-width='90px'>
-                            <el-input v-model="basicInfo.edu" placeholder="请输入您的学历"></el-input>
+                            <el-input v-model="basicInfo.Record" placeholder="请输入您的学历"></el-input>
                         </el-form-item>
                         <el-form-item label="职业：" label-width='90px'>
                             <el-select v-model="basicInfo.job" placeholder="请选择您的职业" class="input">
@@ -74,21 +74,33 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="政治面貌：" label-width='90px'>
-                            <el-input v-model="basicInfo.user" placeholder="请输入您的政治面貌"></el-input>
+                            <el-input v-model="basicInfo.Political" placeholder="请输入您的政治面貌"></el-input>
                         </el-form-item>
                         <el-form-item label="执业时间：" label-width='90px'>
-                            <el-input v-model="basicInfo.worktime" placeholder="请选择您的执业时间"></el-input>
+                            <el-date-picker
+                                v-model="basicInfo.worktime"
+                                align="right"
+                                type="date"
+                                placeholder="请选择您的执业时间"
+                                style="width:202px;">
+                            </el-date-picker>
                         </el-form-item>
                         <el-form-item label="职业证书：" label-width='90px'>
-                            <el-input v-model="basicInfo.certificate" placeholder="请输入您的证书编号"></el-input>
+                            <el-input v-model="basicInfo.workBook" placeholder="请输入您的证书编号"></el-input>
                         </el-form-item>
                         <el-form-item label="证书时间：" label-width='90px'>
-                            <el-input v-model="basicInfo.certificatetime" placeholder="请选择您的证书时间"></el-input>
+                            <el-date-picker
+                                v-model="basicInfo.bookTime"
+                                align="right"
+                                type="date"
+                                placeholder="请选择您的证书时间"
+                                style="width:202px;">
+                            </el-date-picker>
                         </el-form-item>
                         <el-row type="flex" class="row-bg" justify="center">
                             <el-col :span="8">
                                 <el-form-item label="代表作品：" label-width='90px'>
-                            <el-input v-model="basicInfo.works" placeholder="请输入您的代表作品"></el-input>
+                            <el-input v-model="basicInfo.classicWork" placeholder="请输入您的代表作品"></el-input>
                         </el-form-item>
                             </el-col>
                             <el-col :span="8" :offset="8" style="paddingLeft:19.5%">
@@ -119,18 +131,18 @@
                         :data="tableData1"
                         style="width: 100%">
                         <el-table-column
-                            prop="date"
-                            label="日期"
-                            width="180">
+                            prop="honorTime"
+                            label="时间"
+                            width="250">
                         </el-table-column>
                         <el-table-column
-                            prop="name"
-                            label="姓名"
-                            width="180">
+                            prop="summary"
+                            label="摘要"
+                            width="300">
                         </el-table-column>
                         <el-table-column
-                            prop="address"
-                            label="地址">
+                            prop="honorDesc"
+                            label="描述">
                         </el-table-column>
                     </el-table>
                 </div>
@@ -146,18 +158,18 @@
                         :data="tableData2"
                         style="width: 100%">
                         <el-table-column
-                            prop="date"
-                            label="日期"
-                            width="180">
+                            prop="benefitTime"
+                            label="时间"
+                            width="250">
                         </el-table-column>
                         <el-table-column
-                            prop="name"
-                            label="姓名"
-                            width="180">
+                            prop="summary"
+                            label="摘要"
+                            width="300">
                         </el-table-column>
                         <el-table-column
-                            prop="address"
-                            label="地址">
+                            prop="benefitDesc"
+                            label="描述">
                         </el-table-column>
                     </el-table>
                 </div>
@@ -190,8 +202,8 @@
                 </div>
             </div>
             <!-- 弹窗 -->
-            <Dialog :showDialog='2' ref='dialog'></Dialog>
-            <ExpDialog ref='expDialog'></ExpDialog>
+            <Dialog :showDialog='2' @getBenefit='getUserBenefit' @getHonor='getUserHonor' ref='dialog'></Dialog>
+            <ExpDialog ref='expDialog' :data='JobInfo'></ExpDialog>
             <ChoseWorks ref='choseWorks'></ChoseWorks>
         </div>
     </div>
@@ -203,6 +215,7 @@ import Dialog from './dialog/dialog'
 import ExpDialog from './expDialog/expDialog'
 import TimeLine from './timeLine/timeLine'
 import ChoseWorks from './choseWorks/choseWorks'
+import Until from '../../../until/until.js'
 export default {
     components:{Works,Dialog,ExpDialog,TimeLine,ChoseWorks},
     data(){
@@ -239,43 +252,51 @@ export default {
         return{
             showBasicInfo:true,//点击补全信息
             basicInfo: {
-                user: '',
-                region: ''
+                user: '乔杉',
+                sex:'男',
+                age: '31',
+                region:'中国',
+                company:'北京眼缘影视有限公司',
+                workClass:'制片人',
+                Record:'本科',
+                job:"演员",
+                Political:'党员',
+                workTime:'2012.08.09',
+                workBook:'084322',
+                bookTime:'2019.09.09',
+                classicWork:'设计部'
             },
             //表格数据
             tableData1: [{
-                date: '2016-05-02',
-                name: '王小虎1',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-            }],
-            tableData2: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
+                honorTime:'2005-11-13',
+                summary:'金河马奖',
+                honorDesc:'荣获年度最佳演员'
+            },{
+                honorTime:'2008-12-11',
+                summary:'金马奖',
+                honorDesc:'荣获年度最佳配角'
+            },{
+                honorTime:'2005-11-13',
+                summary:'百花奖',
+                honorDesc:'提名年度最佳演员'
+            },],
+            tableData2:[{
+                benefitTime:'2002-11-13',
+                summary:'援助孤寡老人',
+                benefitDesc:'捐献物资2车'
+            },{
+                benefitTime:'2008-05-15',
+                summary:'灾区捐献',
+                benefitDesc:'地震捐献5万元'
+            },
+            {
+                benefitTime:'2010-06-18',
+                summary:'爱心捐献',
+                benefitDesc:'爱心捐献3万元'
+            },{
+                benefitTime:'2011-10-15',
+                summary:'爱心捐献',
+                benefitDesc:'爱心捐献8万元'
             }],
             //作品展示
             worksData:[
@@ -305,16 +326,28 @@ export default {
                 ]
             },
             msg:[                                       //时间轴数据
-                {time:'2018-02-13',info:'个人信息个人信息个人信息个人信息个人信息1'},
-                {time:'2018-02-14',info:'个人信息个人信息个人信息个人信息2'},
-                {time:'2018-02-15',info:'个人信息个人信息个人信息个人信息个人信息3'},
-                {time:'2018-02-16',info:'个人信息个人信息个人信息个人信息4'},
-                {time:'2018-02-16',info:'个人信息个人信息个人信息个人信息个人信息5'},
-                {time:'2018-02-16',info:'个人信息个人信息个人信息个人信息个人信息个人信息个人信息个人信息6'},
-            ]
+                {time:'2002-01-13',info:'创建喜剧社团'},
+                {time:'2004-02-14',info:'个人首部电影上映'},
+                {time:'2008-05-15',info:'创立自己的公司'},
+                {time:'2011-03-05',info:'首次参演春节联欢晚会'},
+                {time:'2014-05-22',info:'传作小品喜剧20部'},
+            ],
+            //从业信息
+            JobInfo:[{
+                time:'2019-02-09',
+                info:'2eqeqw'
+            }],
+
         }
     },
     methods:{
+        //初始化页面
+        init(){
+            this.getUserInfo()
+            this.getUserBenefit()
+            this.getUserJobInfo()
+            this.getUserHonor()
+        },
         //补全信息
         editBasic(){
             this.showBasicInfo = false
@@ -333,8 +366,65 @@ export default {
             this.$refs.expDialog.openExp()
         },
         editSurePass(){         //确认修改密码
-            
-        }
+            this.$router.push({path:'/MakeSure'})
+        },
+        //获取用户信息
+        getUserInfo(){
+            let data = {
+                celebrityId:Until.getUser().user.id,
+                identityType:Until.getUser().user.userType
+            }
+            this.Http.post(this.Action.userInfo,data).then((res) => {
+                console.log(res)
+            }).catch((err) => {
+                console.log(err)
+            })
+        },
+        //获取用户社会公益
+        getUserBenefit(){
+            let data = {
+                celebrityId:Until.getUser().user.id,
+                token:Until.getUser().token
+            }
+            this.Http.post(this.Action.benefit,data).then((res) => {
+                this.tableData2 = res.list
+            }).catch((err) => {
+                console.log(err)
+            })
+        },
+        //获取用户从业信息
+        getUserJobInfo(){
+            let data = {
+                celebrityId:Until.getUser().user.id,
+                token:Until.getUser().token
+            }
+            this.Http.post(this.Action.jobInfo,data).then((res) => {
+                this.jobInfo = res
+            }).catch((err) => {
+                console.log(err)
+            })
+        },
+        //获取用户个人荣誉
+        getUserHonor(){
+            let data = {
+                celebrityId:Until.getUser().user.id,
+                token:Until.getUser().token
+            }
+            this.Http.post(this.Action.userHonor,data).then((res) => {
+                this.tableData1 = res.list
+            }).catch((err) => {
+                console.log(err)
+            })
+        },
+        // dateChange(row,column){             //时间过滤
+        //     return Until.timestampToTime(row.honorTime)
+        // },
+        // dateChange1(row,column){             //时间过滤
+        //     return Until.timestampToTime(row.benefitTime)
+        // },
+    },
+    mounted(){
+        // this.init()
     }
 }
 </script>

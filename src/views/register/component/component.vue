@@ -8,8 +8,8 @@
               </div>
               <div class='form-list code'>
                 <input type='text' placeholder='请输入您看到的验证码' v-model="imgCode">
-                <div class='img-code'><img :src="imgCode"></div>
-                <div class='get-code'>看不清？换一张</div>
+                <div class='img-code'><img :src="codeImg"></div>
+                <div class='get-code' @click="changeImg">看不清？换一张</div>
               </div>
               <div class='form-list pwd'>
                 <div>
@@ -29,8 +29,8 @@
                 <input type='password' placeholder='请再次输入密码' v-model="checkPass">
                 <div class='pwd-eye-icon'></div>
               </div>
-              <div class='form-list login' @click="login">
-                登录
+              <div class='form-list login' @click="regist">
+                注 册
               </div>
               <div class='form-list register'>
                 已有账号？
@@ -53,9 +53,10 @@
 export default {
     data(){
         return{
-          imgCode:'',       //图片验证码
-          codeId:'',        //图片验证码id
+          codeImg:'',       //验证码图片
+          imgId:'',        //图片验证码id
           phone:'',         //手机号码
+          imgCode:'',       //图片验证码
           phoneCode:'',     //手机验证码
           password:'',      //登陆密码
           checkPass:'',     //检查登陆密码
@@ -64,40 +65,64 @@ export default {
         }
     },
     methods:{
-        login(){
-            this.$router.push({path:'Personal'})
+        regist(){
+            let data = {
+              phone: this.phone,
+              code:this.phoneCode,
+              pwd:this.password,
+              imgId:this.imgId,
+              imgCode:this.imgCode
+            }
+            this.Http.post(this.Action.regist,data).then((res) => {
+              this.$message({
+                type:'success',
+                message:'注册成功'
+              })
+            }).catch((err) => {
+              console.log(err)
+            })
         },
         spapLogin(){            //司派登陆
-            this.$emit('toggleLogin',1)
+            this.$router.push({path:'/login',query:{num:1}})
         },
         passwordLogin(){               //手机号快捷登陆
-            this.$emit('toggleLogin',0)
+            this.$router.push({path:'/login',query:{num:0}})
         },
-        login(){                   //注册
-            this.$emit('toggleLogin',0)
+        login(){                   //登陆
+            this.$router.push({path:'/login',query:{num:0}})
         },
         //获取图片验证码
         getImgCode(){
          this.Http.post(this.Action.imgCode).then((res) => {
-            this.imgCode = res.imgPath
-            this.codeId = res.imgId
+            this.codeImg = res.imgPath
+            this.imgId = res.imgId
           }).catch((res) => {
             console.log(res);
           });
         },
+        //切换图片
+        changeImg(){
+          this.getImgCode()
+        },
         //获取手机验证码
         getPhoneCode(){
-          // let data = {
-          //   phone : this.phone,
-          //   imgId : this.imgId,
-          //   imgCode : this.imgCode
-          // }
-          // this.Http.post(this.Action.getPhoneCode,data).then((res) => {
-          //   console.log()
-          // }).catch((res) => {
+          let data = {
+            phone : this.phone,
+            imgId : this.imgId,
+            imgCode : this.imgCode
+          }
+          this.Http.post(this.Action.getPhoneCode,data).then((res) => {
+            this.getCode = false
+            let timeInter = setInterval(() => {
+              this.seconds--
+              if(this.seconds <= 0){
+                this.getCode = true;
+                clearInterval(timeInter)
+              }
+            },1000)
+          }).catch((res) => {
 
-          // })
-          this.getCode = false
+          })
         },
     },
     mounted(){
@@ -159,7 +184,7 @@ export default {
             height: 45px;
             background-color: #F8F9FC;
             font-size: 14px;
-            color: #CCCCCC;
+            color: #606266;
             outline: none;
           }
           .verificationCode{

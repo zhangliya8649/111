@@ -4,22 +4,23 @@
            <div class='form'>
               <div class='form-list user'>
                 <div class='icon user-icon'></div>
-                <input type='text' placeholder='请输入手机号'>
+                <input type='text' placeholder='请输入手机号' v-model="phone">
               </div>
               <div class='form-list code'>
-                <input type='text' placeholder='请输入您看到的验证码'>
-                <div class='img-code'><img :src="imgCode"></div>
-                <div class='get-code'>看不清？换一张</div>
+                <input type='text' placeholder='请输入您看到的验证码' v-model="imgCode">
+                <div class='img-code'><img :src="codeImg"></div>
+                <div class='get-code' @click="changeImg">看不清？换一张</div>
               </div>
               <div class='form-list pwd'>
                 <div>
                     <div class='icon pwd-icon'></div>
-                    <input type='password' class="verificationCode" placeholder='请输入验证码'>
+                    <input type='password' class="verificationCode" placeholder='请输入验证码' v-model="phoneCode">
                 </div>
-                <button class="getCode" @click="getPhoneCode">获取验证码</button>
+                <button class="getCode" @click="getPhoneCode" v-if="getCode">获取验证码</button>
+                <button class="getCode agin" v-else>{{seconds}}秒后再次获取</button>
               </div>
               <div class='form-list login' @click="login">
-                登录
+                登 录
               </div>
               <div class='form-list register'>
                 没有账号？
@@ -43,11 +44,32 @@ export default {
     data(){
         return{
             imgCode:'',         //图片验证码
+            codeImg:'',       //验证码的图片
+            phone:'',         //电话号码
+            imgCode:'',          //图片验证码
+            imgId:'',           //图片验证码ID
+            phoneCode:'',       //手机验证吗
+            getCode:true,       //显示获取验证码
+            seconds:60,       //倒计时
         }
     },
     methods:{
         login(){
-            this.$router.push({path:'Personal'})
+            let data = {
+              phone: this.phone,
+              code: this.phoneCode,
+              imgId: this.imgId,
+              imgCode: this.imgCode,
+            }
+            this.Http.post(this.Action.phoneLogin,data).then((res) => {
+              this.$message({
+                type:'success',
+                message:'登陆成功'
+              })
+              sessionStorage.setItem('userInfo',JSON.stringify(res))
+            }).catch((err) => {
+
+            })
         },
         spapLogin(){            //司派登陆
             this.$emit('toggleLogin',1)
@@ -56,11 +78,48 @@ export default {
             this.$emit('toggleLogin',0)
         },
         regist(){                   //注册
-            this.$emit('toggleLogin',3)
+            this.$router.push({path:'/register'})
         },
-        getPhoneCode(){             //获取手机验证码
-            this.Http('post',)
+        //获取手机验证码
+        getPhoneCode(){
+          this.seconds = 60
+          let data = {
+            phone : this.phone,
+            imgId : this.imgId,
+            imgCode : this.imgCode
+          }
+          this.Http.post(this.Action.getPhoneCode,data).then((res) => {
+            this.getCode = false
+            let timeInter = setInterval(() => {
+              this.seconds--
+              if(this.seconds <= 0){
+                this.getCode = true;
+                clearInterval(timeInter)
+              }
+            },1000)
+          }).catch((res) => {
+
+          })
+        },
+        //获取图片验证码
+        getImgCode(){
+         this.Http.post(this.Action.imgCode).then((res) => {
+            this.codeImg = res.imgPath
+            this.imgId = res.imgId
+          }).catch((err) => {
+            this.$message({
+              type:'error',
+              message:err
+            })
+          });
+        },
+        //换一张
+        changeImg(){
+          this.getImgCode()
         }
+    },
+    mounted(){
+      this.getImgCode()
     }
 }
 </script>
@@ -115,7 +174,7 @@ export default {
             height: 45px;
             background-color: #F8F9FC;
             font-size: 14px;
-            color: #CCCCCC;
+            color: #606266;
             outline: none;
           }
           .verificationCode{
@@ -133,6 +192,9 @@ export default {
             text-align: center;
             outline: none;
             cursor: pointer;
+            &.agin{
+              background-color: #CCCCCC;
+            }
           }
         }
         .pwd{
@@ -161,6 +223,7 @@ export default {
           }
           .img-code {
             width: 90px;
+            height: 45px;
             margin-right: 10px;
             background-color: #F8F9FC;
           }

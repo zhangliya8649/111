@@ -40,7 +40,7 @@
                             </div>
                             <div class="title">
                                 <img :src="classIcon">
-                                <span>信用等级</span>
+                                <span class="info">信用等级</span>
                             </div>
                         </div>
                         <div class="selfOther">
@@ -49,7 +49,7 @@
                             </div>
                             <div class="title">
                                 <img :src="goalIcon">
-                                <span>表彰</span>
+                                <span class="info reword">表彰</span>
                             </div>
                         </div>
                         <div class="selfOther">
@@ -58,7 +58,7 @@
                             </div>
                             <div class="title">
                                 <img :src="notIcon">
-                                <span>失信信息</span>
+                                <span class="info">失信信息</span>
                             </div>
                         </div>
                     </div>
@@ -241,7 +241,7 @@ export default {
                             .other{
                                  p{
                                     font-family: PingFang-SC-Medium;
-                                    font-size: 68px;
+                                    font-size: 86px;
                                     color: #4A4A4A;
                                     letter-spacing: 0;
                                     line-height: 68px;
@@ -250,15 +250,20 @@ export default {
                                 }
                             }
                             .title{
+                                margin: 0 auto;
+                                width: 94px;
+                                display: flex;
+                                justify-content: space-between;
                                 img{
                                     vertical-align: middle;
-                                    margin-right: 18px;
                                 }
                                 font-family: PingFang-SC-Medium;
-                                font-size: 16px;
                                 color: #9B9B9B;
-                                letter-spacing: 0;
                                 line-height: 20px;
+                                font-size: 16px; 
+                                .reword{   
+                                    letter-spacing: 12px;
+                                }
                             }
                         }
                     }

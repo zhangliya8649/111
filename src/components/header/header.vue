@@ -15,30 +15,55 @@
           <li class="user" v-if="isLogin">
             <router-link to="/personal">{{userName}}</router-link>
             <span>|</span>
-            <a>退出</a>
+            <a @click="logOut">退出</a>
           </li>
           <li class='loginRegister' v-else>
-            <router-link to='/login'>登录</router-link>
+            <router-link :to="{path:'/login',query: {num: 0}}">登录</router-link>
             <span>|</span>
             <router-link to='/register'>注册</router-link>
           </li>
         </ul>
       </div>
     </div>
+    <el-dialog 
+    id="dialog"
+    title="提示"
+    :visible.sync="dialogVisible"
+    width="20%" >
+    <span>是否退出登录</span>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button @click="logOutSure" class="btn">确 定</el-button>
+    </span>
+  </el-dialog>
   </div>
 </template>
 
 <script>
+import Until from '../../until/until.js'
   export default {
-    name: 'header',
     data(){
       return{
-        userName:'admin',   //用户名称
-        isLogin:false,      //是否登陆
+        userName:this.$store.getters.getUserName ? this.$store.getters.getUserName.user.nickName : '',   //用户信息
+        isLogin:this.$store.getters.isLogin,      //是否登陆
+        dialogVisible:false,//显示提示
       }
     },
     methods: {
-
+      getUser(){      //获取用户信息
+        this.isLogin =  this.$store.getters.isLogin
+      },
+      logOut(){
+        this.dialogVisible = true
+      },
+      logOutSure(){
+        this.dialogVisible = false
+        this.$store.commit('signOut')
+        this.$router.push({path:'/'})
+        this.getUser()
+      }
+    },
+    mounted(){
     }
   }
 </script>
@@ -140,6 +165,19 @@
            span {
             font-size: 12px;
            }
+        }
+      }
+    }
+    #dialog{
+      .el-dialog{
+        .el-dialog__body{
+          padding: 0 30px!important;
+          text-align: center;
+        }
+        .btn{
+          background-color: #F58523;
+          color: #fff;
+          border-color: #F58523;
         }
       }
     }

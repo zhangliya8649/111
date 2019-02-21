@@ -9,48 +9,30 @@
           <img src='../../assets/login/yxc-bg5.jpg' title='影信查' />
           <img src='../../assets/login/yxc-bg6.jpg' title='影信查' />
         </div>
-        <PasswordLogin v-if="loginNum == 0" @toggleLogin='toggleLogin'></PasswordLogin>
-        <SpapLogin v-if="loginNum == 1" @toggleLogin='toggleLogin'></SpapLogin>
-        <PhoneLogin v-if="loginNum == 2" @toggleLogin='toggleLogin'></PhoneLogin>
-        <!-- <Register v-if="loginNum == 3" @toggleLogin='toggleLogin'></Register> -->
+        <Register @toggleLogin='toggleLogin'></Register>
     </div>
   </div>
 
 </template>
 
 <script>
-import PasswordLogin from './passwordLogin/passwordLogin'
-import PhoneLogin from './phoneLogin/phoneLogin'
-import SpapLogin from './spapLogin/spapLogin'
-// import Register from './register/register'
+import Register from './component/component'
   export default {
-    name: 'login',
+    name: 'regist',
     components: {
-      PasswordLogin,
-      PhoneLogin,
-      SpapLogin,
-      // Register
+      Register
     },
     data(){
       return{
-        loginNum: 0,        //登陆方式
       }
     },
     methods: {
       toggleLogin(num){
         this.loginNum = num;
         console.log('0111')
-      },
-      checkNum(){
-        if(this.$route.query.num){
-          this.loginNum = this.$route.query.num
-        }else{
-          this.loginNum = 0
-        }
       }
     },
     mounted(){
-      this.checkNum()
     }
   }
 </script>
@@ -60,12 +42,10 @@ import SpapLogin from './spapLogin/spapLogin'
     position: relative;
     width: 1920px;
     height: 1080px;
-    margin: 0 auto;
     background-image: url('../../assets/login/yxc-bg.jpg');
     background-repeat: no-repeat;
     overflow: hidden;
     .bg-par {
-      margin: 0 auto;
       img {
         display: block;
       }

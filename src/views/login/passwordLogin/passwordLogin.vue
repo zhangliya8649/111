@@ -12,12 +12,12 @@
                 <div :class='["pwd-eye-icon",open]' @click="openEye"></div>
               </div>
               <div class='form-list code'>
-                <input type='text' placeholder='请输入您看到的验证码' v-model="code">
-                <div class='img-code'><img :src="imgCode"></div>
-                <div class='get-code'>看不清？换一张</div>
+                <input type='text' placeholder='请输入您看到的验证码' v-model="imgCode">
+                <div class='img-code'><img :src="codeImg"></div>
+                <div class='get-code' @click="changeImg">看不清？换一张</div>
               </div>
               <div class='form-list login' @click="login">
-                登录
+                登 录
               </div>
               <div class='form-list register'>
                 没有账号？
@@ -43,10 +43,11 @@ export default {
             isOpen:false,   //判断是否显示密码
             open: '',       //密码显示
             type:'password',  //密码框类型
-            imgCode:'',       //验证码的图片
+            codeImg:'',       //验证码的图片
             phone:'',         //电话号码
             pwd:'',           //密码
-            code:'',          //图片验证码
+            imgCode:'',          //图片验证码
+            imgId:'',           //图片验证码ID
         }
     },
     methods:{
@@ -54,13 +55,23 @@ export default {
             let data = {
               phone:this.phone,
               pwd:this.pwd,
-              imgId:'1',
-              imgCode:this.code
+              imgId:this.imgId,
+              imgCode:this.imgCode
             }
-            // this.$Http.post(this.Action.passwordLogin,data).then((res) => {
-            //   console.log(res)
-            // })
-            // this.$router.push({path:'MakeSure'})
+            this.Http.post(this.Action.passwordLogin,data).then((res) => {
+              this.$message({
+                type:'success',
+                message:'登陆成功'
+              })
+              sessionStorage.setItem('userInfo',JSON.stringify(res))
+              this.$store.commit('setUserInfo')
+              this.$router.push({path:'/Personal'})
+            }).catch((res) => {
+               this.$message({
+                type:'error',
+                message:err
+              })
+            })
         },
         spapLogin(){            //司派登陆
             this.$emit('toggleLogin',1)
@@ -69,13 +80,32 @@ export default {
             this.$emit('toggleLogin',2)
         },
         regist(){                   //注册
-            this.$emit('toggleLogin',3)
+            this.$router.push({path:'/register'})
         },
         openEye(){                   //显示密码
             this.isOpen = !this.isOpen
             this.isOpen ? this.open = 'open' : this.open = ''
             this.isOpen ? this.type = 'text' : this.type = 'password'
+        },
+         //获取图片验证码
+        getImgCode(){
+         this.Http.post(this.Action.imgCode).then((res) => {
+            this.codeImg = res.imgPath
+            this.imgId = res.imgId
+          }).catch((err) => {
+            this.$message({
+              type:'error',
+              message:err
+            })
+          });
+        },
+        //换一张
+        changeImg(){
+          this.getImgCode()
         }
+    },
+    mounted(){
+      this.getImgCode()
     }
 }
 </script>
@@ -130,7 +160,7 @@ export default {
             height: 45px;
             background-color: #F8F9FC;
             font-size: 14px;
-            color: #CCCCCC;
+            color: #606266;
             outline: none;
           }
         }
@@ -171,6 +201,7 @@ export default {
           }
           .img-code {
             width: 90px;
+            height: 45px;
             margin-right: 10px;
             background-color: #F8F9FC;
           }

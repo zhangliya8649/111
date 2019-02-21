@@ -33,11 +33,12 @@
     </div>
 </template>
 <script>
+import Until from '../../../../until/until.js'
 export default {
-    props:['showDialog'],
     data(){
         return{
             dialogFormVisible:false,
+            num:'',             //类型判断
             form:{},        //表单绑定
             title: '添加个人荣誉',//弹窗标题
             time:'',               //时间点
@@ -48,10 +49,51 @@ export default {
     },
     methods:{
         makeSure(){
-            console.log(111)
+            if(this.num == '1'){
+                let data = {
+                    celebrityId:Until.getUser().user.id,
+                    honorTime:this.time,
+                    summary:this.abstract,
+                    honorDesc:this.des,
+                    type:Until.getUser().user.userType,
+                    token:Until.getUser().token
+                }
+                this.Http.post(this.Action.addHonor,data).then((res) => {
+                    this.$message({
+                        type:'success',
+                        message:'添加成功'
+                    })
+                    this.$emit('getHonor')
+                }).catch((err) => {
+                    
+                })
+            }
+            else{
+                let data = {
+                    celebrityId:Until.getUser().user.id,
+                    benefitTime:this.time,
+                    summary:this.abstract,
+                    benefitDesc:this.des,
+                    type:Until.getUser().user.userType,
+                    token:Until.getUser().token
+                }
+                this.Http.post(this.Action.addBenefit,data).then((res) => {
+                    this.$message({
+                        type:'success',
+                        message:'添加成功'
+                    })
+                    this.$emit('getBenefit')
+                }).catch((err) => {
+                    
+                })
+            }
             this.dialogFormVisible = false
+            this.time = ''
+            this.abstract = ''
+            this.des = ''
         },
         openDialog(num){
+            this.num = num
             if(num == '1'){//判断按钮类型
                 this.addexp = {title:'添加个人荣誉',abstract:'添加荣誉摘要',des:'添加荣誉描述'}
             }else{

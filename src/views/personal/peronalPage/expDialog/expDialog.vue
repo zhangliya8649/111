@@ -18,7 +18,7 @@
                             type="textarea"
                             :rows="5"
                             :placeholder="addexp.des"
-                            v-model="des"
+                            v-model="info"
                             class="text">
                         </el-input>
                     </el-form-item>
@@ -36,22 +36,22 @@
                             width="250">
                         </el-table-column>
                         <el-table-column
-                            prop="des"
+                            prop="info"
                             label="描述"
-                            width="180">
+                            width="300">
                         </el-table-column>
                         <el-table-column
                             prop="action"
                             label="操作"
                             align="center">
                             <template slot-scope="scope">
-                                <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
-                                <el-button @click="del(scope.row)" type="text" size="small">删除</el-button>
+                                <el-button @click="edit(scope.$index,tableData)" type="text" size="small">编辑</el-button>
+                                <el-button @click="del(scope.$index,tableData)" type="text" size="small">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
                 </div>
-                <div class="timeLineBox">
+                <div class="timeLineBox" v-if="msg.length > 0">
                     <TimeLine v-for="(data,index) in msg" :msg='data' :index='index' :key='index'></TimeLine>
                 </div>
             </div>
@@ -64,29 +64,20 @@
 </template>
 <script>
 import TimeLine from '../timeLine/timeLine'
+import Until from '../../../../until/until.js'
 export default {
     components:{TimeLine},
-    props:['showDialog'],
+    props:['jobInfo'],
     data(){
         return{
             dialogFormVisible:false,
             form:{},        //表单绑定
-            title: '添加个人荣誉',//弹窗标题
+            title: '添加从业信息',//弹窗标题
             time:'',               //时间点
-            abstract:'',            //摘要
-            des:'',                 //描述
-            addexp:{title:'添加个人荣誉',abstract:'添加荣誉摘要',des:'添加荣誉描述'},   //默认文本描述
-            tableData:[{            //表格数据
-                time: '2018-02-13',
-                des: '大苏打萨达',
-            }],
+            info:'',                 //描述
+            addexp:{title:'添加从业信息',des:'从业信息描述'},   //默认文本描述
+            tableData:[],
             msg:[                                       //时间轴数据
-                {time:'2018-02-13',info:'个人信息个人信息个人信息个人信息个人信息1'},
-                {time:'2018-02-14',info:'个人信息个人信息个人信息个人信息2'},
-                {time:'2018-02-15',info:'个人信息个人信息个人信息个人信息个人信息3'},
-                {time:'2018-02-16',info:'个人信息个人信息个人信息个人信息4'},
-                {time:'2018-02-16',info:'个人信息个人信息个人信息个人信息个人信息5'},
-                {time:'2018-02-16',info:'个人信息个人信息个人信息个人信息个人信息个人信息个人信息个人信息6'},
             ]
         }
     },
@@ -99,14 +90,36 @@ export default {
             this.dialogFormVisible = true
         },
         add(){              //添加
-
+            console.log(this.form)
+            let addMsg = {
+                time:Until.timestampToTime(this.time),
+                info:this.info,
+            }
+            this.tableData.push(addMsg)
+            this.msg.push(addMsg)
         },
         edit(){             //编辑
 
         },
-        del(){              //删除
-
+        del(index,rows){              //删除
+            rows.splice(index,1)
+            this.msg.splice(index,1)
         },
+        //获取用户从业信息
+        getUserJobInfo(){
+            let data = {
+                celebrityId:Until.getUser().user.id,
+                token:Until.getUser().token
+            }
+            this.Http.post(this.Action.jobInfo,data).then((res) => {
+                console.log(res)
+                // this.tableData = res
+            }).catch((err) => {
+                console.log(err)
+            })
+        },
+    },
+    mounted(){
     }
 }
 </script>
