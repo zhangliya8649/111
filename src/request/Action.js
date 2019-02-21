@@ -6,6 +6,8 @@ export default {
 
   // 搜索
   SearchList: '/c10/search/list',
+  GetHomeData: '/c10/statistics/data/show',
+
 
   // 人
   SearchPeopleListByKey: '/c10/celebrity/list',
@@ -16,7 +18,7 @@ export default {
   SearchWorkById: '/c10/subject/get/by_id',
   //图片验证码
   imgCode:'/c10/account/img/code/get',
-  
+
 
   // 登陆注册
   // 1.账号密码登陆

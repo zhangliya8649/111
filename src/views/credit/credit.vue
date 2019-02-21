@@ -12,8 +12,11 @@
         </div>
       </div>
     </div>
-    <child class='search-result' :is='curCom'>
+    <child class='search-result' :is='curCom' :dataObj.sync='dataObj'>
     </child>
+    <div class='no-result' v-if='noResult'>
+      暂无查询数据
+    </div>
   </div>
 
 </template>
@@ -42,6 +45,7 @@
         curTip: '请输入艺人名称，检索艺人信用信息',
         dataObj: {},
         page: 1,
+        noResult: false,
         tabs: [
           {name: '热点人群', comName: 'hotPeople', tip: '请输入艺人名称，检索艺人信用信息'},
           {name: '作品', comName: 'works', tip: '请输入作品名称'},
@@ -59,12 +63,25 @@
 
     methods: {
       tabMenu(index, event) {
+        let param = {
+          searchName: '',
+          tags: index + 1,
+          pageNum: 1
+        };
         this.curIndex = index;
         this.curCom = this.tabs[index].comName;
         this.curTip = this.tabs[index].tip;
+        this.getList(param);
       },
 
-
+      getList(param) {
+        this.Http.post(this.Action.SearchList, param).then((data) => {
+          this.dataObj = data;
+          this.noResult = !data.total ? true : false;
+        }).catch((res) => {
+          console.log(res);
+        });
+      },
     },
 
 
@@ -120,6 +137,7 @@
           height: 56px;
           line-height: 56px;
           background: #F58523;
+          margin-top: -1px;
           text-align: center;
           color: #fff;
           cursor: pointer;
@@ -131,5 +149,12 @@
     padding-top: 18px;
     padding-bottom: 30px;
     background: #fff;
+  }
+  .no-result {
+    height: 400px;
+    padding-top: 30px;
+    text-align: center;
+    font-size: 14px;
+    color: #4a4a4a;
   }
 </style>

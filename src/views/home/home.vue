@@ -13,7 +13,7 @@
            <div class='title'>影视行业信用信息服务平台</div>
            <div class='search'>
               <div class='search-ipt'>
-                <input type='text' v-model='searchKey' :placeholder='curTip'>
+                <input type='text' v-model='searchKey' :placeholder='curTip' @keyup.enter='getResult'>
                 <div class='search-icon' @click='getResult'></div>
               </div>
               <ul class='search-type clear center'>
@@ -28,19 +28,19 @@
          <div class='title-desc'>大数据展示文案说明</div>
          <ul class='con clear center'>
             <li class='company-num'>
-              <p class='num'><span>40</span>+</p>
+              <p class='num'><span>768{{homeObj.companyCount}}</span>+</p>
               <p class='name'>参与影视公司数量</p>
             </li>
             <li class='actor-num'>
-              <p class='num'><span>678</span>+</p>
+              <p class='num'><span>1233{{homeObj.movieCount}}</span>+</p>
               <p class='name'>在线影视演艺演员人数</p>
             </li>
             <li class='works-num'>
-              <p class='num'><span>3425</span>+</p>
+              <p class='num'><span>8778{{homeObj.copyCount}}</span>+</p>
               <p class='name'>作品库存量</p>
             </li>
             <li class=''>
-              <p class='num'><span>2000</span>+</p>
+              <p class='num'><span>152{{homeObj.personCount}}</span>+</p>
               <p class='name'>奖惩信息</p>
             </li>
          </ul>
@@ -79,13 +79,17 @@
       CountUp
     },
 
+    created: function() {
+      //this.getHomeData();
+    },
+
     data() {
       return {
         searchKey: '',
         curIndex: 0,
         curCom: 'searchPeople',
         curTip: '请输入艺人名称，检索艺人信用信息',
-        dataObj: {},
+        homeObj: {},
         page: 1,
         tabs: [
           {name: '热点人群', comName: 'searchPeople', tip: '请输入艺人名称，检索艺人信用信息'},
@@ -119,6 +123,13 @@
         this.curTip = this.tabs[index].tip;
       },
 
+      getHomeData() {
+        this.Http.post(this.Action.GetHomeData, {}).then((data) => {
+          this.homeObj = data;
+        }).catch((res) => {
+
+        });
+      }
     }
   }
 </script>
