@@ -2,14 +2,8 @@
   <div>
     <div class='bg'>
         <div class='bg-par w1180 clear'>
-          <img src='../../assets/login/yxc-bg1.jpg' title='影信查' />
-          <img src='../../assets/login/yxc-bg2.jpg' title='影信查' />
-          <img src='../../assets/login/yxc-bg3.jpg' title='影信查' />
-          <img src='../../assets/login/yxc-bg4.jpg' title='影信查' />
-          <img src='../../assets/login/yxc-bg5.jpg' title='影信查' />
-          <img src='../../assets/login/yxc-bg6.jpg' title='影信查' />
+          <Register @toggleLogin='toggleLogin'></Register>
         </div>
-        <Register @toggleLogin='toggleLogin'></Register>
     </div>
   </div>
 
@@ -40,12 +34,13 @@ import Register from './component/component'
 <style lang='less' scoped>
   .bg {
     position: relative;
-    width: 1920px;
+    width: 100%;
     height: 1080px;
-    background-image: url('../../assets/login/yxc-bg.jpg');
+    background-image: url('../../assets/login/bg.png');
     background-repeat: no-repeat;
     overflow: hidden;
     .bg-par {
+      height: 100%;
       img {
         display: block;
       }

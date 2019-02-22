@@ -40,6 +40,7 @@
         </div>
 </template>
 <script>
+import Until from '../../../until/until.js'
 export default {
     data(){
         return{
@@ -54,22 +55,54 @@ export default {
         }
     },
     methods:{
-        login(){
-            let data = {
-              phone: this.phone,
-              code: this.phoneCode,
-              imgId: this.imgId,
-              imgCode: this.imgCode,
-            }
-            this.Http.post(this.Action.phoneLogin,data).then((res) => {
-              this.$message({
-                type:'success',
-                message:'登陆成功'
-              })
-              sessionStorage.setItem('userInfo',JSON.stringify(res))
-            }).catch((err) => {
-
+        checkForm(){
+          let phoneCheck = Until.checkPhone(this.phone)
+          if(phoneCheck != 'success'){
+            this.$message({
+              type:'error',
+              message:'手机号无效'
             })
+            return false
+          }else if(this.imgCode == ''){
+            this.$message({
+              type:'error',
+              message:'请输入图片验证码'
+            })
+            return false
+          }else if(this.phoneCode == ''){
+            this.$message({
+              type:'error',
+              message:'请输入手机验证码'
+            })
+            return false
+          }else{
+            return true
+          }
+        }, 
+        login(){
+            if(this.checkForm()){
+              let data = {
+                phone: this.phone,
+                code: this.phoneCode,
+                imgId: this.imgId,
+                imgCode: this.imgCode,
+              }
+              this.Http.post(this.Action.phoneLogin,data).then((res) => {
+                if(res.data){
+                  Until.ErrorCode(res.data.code)
+                }else{
+                  this.$message({
+                    type:'success',
+                    message:'登陆成功'
+                  })
+                  sessionStorage.setItem('userInfo',JSON.stringify(res))
+                  this.$store.commit('setUserInfo')
+                  this.$router.push({path:'/Personal'})
+                }
+              }).catch((err) => {
+
+              })
+            }
         },
         spapLogin(){            //司派登陆
             this.$emit('toggleLogin',1)
@@ -82,21 +115,41 @@ export default {
         },
         //获取手机验证码
         getPhoneCode(){
-          this.seconds = 60
+          let phoneCheck = Until.checkPhone(this.phone)
+          if(phoneCheck != 'success'){
+            this.$message({
+              type:'error',
+              message:'手机号无效'
+            })
+            return false
+          }else if(this.imgCode == ''){
+            this.$message({
+              type:'error',
+              message:'请输入图片验证码'
+            })
+            return false
+          }
           let data = {
             phone : this.phone,
             imgId : this.imgId,
             imgCode : this.imgCode
           }
           this.Http.post(this.Action.getPhoneCode,data).then((res) => {
-            this.getCode = false
-            let timeInter = setInterval(() => {
-              this.seconds--
-              if(this.seconds <= 0){
-                this.getCode = true;
-                clearInterval(timeInter)
-              }
-            },1000)
+            if(res){
+              this.$message({
+                type:'error',
+                message:'图片验证码错误'
+              })
+            }else{
+              this.getCode = false
+              let timeInter = setInterval(() => {
+                this.seconds--
+                if(this.seconds <= 0){
+                  this.getCode = true;
+                  clearInterval(timeInter)
+                }
+              },1000)
+            }
           }).catch((res) => {
 
           })
@@ -194,6 +247,7 @@ export default {
             cursor: pointer;
             &.agin{
               background-color: #CCCCCC;
+              cursor: default;
             }
           }
         }
@@ -225,7 +279,10 @@ export default {
             width: 90px;
             height: 45px;
             margin-right: 10px;
-            background-color: #F8F9FC;
+            background-color: #fff;
+            img{
+              vertical-align: middle;
+            }
           }
           .get-code {
             width: 100px;

@@ -4,7 +4,7 @@
            <div class='form'>
               <div class='form-list user'>
                 <div class='icon user-icon'></div>
-                <input type='text' placeholder='请输入手机号' v-model="phone">
+                <input type='text' placeholder='请输入手机号' v-model="phone" @blur="checkPhone">
               </div>
               <div class='form-list code'>
                 <input type='text' placeholder='请输入您看到的验证码' v-model="imgCode">
@@ -50,6 +50,7 @@
         </div>
 </template>
 <script>
+import Until from '../../../until/until.js'
 export default {
     data(){
         return{
@@ -65,23 +66,71 @@ export default {
         }
     },
     methods:{
-        regist(){
-            let data = {
-              phone: this.phone,
-              code:this.phoneCode,
-              pwd:this.password,
-              imgId:this.imgId,
-              imgCode:this.imgCode
-            }
-            this.Http.post(this.Action.regist,data).then((res) => {
-              this.$message({
-                type:'success',
-                message:'注册成功'
-              })
-              this.$router.push({path:'/Login'})
-            }).catch((err) => {
-              console.log(err)
+        checkPhone(){
+          
+        },
+        //表单验证
+        checkForm(){
+          let phoneCheck = Until.checkPhone(this.phone)
+          let passCheckAgin = Until.checkPassAgin(this.password,this.checkPass)
+          let passCheck = Until.checkPass(this.password)
+          if(phoneCheck != 'success'){
+            this.$message({
+              type:'error',
+              message:'手机号无效'
             })
+            return false
+          }else if(this.imgCode == ''){
+            this.$message({
+              type:'error',
+              message:'请输入图片验证码'
+            })
+            return false
+          }else if(this.phoneCode == ''){
+            this.$message({
+              type:'error',
+              message:'请输入手机验证码'
+            })
+            return false
+          }else if(passCheck != 'success'){
+            this.$message({
+              type:'error',
+              message:'密码只支持8~16位数字字母组合'
+            })
+            return false
+          }else if(passCheckAgin != 'success'){
+            this.$message({
+              type:'error',
+              message:'两次密码输入不一致'
+            })
+            return false
+          }else{
+            return true
+          }
+        },
+        regist(){
+            if(this.checkForm()){
+              let data = {
+                phone: this.phone,
+                code:this.phoneCode,
+                pwd:this.password,
+                imgId:this.imgId,
+                imgCode:this.imgCode
+              }
+              this.Http.post(this.Action.regist,data).then((res) => {
+                if(res.data){
+                  Until.ErrorCode(res.data.code)
+                }else{
+                  this.$message({
+                    type:'success',
+                    message:'注册成功'
+                  })
+                this.$router.push({path:'/Login'})
+                }
+              }).catch((err) => {
+                console.log(err)
+              })
+            }
         },
         spapLogin(){            //司派登陆
             this.$router.push({path:'/login',query:{num:1}})
@@ -107,20 +156,41 @@ export default {
         },
         //获取手机验证码
         getPhoneCode(){
+          let phoneCheck = Until.checkPhone(this.phone)
+          if(phoneCheck != 'success'){
+            this.$message({
+              type:'error',
+              message:'手机号无效'
+            })
+            return false
+          }else if(this.imgCode == ''){
+            this.$message({
+              type:'error',
+              message:'请输入图片验证码'
+            })
+            return false
+          }
           let data = {
             phone : this.phone,
             imgId : this.imgId,
             imgCode : this.imgCode
           }
           this.Http.post(this.Action.getPhoneCode,data).then((res) => {
-            this.getCode = false
-            let timeInter = setInterval(() => {
-              this.seconds--
-              if(this.seconds <= 0){
-                this.getCode = true;
-                clearInterval(timeInter)
-              }
-            },1000)
+            if(res){
+              this.$message({
+                type:'error',
+                message:'图片验证码错误'
+              })
+            }else{
+              this.getCode = false
+              let timeInter = setInterval(() => {
+                this.seconds--
+                if(this.seconds <= 0){
+                  this.getCode = true;
+                  clearInterval(timeInter)
+                }
+              },1000)
+            }
           }).catch((res) => {
 
           })
@@ -214,7 +284,7 @@ export default {
             justify-content: space-between;
         }
         .login {
-          margin-top: 67px;
+          margin-top: 20px;
           background: #F58523;
           text-align: center;
           font-size: 14px;
@@ -236,10 +306,9 @@ export default {
             width: 90px;
             height: 45px;
             margin-right: 10px;
-            background-color: #F8F9FC;
+            background-color: #fff;
             img{
-              width: 100%;
-              height: 100%;
+              vertical-align: middle;
             }
           }
           .get-code {
@@ -295,6 +364,22 @@ export default {
             letter-spacing: 2px;
             .password-icon {
               background-image: url('../../../assets/login/pwd.png');
+            }
+          }
+        }
+        .checkForm{
+          font-family: '.AppleSystemUIFont';
+          font-size: 14px;
+          color: #FC605B;
+          letter-spacing: 1x;
+          margin-bottom: 16px;
+          .icon{
+            display: inline-block;
+            height: 23px;
+            width: 23px;
+            margin-right: 8px;
+            img{
+              vertical-align: middle;
             }
           }
         }

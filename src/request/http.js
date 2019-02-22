@@ -4,6 +4,7 @@
 import axios from 'axios'
 import Action from './Action'
 import QS from 'qs'
+import {Message} from 'element-ui'
 import { resolve } from 'upath';
 import { rejects } from 'assert';
 
@@ -46,18 +47,15 @@ export default {
               if (res.data.code == 200) {
                   resolve(res.data.data)
               } else {
-                  switch (res.data.code) {
-                      case 400 : reject('参数错误');break;
-                      case 404 : reject('地址错误');break;
-                      case 10001 : reject('图片验证码错误');break;
-                      case 10011 : reject('手机号未注册');break;
-                      default : reject(res);break;
-                  }
+                  resolve(res)
               }
           }
         ).catch(
           (err) => {
-              reject(err)
+            Message({
+              type:'error',
+              message:'请求错误'
+            })
           }
         )
     })

@@ -1,8 +1,8 @@
 <template>
     <div class="timeLine">
         <div class="showTop" v-if="index % 2 == 0">
-            <CardT :info='msg.info'></CardT>
-            <p class="time" style="marginTop:10px">{{msg.time}}</p>
+            <CardT :info='msg.content'></CardT>
+            <p class="time" style="marginTop:10px">{{msg.workTime}}</p>
         </div>
         <div class="hideTop" v-else>
             <div class="hide"></div>
@@ -14,8 +14,8 @@
             </div>
         </div>
         <div class="showBottom" v-if="index % 2 != 0">
-             <p class="time" style="marginBottom:10px">{{msg.time}}</p>
-            <CardB :info='msg.info' v-if="index % 2 != 0"></CardB>
+             <p class="time" style="marginBottom:10px">{{msg.workTime}}</p>
+            <CardB :info='msg.content' v-if="index % 2 != 0"></CardB>
         </div>
         <div class="hideBottom" v-else>
             <p class="time" style="marginBottom:10px;height:22px"></p>

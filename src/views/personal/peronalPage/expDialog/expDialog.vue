@@ -1,6 +1,6 @@
 <template>
     <div class="dialog">
-        <el-dialog :title="addexp.title" :visible.sync="dialogFormVisible" center width='984px'>
+        <el-dialog :title="addexp.title" :visible.sync="dialogFormVisible" center width='984px' :before-close='beforeClose'>
             <div class="contentBox">
                 <el-form :model="form" label-position='right'>
                     <el-form-item label="时间点:" label-width='60px'>
@@ -31,12 +31,12 @@
                     :data="tableData"
                     style="width: 100%">
                         <el-table-column
-                            prop="time"
+                            prop="workTime"
                             label="时间点"
                             width="250">
                         </el-table-column>
                         <el-table-column
-                            prop="info"
+                            prop="content"
                             label="描述"
                             width="300">
                         </el-table-column>
@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div slot="footer" class="dialog-footer">
-                <el-button class="dialogBtn" @click="dialogFormVisible = false">取 消</el-button>
+                <el-button class="dialogBtn" @click="beforeClose">取 消</el-button>
                 <el-button class="dialogBtn submit" type="primary" @click="makeSure">提 交</el-button>
             </div>
         </el-dialog>
@@ -83,19 +83,32 @@ export default {
     },
     methods:{
         makeSure(){         //提交
-            console.log(111)
+            let data = {
+                workLifeJson:this.tableData,
+                token:Until.getUserToken()
+            }
+            this.Http.post(this.Action.jobInfo,data).then((res) => {
+                this.$message({
+                    type:'success',
+                    message:'提交成功'
+                })
+                this.dialogFormVisible = false
+            }).catch((err) => {
+
+            })
             this.dialogFormVisible = false
         },
         openExp(){          //打开弹窗
             this.dialogFormVisible = true
         },
         add(){              //添加
-            console.log(this.form)
             let addMsg = {
                 celebrityId:Until.getUserId(),
                 workTime:Until.timestampToTime(this.time),
                 content:this.info,
             }
+            this.time = ''
+            this.info = ''
             this.tableData.push(addMsg)
             this.msg.push(addMsg)
         },
@@ -119,6 +132,12 @@ export default {
                 console.log(err)
             })
         },
+        //关闭弹窗前
+        beforeClose(){
+            this.dialogFormVisible = false
+            this.tableData = []
+            this.msg = []
+        }
     },
     mounted(){
     }

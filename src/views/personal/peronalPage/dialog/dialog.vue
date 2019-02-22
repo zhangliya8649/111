@@ -1,6 +1,6 @@
 <template>
     <div class="dialog">
-        <el-dialog :title="addexp.title" :visible.sync="dialogFormVisible" center width='984px'>
+        <el-dialog :title="addexp.title" :visible.sync="dialogFormVisible" center width='984px' :before-close='beforeClose'>
             <el-form :model="form" label-position='right'>
                 <el-form-item label="时间点:" label-width='60px'>
                     <el-date-picker
@@ -26,7 +26,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button class="dialogBtn" @click="dialogFormVisible = false">取 消</el-button>
+                <el-button class="dialogBtn" @click="beforeClose">取 消</el-button>
                 <el-button class="dialogBtn submit" type="primary" @click="makeSure">提 交</el-button>
             </div>
         </el-dialog>
@@ -100,6 +100,13 @@ export default {
                 this.addexp = {title:'添加社会公益案例',abstract:'添加公益摘要',des:'添加公益描述'}
             }
             this.dialogFormVisible = true
+        },
+        //关闭弹窗前
+        beforeClose(){
+            this.dialogFormVisible = false
+            this.time = ''
+            this.des = ''
+            this.abstract = ''
         }
     }
 }

@@ -8,7 +8,7 @@
               </div>
               <div class='form-list pwd'>
                 <div class='icon pwd-icon'></div>
-                <input :type='type' placeholder='密码' v-model="pwd">
+                <input :type='type' placeholder='密码' v-model="password">
                 <div :class='["pwd-eye-icon",open]' @click="openEye"></div>
               </div>
               <div class='form-list code'>
@@ -37,6 +37,7 @@
         </div>
 </template>
 <script>
+import Until from '../../../until/until.js'
 export default {
     data(){
         return{
@@ -45,33 +46,65 @@ export default {
             type:'password',  //密码框类型
             codeImg:'',       //验证码的图片
             phone:'',         //电话号码
-            pwd:'',           //密码
+            password:'',           //密码
             imgCode:'',          //图片验证码
             imgId:'',           //图片验证码ID
         }
     },
     methods:{
-        login(){
-            let data = {
-              phone:this.phone,
-              pwd:this.pwd,
-              imgId:this.imgId,
-              imgCode:this.imgCode
-            }
-            this.Http.post(this.Action.passwordLogin,data).then((res) => {
-              this.$message({
-                type:'success',
-                message:'登陆成功'
-              })
-              sessionStorage.setItem('userInfo',JSON.stringify(res))
-              this.$store.commit('setUserInfo')
-              this.$router.push({path:'/Personal'})
-            }).catch((res) => {
-               this.$message({
-                type:'error',
-                message:err
-              })
+        //表单验证
+        checkForm(){
+          let phoneCheck = Until.checkPhone(this.phone)
+          let passCheck = Until.checkPass(this.password)
+          if(phoneCheck != 'success'){
+            this.$message({
+              type:'error',
+              message:'手机号无效'
             })
+            return false
+          }else if(passCheck != 'success'){
+            this.$message({
+              type:'error',
+              message:'密码只支持8~16位数字字母组合'
+            })
+            return false
+          }else if(this.imgCode == ''){
+            this.$message({
+              type:'error',
+              message:'请输入图片验证码'
+            })
+            return false
+          }else{
+            return true
+          }
+        },
+        login(){
+            if(this.checkForm()){
+              let data = {
+                phone:this.phone,
+                pwd:this.password,
+                imgId:this.imgId,
+                imgCode:this.imgCode
+              }
+              this.Http.post(this.Action.passwordLogin,data).then((res) => {
+                if(res.data){
+                  Until.ErrorCode(res.data.code)
+                }else{
+                  this.$message({
+                    type:'success',
+                    message:'登陆成功'
+                  })
+                  sessionStorage.setItem('userInfo',JSON.stringify(res))
+                  this.$store.commit('setUserInfo')
+                  this.$router.push({path:'/Personal'})
+                }
+              }).catch((res) => {
+                this.$message({
+                  type:'error',
+                  message:err
+                })
+              })
+            }
         },
         spapLogin(){            //司派登陆
             this.$emit('toggleLogin',1)
@@ -132,7 +165,7 @@ export default {
         padding-left: 50px;
         padding-right: 50px;
         > div {
-          margin-bottom: 19px;
+          margin-bottom: 18px;
         }
         .form-list {
           width: 420px;
@@ -203,7 +236,10 @@ export default {
             width: 90px;
             height: 45px;
             margin-right: 10px;
-            background-color: #F8F9FC;
+            background-color: #fff;
+            img{
+              vertical-align: middle;
+            }
           }
           .get-code {
             width: 100px;
@@ -258,6 +294,21 @@ export default {
             .phone-icon {
               background-image: url('../../../assets/login/phone.png');
             }
+          }
+        }
+      }
+      .checkForm{
+        font-family: '.AppleSystemUIFont';
+        font-size: 14px;
+        color: #FC605B;
+        letter-spacing: 0;
+        margin-bottom: 16px;
+        .icon{
+          display: inline-block;
+          height: 23px;
+          width: 23px;
+          img{
+            vertical-align: middle;
           }
         }
       }
