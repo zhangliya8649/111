@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class='works'>
       <div class='works-type w1180' id='parId'>
         <div class='type-list' v-for='item in searchType' :data-type='item.type'>
            <span class='list-tit'>{{item.title}}：</span>
@@ -9,7 +9,10 @@
       <div v-for='(item, index) in dataObj.list' :key='index'>
          <search-works v-bind:list='item'></search-works>
       </div>
-      <el-pagination background layout='prev, pager, next' :total='dataObj.total' @current-change='changeCurrentPage' v-if='dataObj.total ? true : false'></el-pagination>
+      <el-pagination background layout='prev, pager, next' :total='dataObj.total' @current-change='changeCurrentPage' v-if='dataObj.total && dataObj.total > 10'></el-pagination>
+      <div class='no-result' v-if='!dataObj.total'>
+        暂无查询数据
+      </div>
     </div>
 </template>
 <script>
@@ -17,12 +20,18 @@
 
   export default {
     name: 'works',
-
     data() {
       return {
+        param: {
+          subjectName: '',
+          subtype: '',
+          varietyShow: '',
+          showType: '',
+          pageNum: 1
+        },
+        dataObj: {},
         curIndex: 0,
         page: 1,
-        type: 'key',
         searchType: [
           {
             type: 'subtype',
@@ -56,18 +65,14 @@
       }
     },
 
-    props: ['dataObj'],
+    props: [],
 
     components: {
       searchWorks
     },
 
     created: function() {
-      let param = {
-        tags: 2,
-        pageNum: 1
-      };
-      this.getList(param);
+      this.getList(this.param);
     },
 
     mounted: function() {
@@ -76,10 +81,6 @@
 
     methods: {
       tabMenu(index, event) {
-        let param = {
-                  subtype: 'tv',
-                  pageNum: 1
-                };
         let el = event.currentTarget;
         if(el.classList.contains('active')) {
           return;
@@ -94,8 +95,8 @@
         el.classList.add('active');
       },
 
-      //二级搜索列表
-      getListByKey(param) {
+      //搜索作品列表
+      getList(param) {
         this.Http.post(this.Action.SearchWorksListByKey, param).then((data) => {
           this.dataObj = data;
         }).catch((res) => {
@@ -103,27 +104,10 @@
         })
       },
 
-      //一级搜索列表
-      getList(param) {
-        this.Http.post(this.Action.SearchList, param).then((data) => {
-          this.$emit('update:dataObj', data);
-        }).catch((res) => {
-          console.log(res);
-        });
-      },
-
       //分页
       changeCurrentPage(val) {
-        let param = {};
-        param.pageNum = val;
-        if(this.type == 'key') {
-          param.tags = 2;
-          this.getList(param);
-        }else {
-          param.subtype = 'movie';
-          getListByKey(param);
-        }
-
+        this.param.pageNum = val;
+        this.getList(this.param);
       }
     }
   }
@@ -162,7 +146,13 @@
       }
     }
   }
-
+  .no-result {
+    height: 400px;
+    padding-top: 30px;
+    text-align: center;
+    font-size: 14px;
+    color: #4a4a4a;
+  }
 </style>
 <style>
   @import "../../../../static/css/page.css"

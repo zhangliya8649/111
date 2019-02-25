@@ -1,85 +1,52 @@
 <template>
-  <div>
+  <div class='movie-company'>
     <div class='works-type w1180' id='parId'>
       <div class='type-list' v-for='item in searchType' :data-type='item.type'>
-         <span class='list-tit'>{{item.title}}：</span>
+         <span class='list-tit'>{{item.title}}</span>
          <el-button v-for="(subItem, index) in item.con" :key='index' :class="index == 0 ? 'active' : ''" @click='tabMenu(index, $event)'>{{subItem.name}}</el-button>
       </div>
     </div>
     <div v-for='(item, index) in dataObj.list' :key='index'>
-       <search-people v-bind:list='item'></search-people>
+       <search-company v-bind:list='item'></search-company>
     </div>
-    <el-pagination background layout='prev, pager, next' :total='dataObj.total' @current-change='changeCurrentPage' v-if='dataObj.total ? true : false'></el-pagination>
+    <el-pagination background layout='prev, pager, next' :total='dataObj.total' @current-change='changeCurrentPage' v-if='dataObj.total && dataObj.total > 10'></el-pagination>
+    <div class='no-result' v-if='!dataObj.total'>
+      暂无查询数据
+    </div>
   </div>
 </template>
 
 <script>
-  import searchPeople from '../../search/searchPeople.vue'
+  import searchCompany from '../../../search/searchCompany.vue'
 
   export default {
-    name: 'tvPeople',
+    name: 'movieCompany',
+
+    components: {
+      searchCompany
+    },
+
+    created: function() {
+      this.getList(this.param);
+    },
+
+    mounted: function() {
+
+    },
 
     data() {
       return {
-        curIndex: 0,
+        param: {
+          type: 4,
+          name: '',
+          area: '',
+          pageNum: 1
+        },
+        dataObj: {},
         searchType: [
           {
-            type: 'artCreation',
-            title: '艺术创作',
-            con: [
-                   {name: '全部'},
-                   {name: '艺术总监'},
-                   {name: '导演'},
-                   {name: '舞美设计'},
-                   {name: '灯光设计'},
-                   {name: '其他主创'}
-                 ]
-          },
-          {
-            type: 'stagehand',
-            title: '舞台管理',
-            con: [
-                   {name: '全部'},
-                   {name: '舞台监督'},
-                   {name: '舞台管理'}
-                 ]
-          },
-          {
-            type: 'stageTechnique',
-            title: '舞台技术',
-            con: [
-                   {name: '全部'},
-                   {name: '现场布景'},
-                   {name: '现场灯光'},
-                   {name: '现场音响'},
-                   {name: '舞台机械'},
-                   {name: '舞台音效'},
-                   {name: '道具'}
-                 ]
-          },
-          {
-            type: 'actorType',
-            title: '演员',
-            con: [
-                   {name: '全部'},
-                   {name: '舞台剧'},
-                   {name: '歌手'},
-                   {name: '曲艺'}
-                 ]
-          },
-          {
-            type: 'other',
-            title: '其他',
-            con: [
-                   {name: '全部'},
-                   {name: '出品人'},
-                   {name: '制作人'},
-                   {name: '演出经纪人'}
-                 ]
-          },
-          {
             type: 'bj',
-            title: '地区',
+            title: '地区：',
             con: [
                    {name: '北京'},
                    {name: '东城区'},
@@ -144,19 +111,7 @@
       }
     },
 
-    props: ['dataObj'],
-
-    components: {
-      searchPeople
-    },
-
-    mounted: function() {
-      let param = {
-        tags: 6,
-        pageNum: 1
-      };
-      this.getList(param);
-    },
+    props: [],
 
     methods: {
       tabMenu(index, event) {
@@ -174,37 +129,18 @@
         el.classList.add('active');
       },
 
-      //一级搜索列表
+      //列表搜索
       getList(param) {
-        this.Http.post(this.Action.SearchList, param).then((data) => {
-          this.$emit('update:dataObj', data);
+        this.Http.post(this.Action.SearchCompanyListByKey, param).then((data) => {
+          this.dataObj = data;
         }).catch((res) => {
           console.log(res);
         });
       },
 
-      //根据条件查影视人
-      getListByKey() {
-        let param = {
-          celebrityName: '周星驰',
-          identityType: 1,
-          pageNum: 1,
-          artCreation: '艺术总监'
-        };
-        this.Http.post(this.Action.SearchPeopleListByKey, param).then((data) => {
-          console.log('根据电影条件查询列表：');
-          console.log(data);
-        }).catch((err) => {
-          console.log(err);
-        })
-      },
-
       //分页
       changeCurrentPage(val) {
-        let param = {
-          tags: 6,
-          pageNum: val
-        };
+        this.param.pageNum = val;
         this.getList(param);
       }
     }
@@ -224,14 +160,14 @@
       margin-bottom: 18px;
       .list-tit {
         display: inline-block;
-        width: 70px;
+        width: 42px;
         font-weight: bold;
       }
       button {
         height: 22px;
         line-height: 22px;
         padding: 0 15px;
-        margin-right: 10px;
+        margin-left: 0;
         background: transparent;
         border: none;
         outline: none;
@@ -244,28 +180,24 @@
       }
     }
     .type-list[data-type='bj'] {
-      button:nth-child(13) {
-       margin-left: 152px;
+      button:nth-child(17) {
+        margin-left: 104px;
       }
     }
     .type-list[data-type='tj'] {
-      .list-tit {
-        visibility: hidden;
-      }
-      button:nth-child(14) {
-       margin-left: 152px;
-      }
-    }
-    .type-list[data-type='hb'] {
-      .list-tit {
-        visibility: hidden;
-      }
       button:last-child {
-       margin-left: 152px;
+        margin-left: 104px;
       }
     }
   }
+  .no-result {
+    height: 400px;
+    padding-top: 30px;
+    text-align: center;
+    font-size: 14px;
+    color: #4a4a4a;
+  }
 </style>
 <style>
-  @import "../../../../static/css/page.css"
+  @import "../../../../../static/css/page.css"
 </style>

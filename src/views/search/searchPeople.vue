@@ -1,16 +1,16 @@
 <template>
-  <div>
+  <div class='search-con'>
     <div class='search-par' :data-id='list.id'>
       <div class='search-people clear w1180'>
         <div class='img'>
-          <a href='javascript:;' @click='openDetail(list.id)'>
+          <a href='javascript:;' @click='openDetail(list.id, list.identityType)'>
             <img v-if = 'list.celebrityHeadUrl != "None"' :src='list.celebrityHeadUrl'/>
             <img v-else src='../../assets/credit/default-man.png'/>
           </a>
         </div>
         <div class='desc'>
           <div class='tit'>
-              <a href='javascript:;' @click='openDetail(list.id)'>{{list.celebrityName}}</a>
+              <a href='javascript:;' @click='openDetail(list.id, list.identityType)'>{{list.celebrityName}}</a>
               <router-link to='/register' class='operator' v-if='list.claimState == 1'>未认领</router-link>
               <router-link to='/register' class='operator' v-else-if='list.claimState == 2'>审核中</router-link>
               <span class='operator' v-else-if='list.claimState == 3'>已认领</span>
@@ -26,8 +26,7 @@
               所属机构: {{list.agency}}
             </div>
             <div class='role clear'>
-              <div class='role-list'>影视人</div>
-              <div class='role-list'>制片人</div>
+              <div v-for='item in list.roleList' class='role-list'>{{item.roleType == 1 ? '导演' : item.roleType == 2 ? '编剧' : item.roleType == 3 ? '演员' : ''}}</div>
             </div>
           </div>
         </div>
@@ -60,11 +59,10 @@
     },
 
     methods: {
-      openDetail(id) {
-        console.log(typeof id);
+      openDetail(id, type) {
         this.$router.push({
           path: '/credit/people',
-          query: {id: id}
+          query: {id: id, type: type}
         });
       }
     }
@@ -101,7 +99,7 @@
             margin-bottom: 20px;
             font-size: 24px;
             a {
-              color: #000;
+              color: #4a4a4a;
             }
             .operator {
               padding-left: 15px;

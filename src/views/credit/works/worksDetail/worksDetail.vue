@@ -14,13 +14,13 @@
             </div>
             <div class='con'>
               <div class='list'>
-                导演：<a href='javascript:;' @click='openDetail(item.id)' class='active' v-for='item in list.subjectDirectors'>{{item.celebrityName}}<span class='line'>/</span></a>
+                导演：<a href='javascript:;' @click='openDetail(item.id, item.identityType)' class='active' v-for='item in list.subjectDirectors'>{{item.celebrityName}}<span class='line'>/</span></a>
               </div>
               <div class='list'>
-                编剧: <a href='javascript:;' @click='openDetail(item.id)' class='active' v-for='item in list.subjectAdaptors'>{{item.celebrityName}}<span class='line'>/</span></a>
+                编剧: <a href='javascript:;' @click='openDetail(item.id, item.identityType)' class='active' v-for='item in list.subjectAdaptors'>{{item.celebrityName}}<span class='line'>/</span></a>
               </div>
               <div class='list'>
-                主演：<a href='javascript:;' @click='openDetail(item.id)' class='active' v-for='item in list.subjectProtagonists'>{{item.celebrityName}}<span class='line'>/</span></a>
+                主演：<a href='javascript:;' @click='openDetail(item.id, item.identityType)' class='active' v-for='item in list.subjectProtagonists'>{{item.celebrityName}}<span class='line'>/</span></a>
               </div>
               <div class='list'>
                 类型: <a href='javascript:;' v-for='item in list.genres'>{{item}}<span class='line'>/</span></a>
@@ -54,25 +54,25 @@
         <div class='tit'>来电狂响演职员</div>
         <div class='con clear'>
           <div class='list' v-for='item in list.subjectDirectors'>
-            <a href='javascript:;' @click=openDetail(item.id)>
+            <a href='javascript:;' @click='openDetail(item.id, item.identityType)'>
               <img v-if = 'item.celebrityHeadUrl != "None"' :src='item.celebrityHeadUrl'/>
-              <img v-else src='../../../assets/credit/default-man.png'/>
+              <img v-else src='../../../../assets/credit/default-man.png'/>
             </a>
             <div class='name'>{{item.celebrityName}}</div>
             <div class='rule'>导演</div>
           </div>
           <div class='list' v-for='item in list.subjectAdaptors'>
-            <a href='javascript:;' @click=openDetail(item.id)>
+            <a href='javascript:;' @click='openDetail(item.id, item.identityType)'>
               <img v-if = 'item.celebrityHeadUrl != "None"' :src='item.celebrityHeadUrl'/>
-              <img v-else src='../../../assets/credit/default-man.png'/>
+              <img v-else src='../../../../assets/credit/default-man.png'/>
             </a>
             <div class='name'>{{item.celebrityName}}</div>
             <div class='rule'>编剧</div>
           </div>
           <div class='list' v-for='item in list.subjectProtagonists'>
-            <a href='javascript:;' @click=openDetail(item.id)>
+            <a href='javascript:;' @click='openDetail(item.id, item.identityType)'>
               <img v-if = 'item.celebrityHeadUrl != "None"' :src='item.celebrityHeadUrl'/>
-              <img v-else src='../../../assets/credit/default-man.png'/>
+              <img v-else src='../../../../assets/credit/default-man.png'/>
             </a>
             <div class='name'>{{item.celebrityName}}</div>
             <div class='rule'>主演</div>
@@ -118,11 +118,11 @@
           })
         },
 
-        openDetail(id) {
+        openDetail(id, type) {
           //跳转到人物详情
           this.$router.push({
             path: '/credit/people',
-            query: {id: id}
+            query: {id: id, type: type}
           })
         }
     }

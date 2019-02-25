@@ -3,16 +3,18 @@
         <div class='basic-detail'>
           <div class='search-people clear w1180'>
             <div class='img'>
-              <img src='' />
+              <img :src='list.celebrityHeadUrl' />
             </div>
             <div class='desc'>
               <div class='tit'>
-                  赵丽颖
-                  <span class='operator'>未认证</span>
+                  {{list.celebrityName}}
+                  <router-link to='/register' class='operator' v-if='list.claimState == 1'>未认领</router-link>
+                  <router-link to='/register' class='operator' v-else-if='list.claimState == 2'>审核中</router-link>
+                  <span class='operator' v-else-if='list.claimState == 3'>已认领</span>
               </div>
               <div class='con'>
                 <div class='list'>
-                  职业: 演员/配音 {{list.occupation}}
+                  职业: {{list.occupation}}
                 </div>
                 <div class='list'>
                   所属机构: {{list.agency}}
@@ -22,41 +24,41 @@
             <div class='jc'>
               <div class='jc-head clear'>
                 <div class='jc-list credit'>
-                  <div class='num'>0{{list.rating}}</div>
+                  <div class='num'>{{list.rating}}</div>
                   <div class='icon-txt'>信用等级</div>
                 </div>
                 <div class='jc-list honor'>
-                  <div class='num'>5{{list.commendCount}}</div>
+                  <div class='num'>{{list.commendCount ? list.commendCount : 0}}</div>
                   <div class='icon-txt'>荣誉</div>
                 </div>
                 <div class='jc-list no-honor'>
-                  <div class='num'>0{{list.loseCreditCount}}</div>
+                  <div class='num'>{{list.loseCreditCount ? list.loseCreditCount : 0}}</div>
                   <div class='icon-txt'>失信信息</div>
                 </div>
               </div>
               <div class='jc-foot clear'>
                 <div class='jc-list credit'>
-                  <div class='num'>0<span>年</span></div>
+                  <div class='num'>{{list.workingYear ? list.workingYear : 0}}<span>年</span></div>
                   <div class='icon-txt'>执业年限</div>
                 </div>
                 <div class='jc-list honor'>
-                  <div class='num'>5<span>部</span></div>
+                  <div class='num'>{{list.subjectCount ? list.subjectCount : 0}}<span>部</span></div>
                   <div class='icon-txt'>作品数量</div>
                 </div>
                 <div class='jc-list no-honor'>
-                  <div class='num'>0<span>条</span></div>
+                  <div class='num'>{{list.xzPenalty ? list.xzPenalty : 0}}<span>条</span></div>
                   <div class='icon-txt'>行政处罚</div>
                 </div>
                 <div class='jc-list no-honor'>
-                  <div class='num'>0<span>条</span></div>
+                  <div class='num'>{{list.xsPenalty ? list.xsPenalty : 0}}<span>条</span></div>
                   <div class='icon-txt'>行事处罚</div>
                 </div>
                 <div class='jc-list no-honor'>
-                  <div class='num'>0<span>条</span></div>
+                  <div class='num'>{{list.industryDispose ? list.industryDispose : 0}}<span>条</span></div>
                   <div class='icon-txt'>行业处分</div>
                 </div>
                 <div class='jc-list no-honor'>
-                  <div class='num'>0<span>条</span></div>
+                  <div class='num'>{{list.negligence ? list.negligence : 0}}<span>条</span></div>
                   <div class='icon-txt'>责任事故</div>
                 </div>
               </div>
@@ -67,98 +69,43 @@
         <div class="Personal-content w1180">
             <div class="papel">
                 <p class="title">基本信息</p>
-                <div class="content" v-if='showBasicInfo'>
+                <div class="content">
                     <el-row :gutter="20" class="row">
-                        <el-col :span="3"><div class="grid-content bg-purple">姓名：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">乔杉</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple">性别：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">男</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple">年龄：</div></el-col>
-                        <el-col :span="5"><div class="grid-content bg-purple">31</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple">姓名：</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.celebrityName}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple">性别：</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.sex == 1 ? '男' : list.sex == 2 ? '女' : ''}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple">年龄：</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">1{{list.age}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
-                        <el-col :span="3"><div class="grid-content bg-purple">祖籍：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">中国</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple">公司：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">北京眼缘影视有限公司</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple">职务：</div></el-col>
-                        <el-col :span="5"><div class="grid-content bg-purple">好好好</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple">祖籍：</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">中国{{list.nationality}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple">公司：</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">北京眼缘影视传媒有限公司{{list.agency}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple">职务：</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">1{{list.position}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
-                        <el-col :span="3"><div class="grid-content bg-purple">学历：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">本科</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple">职业：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">演员</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple">政治面貌：</div></el-col>
-                        <el-col :span="5"><div class="grid-content bg-purple">党员</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple">学历：</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">本科{{list.education}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple">职业：</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">演员{{list.occupation}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple">政治面貌：</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">群众{{list.politics}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
-                        <el-col :span="3"><div class="grid-content bg-purple">执业时间：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">2012.08.09</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple">职业证书：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">084322</div></el-col>
-                        <el-col :span="3"><div class="grid-content bg-purple">证书时间：</div></el-col>
-                        <el-col :span="5"><div class="grid-content bg-purple">2019.09.09</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple">执业年限：</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.workingYear ? list.workingYear : 0}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple">职业证书：</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">2{{list.certificate}}</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple">证书时间：</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">2019.2.21{{list.certificateTime}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
-                        <el-col :span="3"><div class="grid-content bg-purple">代表作品：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">设计部</div></el-col>
+                        <el-col :span="2"><div class="grid-content bg-purple">代表作品：</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">3{{list.portfolio}}</div></el-col>
                     </el-row>
-                </div>
-                <div class="content" v-else>
-                    <el-form :inline="true" :model="basicInfo" class="demo-form-inline">
-                        <el-form-item label="姓名：" label-width='90px'>
-                            <el-input :disabled='true' v-model="basicInfo.user"></el-input>
-                        </el-form-item>
-                        <el-form-item label="性别：" label-width='90px'>
-                            <el-input v-model="basicInfo.sex" placeholder="请输入您的性别"></el-input>
-                        </el-form-item>
-                        <el-form-item label="年龄：" label-width='90px'>
-                            <el-input v-model="basicInfo.age" placeholder="请输入您的年龄"></el-input>
-                        </el-form-item>
-                        <el-form-item label="祖籍：" label-width='90px'>
-                            <el-input v-model="basicInfo.country" placeholder="请输入您的祖籍"></el-input>
-                        </el-form-item>
-                        <el-form-item label="公司：" label-width='90px'>
-                            <el-input v-model="basicInfo.company" placeholder="请输入公司名称"></el-input>
-                        </el-form-item>
-                        <el-form-item label="职务：" label-width='90px'>
-                            <el-input v-model="basicInfo.level" placeholder="请输入您的职务"></el-input>
-                        </el-form-item>
-                        <el-form-item label="学历：" label-width='90px'>
-                            <el-input v-model="basicInfo.edu" placeholder="请输入您的学历"></el-input>
-                        </el-form-item>
-                        <el-form-item label="职业：" label-width='90px'>
-                            <el-select v-model="basicInfo.job" placeholder="请选择您的职业" class="input">
-                            <el-option label="区域一" value="shanghai"></el-option>
-                            <el-option label="区域二" value="beijing"></el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="政治面貌：" label-width='90px'>
-                            <el-input v-model="basicInfo.user" placeholder="请输入您的政治面貌"></el-input>
-                        </el-form-item>
-                        <el-form-item label="执业时间：" label-width='90px'>
-                            <el-input v-model="basicInfo.worktime" placeholder="请选择您的执业时间"></el-input>
-                        </el-form-item>
-                        <el-form-item label="职业证书：" label-width='90px'>
-                            <el-input v-model="basicInfo.certificate" placeholder="请输入您的证书编号"></el-input>
-                        </el-form-item>
-                        <el-form-item label="证书时间：" label-width='90px'>
-                            <el-input v-model="basicInfo.certificatetime" placeholder="请选择您的证书时间"></el-input>
-                        </el-form-item>
-                        <el-row type="flex" class="row-bg" justify="center">
-                            <el-col :span="8">
-                                <el-form-item label="代表作品：" label-width='90px'>
-                            <el-input v-model="basicInfo.works" placeholder="请输入您的代表作品"></el-input>
-                        </el-form-item>
-                            </el-col>
-                            <el-col :span="8" :offset="8" style="paddingLeft:19.5%">
-                                <el-form-item>
-                                    <el-button class="editInfo" @click="editSure">确认</el-button>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                    </el-form>
                 </div>
             </div>
             <div class="papel">
@@ -217,7 +164,7 @@
             <div class="works-par">
                 <div class='works-title clear'>
                   <p class="tit-desc">作品（与<span>XXX</span>相关的，共有<span>XXX</span>部作品）</p>
-                  <p class="more-works" @click="moreWorks">全部作品》</p>
+                  <p class="more-works" @click="moreWorks()">全部作品》</p>
                 </div>
                 <div class="works-box">
                     <Works v-for="(data,index) in worksData" :data='data' :key='index'></Works>
@@ -266,7 +213,6 @@ export default {
         };
         return{
             list: {},
-            showBasicInfo:true,//点击补全信息
             basicInfo: {
                 user: '',
                 region: ''
@@ -341,6 +287,11 @@ export default {
             ]
         }
     },
+
+    created: function() {
+       this.getDataDetail(this.$route.query.id, this.$route.query.type);
+    },
+
     methods:{
         //补全信息
         editBasic(){
@@ -358,7 +309,22 @@ export default {
         },
         addExp(){
 
-        }
+        },
+
+        getDataDetail(id, type) {
+          let param = {
+            celebrityId: id,
+            identityType: type
+          };
+          this.Http.post(this.Action.SearchPersonById, param).then((data) => {
+            this.list = data.celebrity;
+            console.log(this.list);
+          }).catch((err) => {
+            console.log(err);
+          })
+        },
+
+
     }
 }
 </script>
@@ -385,8 +351,9 @@ export default {
         .img {
           margin-right: 22px;
           width: 180px;
-          height: 254px;
-          background: #fff;
+          img {
+            width: 100%;
+          }
         }
         .desc {
           width: 264px;
@@ -412,11 +379,7 @@ export default {
             height: 22px;
             line-height: 22px;
             font-size: 14px;
-            span {
-              a {
-                color: #4393F9;
-              }
-            }
+            opacity: 0.8;
           }
           .role {
             margin-top: 60px;
@@ -465,6 +428,7 @@ export default {
                background-repeat: no-repeat;
                background-position: left center;
                font-size: 16px;
+               opacity: 0.8;
              }
              &.credit {
               .num {
@@ -514,6 +478,9 @@ export default {
                }
              }
            }
+           .jc-list:last-child {
+            margin-right:0;
+           }
          }
         }
       }
@@ -561,7 +528,6 @@ export default {
                         margin-top: 25px;
                         color: #333;
                         font-size: 14px;
-                        font-family: 'PingFangSC-Regular';
                     }
                     .editInfo{
                         background-color: #F58523;

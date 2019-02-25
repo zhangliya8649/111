@@ -3,7 +3,13 @@ import Router from 'vue-router'
 import Home from '../views/home/home.vue'
 import Login from '../views/login/login.vue'
 import Credit from '../views/credit/credit.vue'
-import worksDetail from '../views/credit/works/worksDetail.vue'
+import works from '../views/credit/works/works.vue'
+import hotPeople from '../views/credit/people/hotPeople/people.vue'
+import moviePeople from '../views/credit/people/moviePeople/moviePeople.vue'
+import tvPeople from '../views/credit/people/tvPeople/tvPeople.vue'
+import movieCompany from '../views/credit/company/movieCompany/movieCompany.vue'
+import tvCompany from '../views/credit/company/tvCompany/tvCompany.vue'
+import worksDetail from '../views/credit/works/worksDetail/worksDetail.vue'
 import peopleDetail from '../views/credit/people/peopleDetail.vue'
 import companyDetail from '../views/credit/company/companyDetail.vue'
 import Personal from '../views/personal/personal.vue'
@@ -17,7 +23,8 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
+      redirect: ''
     },
     {
       path: '/login',
@@ -32,10 +39,43 @@ export default new Router({
     {
       path: '/credit',
       name: 'Credit',
-      component: Credit
+      component: Credit,
+      redirect: {name: 'hotPeople'},
+      children: [
+        {
+          path: 'works',
+          name: 'works',
+          component: works
+        },
+        {
+          path: 'people/hotPeople',
+          name: 'hotPeople',
+          component: hotPeople
+        },
+        {
+          path: 'people/moviePeople',
+          name: 'moviePeople',
+          component: moviePeople
+        },
+        {
+          path: 'people/tvPeople',
+          name: 'tvPeople',
+          component: tvPeople
+        },
+        {
+          path: 'company/movieCompany',
+          name: 'movieCompany',
+          component: movieCompany
+        },
+        {
+          path: 'company/tvCompany',
+          name: 'tvCompany',
+          component: tvCompany
+        }
+      ]
     },
     {
-      path: '/credit/works',
+      path: '/credit/works/worksDetail',
       name: 'worksDetail',
       component: worksDetail
     },

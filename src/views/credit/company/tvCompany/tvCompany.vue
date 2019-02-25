@@ -9,31 +9,37 @@
     <div v-for='(item, index) in dataObj.list' :key='index'>
        <search-company v-bind:list='item'></search-company>
     </div>
-    <el-pagination background layout='prev, pager, next' :total='dataObj.total' @current-change='changeCurrentPage' v-if='dataObj.total ? true : false'></el-pagination>
+    <el-pagination background layout='prev, pager, next' :total='dataObj.total' @current-change='changeCurrentPage' v-if='dataObj.total && dataObj.total > 10'></el-pagination>
   </div>
 </template>
 
 <script>
-  import searchCompany from '../../search/searchCompany.vue'
+  import searchCompany from '../../../search/searchCompany.vue'
 
   export default {
-    name: 'movieCompany',
+    name: 'tvCompany',
 
     components: {
       searchCompany
     },
 
+    created: function() {
+      this.getList(this.param);
+    },
+
     mounted: function() {
-      let param = {
-        tags: 3,
-        pageNum: 1
-      };
-      this.getList(param);
+
     },
 
     data() {
       return {
-        curIndex: 0,
+        param: {
+          type: 5,
+          name: '',
+          area: '',
+          pageNum: 1
+        },
+        dataObj: {},
         searchType: [
           {
             type: 'bj',
@@ -102,7 +108,7 @@
       }
     },
 
-    props: ['dataObj'],
+    props: [],
 
     methods: {
       tabMenu(index, event) {
@@ -120,10 +126,10 @@
         el.classList.add('active');
       },
 
-      //一级搜索列表
+      //搜索演艺公司列表
       getList(param) {
-        this.Http.post(this.Action.SearchList, param).then((data) => {
-          this.$emit('update:dataObj', data);
+        this.Http.post(this.Action.SearchCompanyListByKey, param).then((data) => {
+          this.dataObj = data;
         }).catch((res) => {
           console.log(res);
         });
@@ -131,7 +137,8 @@
 
       //分页
       changeCurrentPage(val) {
-
+        this.param.pageNum = val;
+        this.getList(this.param);
       }
     }
   }
@@ -180,8 +187,14 @@
       }
     }
   }
-
+  .no-result {
+    height: 400px;
+    padding-top: 30px;
+    text-align: center;
+    font-size: 14px;
+    color: #4a4a4a;
+  }
 </style>
 <style>
-  @import "../../../../static/css/page.css"
+  @import "../../../../../static/css/page.css"
 </style>

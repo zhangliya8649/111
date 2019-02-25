@@ -16,6 +16,11 @@ export default {
   // 作品
   SearchWorksListByKey: '/c10/subject/list',    //根据条件查作品列表
   SearchWorkById: '/c10/subject/get/by_id',
+
+  //公司
+  SearchCompanyListByKey: '/c10/company/list',       //查询公司列表
+
+
   //图片验证码
   imgCode:'/c10/account/img/code/get',
 

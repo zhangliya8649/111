@@ -265,6 +265,7 @@ export default {
       background-repeat: no-repeat;
       background-position: top center;
       background-size: 1920px 394px;
+      margin-top: -10px;
       .search-people {
           height: 254px;
           padding-top: 77px;

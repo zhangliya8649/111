@@ -9,70 +9,92 @@
     <div v-for='(item, index) in dataObj.list' :key='index'>
        <search-people v-bind:list='item'></search-people>
     </div>
-    <el-pagination background layout='prev, pager, next' :total='dataObj.total' @current-change='changeCurrentPage' v-if='dataObj.total ? true : false'></el-pagination>
+    <el-pagination background layout='prev, pager, next' :total='dataObj.total' @current-change='changeCurrentPage' v-if='dataObj.total && dataObj.total > 10'></el-pagination>
+    <div class='no-result' v-if='!dataObj.total'>
+      暂无查询数据
+    </div>
   </div>
 </template>
 
 <script>
-  import searchPeople from '../../search/searchPeople.vue'
+  import searchPeople from '../../../search/searchPeople.vue'
 
   export default {
-    name: 'people',
+    name: 'tvPeople',
 
     data() {
       return {
+        param : {
+          celebrityName: '',
+          identityType: 3,
+          artCreation: '',
+          stagehand: '',
+          stageTechnique: '',
+          actorType: '',
+          other: '',
+          investment: '',
+          producer: '',
+          afterTreatment: '',
+          publicity: '',
+          publish: '',
+          area: '',
+          pageNum: 1
+        },
+        dataObj: {},
         curIndex: 0,
         searchType: [
           {
-            type: 'investment',
-            title: '投资',
+            type: 'artCreation',
+            title: '艺术创作',
             con: [
                    {name: '全部'},
-                   {name: '出品人'}
-                 ]
-          },
-          {
-            type: 'producer',
-            title: '制作',
-            con: [
-                   {name: '全部'},
-                   {name: '制片人'},
-                   {name: '编剧'},
+                   {name: '艺术总监'},
                    {name: '导演'},
-                   {name: '演员'},
-                   {name: '摄影'},
-                   {name: '灯光'},
-                   {name: '造型'},
-                   {name: '录音'},
-                   {name: '特技'},
+                   {name: '舞美设计'},
+                   {name: '灯光设计'},
+                   {name: '其他主创'}
                  ]
           },
           {
-            type: 'afterTreatment',
-            title: '后期',
+            type: 'stagehand',
+            title: '舞台管理',
             con: [
                    {name: '全部'},
-                   {name: '视频后期'},
-                   {name: '音频后期'},
-                   {name: '特效后期'}
+                   {name: '舞台监督'},
+                   {name: '舞台管理'}
                  ]
           },
           {
-            type: 'publicity',
-            title: '宣传',
+            type: 'stageTechnique',
+            title: '舞台技术',
             con: [
                    {name: '全部'},
-                   {name: '宣传总监'},
-                   {name: '宣传'},
-                   {name: '媒体人'}
+                   {name: '现场布景'},
+                   {name: '现场灯光'},
+                   {name: '现场音响'},
+                   {name: '舞台机械'},
+                   {name: '舞台音效'},
+                   {name: '道具'}
                  ]
           },
           {
-            type: 'publish',
-            title: '发行',
+            type: 'actorType',
+            title: '演员',
             con: [
                    {name: '全部'},
-                   {name: '发行人'}
+                   {name: '舞台剧'},
+                   {name: '歌手'},
+                   {name: '曲艺'}
+                 ]
+          },
+          {
+            type: 'other',
+            title: '其他',
+            con: [
+                   {name: '全部'},
+                   {name: '出品人'},
+                   {name: '制作人'},
+                   {name: '演出经纪人'}
                  ]
           },
           {
@@ -142,18 +164,18 @@
       }
     },
 
-    props: ['dataObj'],
+    props: [],
 
     components: {
       searchPeople
     },
 
+    created: function() {
+      this.getList(this.param);
+    },
+
     mounted: function() {
-      let param = {
-        tags: 4,
-        pageNum: 1
-      };
-      this.getList(param);
+
     },
 
     methods: {
@@ -172,24 +194,10 @@
         el.classList.add('active');
       },
 
-      //一级搜索列表
+      //查询演艺人列表
       getList(param) {
-        this.Http.post(this.Action.SearchList, param).then((data) => {
-          this.$emit('update:dataObj', data);
-        }).catch((res) => {
-          console.log(res);
-        });
-      },
-
-      //根据条件查影视人
-      getListByKey() {
-        let param = {
-          identityType: 1,
-          pageNum: 1
-        };
-        this.Http.post(this.Action.SearchWorksListByKey, param).then((data) => {
-          console.log('根据电影条件查询列表：');
-          console.log(data);
+        this.Http.post(this.Action.SearchPeopleListByKey, param).then((data) => {
+          this.dataObj = data;
         }).catch((err) => {
           console.log(err);
         })
@@ -197,11 +205,8 @@
 
       //分页
       changeCurrentPage(val) {
-        let param = {
-          tags: 4,
-          pageNum: val
-        };
-        this.getList(param);
+        this.param.pageNum = val;
+        this.getList(this.param);
       }
     }
   }
@@ -219,6 +224,8 @@
     .type-list {
       margin-bottom: 18px;
       .list-tit {
+        display: inline-block;
+        width: 70px;
         font-weight: bold;
       }
       button {
@@ -237,15 +244,9 @@
         }
       }
     }
-    .type-list[data-type='bj'], .type-list[data-type='tj'], .type-list[data-type='hb'] {
-      .list-tit {
-        display: inline-block;
-        width: 42px;
-      }
-    }
     .type-list[data-type='bj'] {
-      button:nth-child(14) {
-       margin-left: 124px;
+      button:nth-child(13) {
+       margin-left: 152px;
       }
     }
     .type-list[data-type='tj'] {
@@ -253,7 +254,7 @@
         visibility: hidden;
       }
       button:nth-child(14) {
-       margin-left: 124px;
+       margin-left: 152px;
       }
     }
     .type-list[data-type='hb'] {
@@ -261,11 +262,18 @@
         visibility: hidden;
       }
       button:last-child {
-       margin-left: 124px;
+       margin-left: 152px;
       }
     }
   }
+  .no-result {
+    height: 400px;
+    padding-top: 30px;
+    text-align: center;
+    font-size: 14px;
+    color: #4a4a4a;
+  }
 </style>
 <style>
-  @import "../../../../static/css/page.css"
+  @import "../../../../../static/css/page.css"
 </style>

@@ -17,7 +17,7 @@
                 <div class='search-icon' @click='getResult'></div>
               </div>
               <ul class='search-type clear center'>
-                <li :class="curIndex == index ? 'active' : ''" v-for="(tab, index) in tabs" :key='index' @click='tabMenu(index, $event)' :data-type='curIndex'>{{tab.name}}</li>
+                <li :class="curIndex == index ? 'active' : ''" v-for="(tab, index) in tabs" :key='index'><a :href="'#' + tab.id">{{tab.name}}</a></li>
               </ul>
            </div>
         </div>
@@ -72,6 +72,16 @@
 
 <script>
   import CountUp from '../../components/CountUp.vue'
+
+  const searchTabs = {
+    'hot': 0,
+    'works': 1,
+    'f_company': 2,
+    'film': 3,
+    'e_company': 4,
+    'entertainer': 5,
+  };
+
   export default {
     name: 'home',
 
@@ -80,7 +90,13 @@
     },
 
     created: function() {
-      //this.getHomeData();
+      window.onhashchange = () => {
+        this.changeTab();
+      };
+    },
+
+    mounted: function() {
+      this.changeTab();
     },
 
     data() {
@@ -92,12 +108,12 @@
         homeObj: {},
         page: 1,
         tabs: [
-          {name: '热点人群', comName: 'searchPeople', tip: '请输入艺人名称，检索艺人信用信息'},
-          {name: '作品', comName: 'searchWorks', tip: '请输入作品名称'},
-          {name: '影视企业', comName: 'searchCompany', tip: '请输入企业名称查看信用信息'},
-          {name: '影视人', comName: 'searchPeople', tip: '请输入艺人名称，检索艺人信用信息'},
-          {name: '演艺企业', comName: 'searchCompany', tip: '请输入企业名称查看信用信息'},
-          {name: '演艺人', comName: 'searchPeople', tip: '请输入艺人名称，检索艺人信用信息'}
+          {id: 'hot', name: '热点人群', comName: 'searchPeople', tip: '请输入艺人名称，检索艺人信用信息'},
+          {id: 'works', name: '作品', comName: 'searchWorks', tip: '请输入作品名称'},
+          {id: 'f_company', name: '影视企业', comName: 'searchCompany', tip: '请输入企业名称查看信用信息'},
+          {id: 'film', name: '影视人', comName: 'searchPeople', tip: '请输入艺人名称，检索艺人信用信息'},
+          {id: 'e_company', name: '演艺企业', comName: 'searchCompany', tip: '请输入企业名称查看信用信息'},
+          {id: 'entertainer', name: '演艺人', comName: 'searchPeople', tip: '请输入艺人名称，检索艺人信用信息'}
         ]
       }
     },
@@ -116,19 +132,19 @@
         })
       },
 
-      //搜索条件选择
-      tabMenu(index, event) {
-        this.curIndex = index;
-        this.curCom = this.tabs[index].comName;
-        this.curTip = this.tabs[index].tip;
-      },
-
       getHomeData() {
         this.Http.post(this.Action.GetHomeData, {}).then((data) => {
           this.homeObj = data;
         }).catch((res) => {
 
         });
+      },
+
+      changeTab() {
+        let index = searchTabs[location.hash.replace('#', '') || 'hot'];
+        this.curIndex = index;
+        this.curCom = this.tabs[index].comName;
+        this.curTip = this.tabs[index].tip;
       }
     }
   }
@@ -174,8 +190,8 @@
           border-radius: 2px;
           input {
             width: 300px;
-            height: 50px;
-            line-height: 50px;
+            height: 48px;
+            line-height: 48px;
             outline: none;
           }
           .search-icon {
@@ -195,8 +211,13 @@
             float:left;
             margin-right: 18px;
             cursor: pointer;
+            a {
+              color: #ffffff;
+            }
             &.active {
-              color: #F58523;
+              a {
+                color: #F58523;
+              }
             }
           }
           .actor {

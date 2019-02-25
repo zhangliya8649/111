@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class='search-con'>
     <div class='search-par' :data-id='list.id'>
       <div class='search-people clear w1180'>
         <div class='img'>
@@ -7,17 +7,17 @@
         </div>
         <div class='desc'>
           <div class='tit'>
-            《{{list.subjectName}}》
+            <a href='javascript:;' @click='openWorkDetail(list.id)' >《{{list.subjectName}}》</a>
           </div>
           <div class='con'>
             <div class='list'>
-              导演：<a href='javascript:;' @click='openPeopleDetail(item.id)' v-for='item in list.subjectDirectors' class='active'>{{item.celebrityName}}<span class='line'>/</span></a>
+              导演：<a href='javascript:;' @click='openPeopleDetail(item.id, item.identityType)' v-for='item in list.subjectDirectors' class='active'>{{item.celebrityName}}<span class='line'>/</span></a>
             </div>
             <div class='list'>
-              编剧: <a href='javascript:;' @click='openPeopleDetail(item.id)' v-for='item in list.subjectAdaptors' class='active'>{{item.celebrityName}}<span class='line'>/</span></a>
+              编剧: <a href='javascript:;' @click='openPeopleDetail(item.id, item.identityType)' v-for='item in list.subjectAdaptors' class='active'>{{item.celebrityName}}<span class='line'>/</span></a>
             </div>
             <div class='list'>
-              主演：<a href='javascript:;' @click='openPeopleDetail(item.id)' v-for='item in list.subjectProtagonists' class='active'>{{item.celebrityName}}<span class='line'>/</span></a>
+              主演：<a href='javascript:;' @click='openPeopleDetail(item.id, item.identityType)' v-for='item in list.subjectProtagonists' class='active'>{{item.celebrityName}}<span class='line'>/</span></a>
             </div>
             <div class='list'>
               制片国家/地区: <a href='javascript:;' v-for='item in list.producerCountry' class=''>{{item}}<span class='line'>/</span></a>
@@ -54,15 +54,15 @@
     methods: {
       openWorkDetail(id) {
         this.$router.push({
-          path: '/credit/works',
+          path: '/credit/works/worksDetail',
           query: {id: id}
         });
       },
 
-      openPeopleDetail(id) {
+      openPeopleDetail(id, type) {
         this.$router.push({
           path: '/credit/people',
-          query: {id: id}
+          query: {id: id, type: type}
         });
       }
     },
@@ -101,6 +101,9 @@
             margin-bottom: 33px;
             font-size: 18px;
             font-weight: bold;
+            a {
+              color: #4a4a4a;
+            }
           }
           .list {
             height: 22px;

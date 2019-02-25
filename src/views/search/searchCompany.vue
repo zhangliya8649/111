@@ -1,14 +1,14 @@
 <template>
-  <div>
+  <div class='search-con'>
     <div class='search-par' :data-id='list.id'>
       <div class='search-people clear w1180'>
         <div class='img'>
-          <router-link to=''><img :src='list.businessLicense' /></router-link>
+          <a href='javascript:;' @click='openCompanyDetail(list.id)'><img :src='list.businessLicense' /></a>
         </div>
         <div class='desc'>
           <div class='tit'>
-              {{list.name}}
-              <router-link to='' class='operator'>未认证</router-link>
+              <a href='javascript:;' @click='openCompanyDetail(list.id)'>{{list.name}}</a>
+              <router-link to='/register' class='operator'>未认证</router-link>
           </div>
           <div class='con'>
             <div class='list'>
@@ -46,7 +46,15 @@
     components: {
 
     },
+
     methods: {
+      openCompanyDetail(id) {
+        this.$router.push({
+          path: '/credit/company',
+          query: {id: id}
+        });
+      },
+
 
     }
   }
@@ -78,6 +86,9 @@
           .tit {
             margin-bottom: 20px;
             font-size: 24px;
+            a {
+              color: #4a4a4a;
+            }
             .operator {
               padding-left: 15px;
               height: 15px;

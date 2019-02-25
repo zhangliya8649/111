@@ -3,7 +3,7 @@
     <div class='search-top-par'>
       <div class='search-top w1180'>
         <div class='search-type clear center'>
-          <el-button v-for="(tab, index) in tabs" :key='index' :class="curIndex == index ? 'active' : ''" :data-type='curIndex' @click='tabMenu(index, $event)'>{{tab.name}}</el-button>
+          <a :class="curIndex == index ? 'active' : ''" v-for="(tab, index) in tabs" @click='tabMenu(index)'>{{tab.name}}</a>
         </div>
         <div class='search-ipt clear'>
           <div class='search-icon'></div>
@@ -12,38 +12,31 @@
         </div>
       </div>
     </div>
-    <child class='search-result' :is='curCom' :dataObj.sync='dataObj'>
-    </child>
-    <div class='no-result' v-if='noResult'>
-      暂无查询数据
+    <div class='child-router'>
+      <router-view/>
     </div>
   </div>
 
 </template>
 
 <script>
-  import hotPeople from './people/people.vue'
-  import works from './works/works.vue'
-  import movieCompany from './company/movieCompany.vue'
-  import moviePeople from './people/moviePeople.vue'
-  import tvPeople from './people/tvPeople.vue'
+  const searchTabs = {
+    'hotPeople': 0,
+    'works': 1,
+    'movieCompany': 2,
+    'moviePeople': 3,
+    'tvCompany': 4,
+    'tvPeople': 5,
+  };
+
   export default {
     name: 'credit',
-
-    components: {
-      hotPeople,
-      works,
-      movieCompany,
-      moviePeople,
-      tvPeople
-    },
 
     data() {
       return {
         curIndex: 0,
         curCom: 'hotPeople',
         curTip: '请输入艺人名称，检索艺人信用信息',
-        dataObj: {},
         page: 1,
         noResult: false,
         tabs: [
@@ -51,37 +44,39 @@
           {name: '作品', comName: 'works', tip: '请输入作品名称'},
           {name: '影视企业', comName: 'movieCompany', tip: '请输入企业名称查看信用信息'},
           {name: '影视人', comName: 'moviePeople', tip: '请输入艺人名称，检索艺人信用信息'},
-          {name: '演艺企业', comName: 'movieCompany', tip: '请输入企业名称查看信用信息'},
+          {name: '演艺企业', comName: 'tvCompany', tip: '请输入企业名称查看信用信息'},
           {name: '演艺人', comName: 'tvPeople', tip: '请输入艺人名称，检索艺人信用信息'}
-        ]
+        ],
+        dataObj: {}
       }
     },
 
-    mounted: function() {
+    watch: {
+       curIndex: (val) => {
+
+       }
+    },
+
+    created: function() {
 
     },
 
+    mounted: function() {
+      let curRoute = this.$route.name;
+      this.curIndex = searchTabs[curRoute];
+      this.curTip = this.tabs[this.curIndex].tip;
+      this.curCom = this.tabs[this.curIndex].comName;
+    },
+
     methods: {
-      tabMenu(index, event) {
-        let param = {
-          searchName: '',
-          tags: index + 1,
-          pageNum: 1
-        };
+      tabMenu(index) {
         this.curIndex = index;
         this.curCom = this.tabs[index].comName;
         this.curTip = this.tabs[index].tip;
-        this.getList(param);
-      },
-
-      getList(param) {
-        this.Http.post(this.Action.SearchList, param).then((data) => {
-          this.dataObj = data;
-          this.noResult = !data.total ? true : false;
-        }).catch((res) => {
-          console.log(res);
-        });
-      },
+        this.$router.push({
+          name: this.curCom
+        })
+      }
     },
 
 
@@ -89,6 +84,11 @@
 </script>
 
 <style lang='less' scoped>
+  .child-router {
+    padding-top: 18px;
+    padding-bottom: 30px;
+    background: #fff;
+  }
   .search-top-par {
     background: #FAF8F7;
     .search-top {
@@ -98,11 +98,22 @@
         margin-bottom: 20px;
         font-size: 16px;
         color: #666666;
-        .el-button {
-          border: none;
-          background: transparent;
-          border-radius: 0;
+
+        a {
+          box-sizing: border-box;
+          display: inline-block;
+          padding: 12px 20px;
+          white-space: nowrap;
+          text-align: center;
+          color: #606266;
+          font-weight: 500;
+          font-size: 14px;
+          cursor: pointer;
           &.active {
+            background: #F58523;
+            color: #fff;
+          }
+          &:active {
              background: #F58523;
              color: #fff;
           }
@@ -144,17 +155,5 @@
         }
       }
     }
-  }
-  .search-result {
-    padding-top: 18px;
-    padding-bottom: 30px;
-    background: #fff;
-  }
-  .no-result {
-    height: 400px;
-    padding-top: 30px;
-    text-align: center;
-    font-size: 14px;
-    color: #4a4a4a;
   }
 </style>
