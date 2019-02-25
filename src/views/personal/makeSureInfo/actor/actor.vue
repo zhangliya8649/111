@@ -2,41 +2,41 @@
     <div>
         <div class="actor">
             <p class="title">认领您的信息</p>
-            <div class="userInfo-box" v-if='this.userInfo.name'>
+            <div class="userInfo-box" v-for="(userInfo,index) in searchMsg" :key='index'>
                 <div class="userInfo">
                     <div class="userInfo-left">
                         <div class="img-box">
-                            <img :src='userInfo.userImg' >
+                            <img :src='userInfo.celebrityHeadUrl' >
                         </div>
                         <div class="selfInfo">
                             <div class="selfInfo-top">
                                 <div>
-                                    <span class="userName">{{userInfo.name}}</span>
-                                    <button v-if="userInfo.isSure == 0" class="goSure" @click="goSure">去认领</button>
-                                    <span class="notSure" v-if="userInfo.isSure == 1">
+                                    <span class="userName">{{userInfo.celebrityName}}</span>
+                                    <button v-if="userInfo.claimState == 1" class="goSure" @click="goSure(index)">去认领</button>
+                                    <span class="notSure" v-if="userInfo.claimState == 2">
                                         <img :src="notSureIcon" class="notSureIcon"><span class="suring">审核中...</span>
                                     </span>
-                                    <span class="notSure" v-if="userInfo.isSure == 2">
+                                    <span class="notSure" v-if="userInfo.claimState == 3">
                                         <img :src="SuredIcon" class="notSureIcon"><span class="sured">已审核</span>
                                     </span>
                                 </div>
                             </div>
                             <div class="selfInfo-center">
-                                <p class="center center-job">职业：{{userInfo.job}}</p>
-                                <p class="center">职业证书：{{userInfo.jobCertificate}}</p>
-                                <p class="center">所属机构：{{userInfo.company}}</p>
+                                <p class="center center-job">职业：{{userInfo.occupation}}</p>
+                                <p class="center">职业证书：{{userInfo.certificate}}</p>
+                                <p class="center">所属机构：{{userInfo.agency}}</p>
                             </div>
                             <div class="selfInfo-bottom">
-                                <p :class="['job',userInfo.identity == '影视人' ? 'active' : '']">影视人</p>
-                                <p :class="['job',userInfo.identity == '制片人' ? 'active' : '']">制片人</p>
-                                <p :class="['job',userInfo.identity == '导演' ? 'active' : '']">导演</p>
+                                <p :class="['job',userInfo.identityType == '1' ? 'active' : '']">影视人</p>
+                                <p :class="['job',userInfo.identityType == '2' ? 'active' : '']">制片人</p>
+                                <p :class="['job',userInfo.identityType == '3' ? 'active' : '']">导演</p>
                             </div>
                         </div>
                     </div>
                     <div class="userInfo-right">
                         <div class="selfOther">
                             <div class="other class">
-                                <p>{{userInfo.class}}</p>
+                                <p>{{userInfo.rating}}</p>
                             </div>
                             <div class="title">
                                 <img :src="classIcon">
@@ -45,7 +45,7 @@
                         </div>
                         <div class="selfOther">
                             <div class="other class">
-                                <p>{{userInfo.goal}}</p>
+                                <p>{{userInfo.commendCount}}</p>
                             </div>
                             <div class="title">
                                 <img :src="goalIcon">
@@ -54,7 +54,7 @@
                         </div>
                         <div class="selfOther">
                             <div class="other class">
-                                <p>{{userInfo.not}}</p>
+                                <p>{{userInfo.loseCreditCount}}</p>
                             </div>
                             <div class="title">
                                 <img :src="notIcon">
@@ -65,7 +65,7 @@
                 </div>
             </div>
         </div>
-        <Dialog ref='dialog'></Dialog>
+        <Dialog ref='dialog' :userMsg='searchMsg' :userType='identityType' :index='index' @editClaim='editClaim'></Dialog>
     </div>
 </template>
 <script>
@@ -76,16 +76,16 @@ let classIcon = require('../../../../assets/img/class.png')
 let goalIcon = require('../../../../assets/img/goal.png')
 let notIcon = require('../../../../assets/img/not.png')
 import Dialog from '../dialog/dialog' 
+import Until from '../../../../until/until.js'
 export default {
     components:{Dialog},
     data(){
         return{
+            index:0,        //当前点击的用户
+            identityType:2,     //当前用户类别
             input:'',   //双向绑定搜索
-            userInfo:{
-               
-            },
-            isSure:0,   //是否认领
-            userImg: userImg,   //用户的照片    
+            searchMsg:[
+            ], 
             notSureIcon: notSureIcon,   //未认领图标
             SuredIcon: SuredIcon,   //未认领图标
             classIcon: classIcon,   //信用等级图标
@@ -94,24 +94,30 @@ export default {
         }
     },
     methods:{
-        goSure(){       //认领
+        goSure(index){       //认领
             this.$refs.dialog.showDialog()
+            this.index = index
         },
-        search(num){       //找到人
-            if(num == 0 || num == 1){
-                this.userInfo = {
-                    name:'乔杉',
-                    isSure:0,
-                    userImg:userImg,
-                    job:'演员/配音',
-                    jobCertificate:'08768',
-                    company:'北京演员影视传媒有限公司',
-                    identity:'影视人',
-                    class:'A',
-                    goal:'5',
-                    not: '0'
-                }
+        search(num,name){       //找到人
+            let data = {
+                celebrityName:name,
+                identityType:num,
+                pageNum:1
             }
+            this.Http.post(this.Action.searchActor,data).then((res) => {
+                if(res.data){
+                    Until.ErrorCode(res.data.code)
+                }else{
+                    this.searchMsg = res.list
+                }
+            })
+            this.identityType = num
+        },
+        clear(){            //清空信息
+            this.searchMsg = []
+        },
+        editClaim(index){        //修改认领信息
+            this.searchMsg[index].claimState = 2
         }
     }
 }
@@ -119,6 +125,7 @@ export default {
 <style lang="less" scoed>
     .actor{
             padding-top: 50px;
+            margin-bottom: 20px;
             .title{
                 font-family: PingFang-SC-Medium;
                 font-size: 16px;
@@ -144,6 +151,10 @@ export default {
                         justify-content: space-around;
                         .img-box{
                             margin-right: 22px;
+                            img{
+                                width: 135px;
+                                height: 200px;
+                            }
                         }
                         .selfInfo{
                             display: flex;

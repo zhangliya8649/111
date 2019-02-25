@@ -326,11 +326,6 @@ export default {
                 ]
             },
             msg:[                                       //时间轴数据
-                {workTime:'2002-01-13',content:'创建喜剧社团'},
-                {workTime:'2004-02-14',content:'个人首部电影上映'},
-                {workTime:'2008-05-15',content:'创立自己的公司'},
-                {workTime:'2011-03-05',content:'首次参演春节联欢晚会'},
-                {workTime:'2014-05-22',content:'传作小品喜剧20部'},
             ],
             //从业信息
             JobInfo:[{

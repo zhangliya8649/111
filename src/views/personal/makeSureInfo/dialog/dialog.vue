@@ -5,9 +5,10 @@
     title="认领艺人"
     :visible.sync="DialogVisible"
     width="764px"
-    center>
+    center
+    :before-close="beforeClose">
         <div class="dialog-content">
-            <Upload @show="showImg"></Upload>
+            <Upload @show="showImg" @saveIDCard='saveIDCard' ref='upload'></Upload>
         </div>
         <span slot="footer" class="dialog-footer">
             <el-button class="btn" @click="DialogVisible = false">取 消</el-button>
@@ -32,8 +33,10 @@
 </template>
 <script>
 import Upload from './upload/upload'
+import Until from '../../../../until/until.js'
 let gou = require('../../../../assets/img/gou.png')
 export default {
+    props:['userMsg','userType','index'],
     components:{Upload},
     data(){
         return{
@@ -42,6 +45,7 @@ export default {
             idCard2: '',    //身份证反面
             gou: gou,       //上传完成图标
             uploadOver: false,   //上传完成弹窗
+            file:[],            //身份证
         }
     },
     methods:{
@@ -49,14 +53,35 @@ export default {
             this.DialogVisible = true
         },
         uploadSure(){       //确认上传
-            this.DialogVisible = false;
-            this.uploadOver = true;
+            let data = {
+                celebrityId:this.userMsg[this.index].id,
+                celebrityName:this.userMsg[this.index].celebrityName,
+                filePath: '[' + this.file + ']',
+                userType:this.userType,
+                token:Until.getUserToken(),
+            }
+            this.Http.post(this.Action.claimUser,data).then((res) => {
+                if(res){
+                    Until.ErrorCode(res.data.code)
+                }else{
+                    this.DialogVisible = false;
+                    this.uploadOver = true;
+                    this.$emit('editClaim',this.index)
+                }
+            })
         },
         konw(){         //知道了
             this.uploadOver = false;
         },
         showImg(obj){
             obj.type == 1 ? this.idCard1 = obj.src : this.idCard2 = obj.src;
+        },
+        saveIDCard(files){
+            this.file = files
+        },
+        beforeClose(){
+            this.$refs.upload.clear()
+            this.DialogVisible = false;
         }
     }
 }

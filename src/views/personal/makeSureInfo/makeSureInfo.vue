@@ -9,7 +9,7 @@
                 <div class="search-box" v-if="this.active != 4">
                     <div class="search">
                             <i slot="prefix" class="el-input__icon el-icon-search"></i>
-                            <input type="text" class="input" :placeholder="this.active == 0 || this.active == 1 ? actorPlace : companyPlace">
+                            <input type="text" class="input" :placeholder="this.active == 0 || this.active == 1 ? actorPlace : companyPlace" v-model="searchName">
                             <el-button class="search-btn" @click="search">搜索</el-button>
                     </div>
                 </div>
@@ -31,6 +31,7 @@ export default {
     components:{Actor,CompanyMan,Outer},
     data(){
         return{
+            searchName:'',      //搜索名字
             active:0,//初始化选中按钮
             tabs:[          //切换菜单
                 {name:'影视人'},    
@@ -46,15 +47,21 @@ export default {
     methods:{
         tabMenu(index){
             this.active = index;
+            this.searchName = ''
+            if(this.active == 0 || this.active == 1){
+                this.$refs.actor.clear()
+            }else if(this.active == 2 || this.active == 3){
+                this.$refs.companyMan.clear()
+            }
         },
         findNot(){          //查询后未找到
             this.$refs.companyMan.findNot()
         },
         search(){           //搜索
             if(this.active == 0 || this.active == 1){
-                this.$refs.actor.search(this.active)
-            }else{
-                this.$refs.companyMan.search(this.active)
+                this.$refs.actor.search(this.active + 2,this.searchName)
+            }else if(this.active == 2 || this.active == 3){
+                this.$refs.companyMan.search(this.active + 2,this.searchName)
             }
         }
     }
@@ -62,8 +69,9 @@ export default {
 </script>
 <style lang="less" scoped>
     .makeSureInfo{
-        height: 1200px;
+        flex-grow: 1;
         .makeSureInfoHeader{
+                position: relative;
                 background-color: #FAF8F7;
                 // height: 200px;  
                 padding: 0 0 40px 0;
@@ -137,6 +145,9 @@ export default {
                     cursor: pointer;
                 }
             }
+        }
+        .makeSure-content{
+            // min-height: 100vh;
         }
     }
 </style>

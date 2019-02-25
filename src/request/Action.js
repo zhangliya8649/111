@@ -47,6 +47,12 @@ export default {
   addHonor:'/c10/celebrity/add/honor',
   
 
+  //认证信息
+  // 1.搜索名称
+  searchActor:'/c10/celebrity/list',
+  //2.认领用户信息
+  claimUser:'/c10/celebrity/claim',
+
 }
 
 

@@ -23,9 +23,10 @@ export default {
     data(){
      return{
         plus: plus,     //上传图标
-        idCard1: '',    //身份证正面
-        idCard2: '',    //身份证反面
+        idCard1: '',    //身份证正面src
+        idCard2: '',    //身份证反面src
         type: 1,        //判断上传身份证正反面 
+        files:[],       //身份证文件集合
      }   
     },
     methods:{
@@ -34,15 +35,27 @@ export default {
             this.type = num;
         },
         choseImg(e){    //图片选择
-            let windowURL = window.URL || window.webkitURL
-            let src = windowURL.createObjectURL( e.target.files[0])
-            this.type == 1 ? this.idCard1 = src : this.idCard2 = src;
-            if(this.type == 1){
-                this.$emit('show',{type:1,src:this.idCard1})
-            }else{
-                this.$emit('show',{type:2,src:this.idCard2})
+            if(e.target.files[0]){
+                let windowURL = window.URL || window.webkitURL
+                let src = windowURL.createObjectURL(e.target.files[0])
+                this.type == 1 ? this.idCard1 = src : this.idCard2 = src;
+                let file = e.target.files[0]
+                if(this.type == 1){
+                    this.$emit('show',{type:1,src:this.idCard1})
+                }else{
+                    this.$emit('show',{type:2,src:this.idCard2})
+                }
+                this.files.push(file)
+                if(this.files.length == 2){
+                    this.$emit('saveIDCard',this.files)
+                }
             }
         },
+        clear(){            //清除数据
+            this.idCard1 = ''
+            this.idCard2= ''
+            this.files = []
+        }
     }
 }
 </script>
@@ -64,6 +77,7 @@ export default {
                     cursor: pointer;
                 }
                 .idCard{
+                    width: 100%;
                     height: 100%;
                 }
                 p{

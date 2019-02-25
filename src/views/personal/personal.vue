@@ -8,6 +8,7 @@
             </div>
         </div>
         <PersonalPage v-if="this.active == 0"></PersonalPage>
+        <!-- <CompanyPage v-if="this.active == 0"></CompanyPage> -->
         <MyCollection v-if="this.active == 1"></MyCollection>
         <MessageCenter v-if="this.active == 2"></MessageCenter>
     </div>
@@ -16,8 +17,9 @@
 import PersonalPage from './peronalPage/PersonalPage'
 import MyCollection from './myCollection/myCollection'
 import MessageCenter from './messageCenter/messageCenter'
+import CompanyPage from './peronalPage/companyPage'
 export default {
-    components:{PersonalPage,MyCollection,MessageCenter},
+    components:{PersonalPage,MyCollection,MessageCenter,CompanyPage},
     data(){
         return{
             //当前选中按钮

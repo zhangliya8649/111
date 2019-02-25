@@ -193,13 +193,10 @@ export default {
             this.find = true
         },
         search(num){           //找到公司
-            if(num == 2 || num == 3){
-                this.tableData = [{
-                    name: '北京眼缘影视传媒有限公司',
-                    class: 'A级',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }]
-            }
+            
+        },
+        clear(){            //清空信息
+            this.tableData = []
         }
     }
 }
