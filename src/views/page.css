@@ -1,0 +1,47 @@
+.el-pagination {
+  margin-top: 26px;
+  text-align: center;
+}
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  background: #F58523;
+}
+.search-ipt-par {
+  background: #FAF8F7;
+  margin-bottom: 28px;
+  padding-bottom: 28px;
+}
+.search-ipt {
+  width: 1180px;
+  height: 54px;
+  background: #FFFFFF;
+  border: 1px solid #DCDFE6;
+  border-right: none;
+  font-size: 16px;
+}
+.search-ipt div, input {
+  float: left;
+}
+.search-ipt .search-icon {
+  width: 51px;
+  height: 54px;
+  background-image: url('../assets/credit-search.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.search-ipt input {
+  width: 980px;
+  height: 52px;
+  margin-top: 2px;
+  outline: none;
+}
+.search-ipt .search-btn {
+  float: right;
+  width: 148px;
+  height: 56px;
+  line-height: 56px;
+  background: #F58523;
+  margin-top: -1px;
+  text-align: center;
+  color: #fff;
+  cursor: pointer;
+}

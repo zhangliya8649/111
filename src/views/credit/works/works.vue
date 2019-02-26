@@ -1,9 +1,16 @@
 <template>
     <div class='works'>
+      <div class='search-ipt-par'>
+        <div class='search-ipt w1180 clear'>
+          <div class='search-icon'></div>
+          <input type='text' placeholder='请输入作品名称' v-model='searchKey' @keyup.enter='searchResultByKey()' @keyup.delete='searchResultByKey()'>
+          <div class='search-btn' @click='searchResultByKey()'>搜索</div>
+        </div>
+      </div>
       <div class='works-type w1180' id='parId'>
         <div class='type-list' v-for='item in searchType' :data-type='item.type'>
            <span class='list-tit'>{{item.title}}：</span>
-           <el-button v-for="(subItem, index) in item.con" :key='index' :class="index == 0 ? 'active' : ''" @click='tabMenu(index, $event)'>{{subItem.name}}</el-button>
+           <el-button v-for="(subItem, index) in item.con" :key='index' :class="index == 0 ? 'active' : ''" @click='tabMenu(index, $event)' :data-type='subItem.type'>{{subItem.name}}</el-button>
         </div>
       </div>
       <div v-for='(item, index) in dataObj.list' :key='index'>
@@ -31,34 +38,35 @@
         },
         dataObj: {},
         curIndex: 0,
+        searchKey: '',
         page: 1,
         searchType: [
           {
             type: 'subtype',
             title: '影视剧',
             con: [
-                   {name: '全部'},
-                   {name: '电影'},
-                   {name: '电视剧'},
-                   {name: '动画片'},
-                   {name: '纪录片'}
+                   {name: '全部', type: ''},
+                   {name: '电影', type: 'movie'},
+                   {name: '电视剧', type: 'tv'},
+                   {name: '动画片', type: 'movie'},
+                   {name: '纪录片', type: 'movie'}
                  ]
           },
           {
             type: 'varietyShow',
             title: '综艺',
             con: [
-                   {name: '全部'}
+                   {name: '全部', type: ''}
                  ]
           },
           {
             type: 'showType',
             title: '演出',
             con: [
-                   {name: '全部'},
-                   {name: '舞台剧'},
-                   {name: '歌曲'},
-                   {name: '曲艺'}
+                   {name: '全部', type: ''},
+                   {name: '舞台剧', type: ''},
+                   {name: '歌曲', type: ''},
+                   {name: '曲艺', type: ''}
                  ]
           }
         ]
@@ -87,12 +95,22 @@
         }
         let parNode = el.parentNode;
         let btnListNode = parNode.children;
+        let parType = parNode.getAttribute('data-type');
+        let elType = el.getAttribute('data-type');
+        this.param[parType] = elType;
         for(let i = 0; i < btnListNode.length; i++) {
           if(btnListNode[i].classList.contains('active')) {
             btnListNode[i].classList.remove('active');
           }
         }
         el.classList.add('active');
+        this.getList(this.param);
+      },
+
+      //搜索
+      searchResultByKey() {
+        this.param.subjectName = this.searchKey;
+        this.getList(this.param);
       },
 
       //搜索作品列表
@@ -154,6 +172,4 @@
     color: #4a4a4a;
   }
 </style>
-<style>
-  @import "../../../../static/css/page.css"
-</style>
+

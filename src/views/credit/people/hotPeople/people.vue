@@ -1,5 +1,12 @@
 <template>
     <div class='people'>
+      <div class='search-ipt-par'>
+        <div class='search-ipt w1180 clear'>
+          <div class='search-icon'></div>
+          <input type='text' placeholder='请输入艺人名称，检索艺人信用信息' v-model='searchKey' @keyup.enter='searchResultByKey()' @keyup.delete='searchResultByKey()'>
+          <div class='search-btn' @click='searchResultByKey()'>搜索</div>
+        </div>
+      </div>
       <div v-for='(item, index) in dataObj.list' :key='index'>
          <search-people v-bind:list='item'></search-people>
       </div>
@@ -23,6 +30,7 @@
           pageNum: 1
         },
         dataObj: {},
+        searchKey: ''
       }
     },
 
@@ -50,6 +58,11 @@
         });
       },
 
+      searchResultByKey() {
+        this.param.searchName = this.searchKey;
+        this.getList(this.param);
+      },
+
       //分页
       changeCurrentPage(val) {
         this.param.pageNum = val;
@@ -67,7 +80,4 @@
     font-size: 14px;
     color: #4a4a4a;
   }
-</style>
-<style>
-  @import "../../../../../static/css/page.css"
 </style>

@@ -1,15 +1,25 @@
 <template>
   <div>
+    <div class='search-ipt-par'>
+      <div class='search-ipt w1180 clear'>
+        <div class='search-icon'></div>
+        <input type='text' placeholder='请输入企业名称查看信用信息' v-model='searchKey' @keyup.enter='searchResultByKey()'>
+        <div class='search-btn' @click='searchResultByKey()'>搜索</div>
+      </div>
+    </div>
     <div class='works-type w1180' id='parId'>
       <div class='type-list' v-for='item in searchType' :data-type='item.type'>
          <span class='list-tit'>{{item.title}}</span>
-         <el-button v-for="(subItem, index) in item.con" :key='index' :class="index == 0 ? 'active' : ''" @click='tabMenu(index, $event)'>{{subItem.name}}</el-button>
+         <el-button v-for="(subItem, index) in item.con" :key='index' :class="index == 0 ? 'active' : ''" @click='tabMenu(index, $event)' :data-type='subItem.name'>{{subItem.name}}</el-button>
       </div>
     </div>
     <div v-for='(item, index) in dataObj.list' :key='index'>
        <search-company v-bind:list='item'></search-company>
     </div>
     <el-pagination background layout='prev, pager, next' :total='dataObj.total' @current-change='changeCurrentPage' v-if='dataObj.total && dataObj.total > 10'></el-pagination>
+    <div class='no-result' v-if='!dataObj.total'>
+      暂无查询数据
+    </div>
   </div>
 </template>
 
@@ -40,9 +50,10 @@
           pageNum: 1
         },
         dataObj: {},
+        searchKey: '',
         searchType: [
           {
-            type: 'bj',
+            type: 'area',
             title: '地区：',
             con: [
                    {name: '北京'},
@@ -61,13 +72,7 @@
                    {name: '怀柔区'},
                    {name: '平谷区'},
                    {name: '密云区'},
-                   {name: '延庆区'}
-                 ]
-          },
-          {
-            type: 'tj',
-            title: '',
-            con: [
+                   {name: '延庆区'},
                    {name: '天津'},
                    {name: '和平区'},
                    {name: '河东区'},
@@ -83,13 +88,7 @@
                    {name: '宝坻区'},
                    {name: '滨海新区'},
                    {name: '宁河区'},
-                   {name: '静海区'}
-                 ]
-          },
-          {
-            type: 'hb',
-            title: '',
-            con: [
+                   {name: '静海区'},
                    {name: '河北'},
                    {name: '石家庄市'},
                    {name: '唐山市'},
@@ -118,12 +117,16 @@
         }
         let parNode = el.parentNode;
         let btnListNode = parNode.children;
+        let parType = parNode.getAttribute('data-type');
+        let elType = el.getAttribute('data-type') == '全部' ? '' : el.getAttribute('data-type');
+        this.param[parType] = elType;
         for(let i = 0; i < btnListNode.length; i++) {
           if(btnListNode[i].classList.contains('active')) {
             btnListNode[i].classList.remove('active');
           }
         }
         el.classList.add('active');
+        this.getList(this.param);
       },
 
       //搜索演艺公司列表
@@ -133,6 +136,12 @@
         }).catch((res) => {
           console.log(res);
         });
+      },
+
+      //搜索
+      searchResultByKey() {
+        this.param.name = this.searchKey;
+        this.getList(this.param);
       },
 
       //分页
@@ -175,15 +184,18 @@
           color: #fff;
         }
       }
-    }
-    .type-list[data-type='bj'] {
-      button:nth-child(17) {
-        margin-left: 104px;
+      button[data-type='延庆区'] {
+        margin-right: 875px;
       }
-    }
-    .type-list[data-type='tj'] {
-      button:last-child {
-        margin-left: 104px;
+      button[data-type='密云区'] {
+        margin-left: 105px;
+      }
+      button[data-type='天津'], button[data-type='河北'] {
+        margin-left: 46px;
+      }
+      button[data-type='静海区'] {
+        margin-left: 105px;
+        margin-right: 932px;
       }
     }
   }
@@ -194,7 +206,4 @@
     font-size: 14px;
     color: #4a4a4a;
   }
-</style>
-<style>
-  @import "../../../../../static/css/page.css"
 </style>

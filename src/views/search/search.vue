@@ -90,5 +90,5 @@
   }
 </style>
 <style>
-  @import "../../../static/css/page.css"
+  @import "../page.css"
 </style>

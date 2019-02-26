@@ -1,9 +1,16 @@
 <template>
   <div>
+    <div class='search-ipt-par'>
+      <div class='search-ipt w1180 clear'>
+        <div class='search-icon'></div>
+        <input type='text' placeholder='请输入艺人名称，检索艺人信用信息' v-model='searchKey' @keyup.enter='searchResultByKey()' @keyup.delete='searchResultByKey()'>
+        <div class='search-btn' @click='searchResultByKey()'>搜索</div>
+      </div>
+    </div>
     <div class='works-type w1180' id='parId'>
       <div class='type-list' v-for='item in searchType' :data-type='item.type'>
          <span class='list-tit'>{{item.title}}：</span>
-         <el-button v-for="(subItem, index) in item.con" :key='index' :class="index == 0 ? 'active' : ''" @click='tabMenu(index, $event)'>{{subItem.name}}</el-button>
+         <el-button v-for="(subItem, index) in item.con" :key='index' :class="index == 0 ? 'active' : ''" @click='tabMenu(index, $event)' :data-type='subItem.name'>{{subItem.name}}</el-button>
       </div>
     </div>
     <div v-for='(item, index) in dataObj.list' :key='index'>
@@ -42,6 +49,7 @@
         },
         dataObj: {},
         curIndex: 0,
+        searchKey: '',
         searchType: [
           {
             type: 'investment',
@@ -96,7 +104,7 @@
                  ]
           },
           {
-            type: 'bj',
+            type: 'area',
             title: '地区',
             con: [
                    {name: '北京'},
@@ -115,13 +123,7 @@
                    {name: '怀柔区'},
                    {name: '平谷区'},
                    {name: '密云区'},
-                   {name: '延庆区'}
-                 ]
-          },
-          {
-            type: 'tj',
-            title: '',
-            con: [
+                   {name: '延庆区'},
                    {name: '天津'},
                    {name: '和平区'},
                    {name: '河东区'},
@@ -137,13 +139,7 @@
                    {name: '宝坻区'},
                    {name: '滨海新区'},
                    {name: '宁河区'},
-                   {name: '静海区'}
-                 ]
-          },
-          {
-            type: 'hb',
-            title: '',
-            con: [
+                   {name: '静海区'},
                    {name: '河北'},
                    {name: '石家庄市'},
                    {name: '唐山市'},
@@ -184,12 +180,22 @@
         }
         let parNode = el.parentNode;
         let btnListNode = parNode.children;
+        let parType = parNode.getAttribute('data-type');
+        let elType = el.getAttribute('data-type') == '全部' ? '' : el.getAttribute('data-type');
+        this.param[parType] = elType;
         for(let i = 0; i < btnListNode.length; i++) {
           if(btnListNode[i].classList.contains('active')) {
             btnListNode[i].classList.remove('active');
           }
         }
         el.classList.add('active');
+        this.getList(this.param);
+      },
+
+      //搜索
+      searchResultByKey() {
+        this.param.celebrityName = this.searchKey;
+        this.getList(this.param);
       },
 
       //查询影视人列表
@@ -222,6 +228,8 @@
     .type-list {
       margin-bottom: 18px;
       .list-tit {
+        display: inline-block;
+        width: 42px;
         font-weight: bold;
       }
       button {
@@ -239,32 +247,20 @@
           color: #fff;
         }
       }
-    }
-    .type-list[data-type='bj'], .type-list[data-type='tj'], .type-list[data-type='hb'] {
-      .list-tit {
-        display: inline-block;
-        width: 42px;
+      button[data-type='延庆区'] {
+        margin-right: 565px;
       }
-    }
-    .type-list[data-type='bj'] {
-      button:nth-child(14) {
-       margin-left: 124px;
+      button[data-type='大兴区'] {
+        margin-left: 124px;
       }
-    }
-    .type-list[data-type='tj'] {
-      .list-tit {
-        visibility: hidden;
+      button[data-type='天津'], button[data-type='河北'] {
+        margin-left: 46px;
       }
-      button:nth-child(14) {
-       margin-left: 124px;
+      button[data-type='宝坻区'], button[data-type='衡水市'] {
+        margin-left: 124px;
       }
-    }
-    .type-list[data-type='hb'] {
-      .list-tit {
-        visibility: hidden;
-      }
-      button:last-child {
-       margin-left: 124px;
+      button[data-type='静海区'] {
+        margin-right: 640px;
       }
     }
   }
@@ -276,6 +272,4 @@
     color: #4a4a4a;
   }
 </style>
-<style>
-  @import "../../../../../static/css/page.css"
-</style>
+

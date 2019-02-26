@@ -1,7 +1,0 @@
-.el-pagination {
-  margin-top: 26px;
-  text-align: center;
-}
-.el-pagination.is-background .el-pager li:not(.disabled).active {
-  background: #F58523;
-}
