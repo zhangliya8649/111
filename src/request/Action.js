@@ -50,7 +50,8 @@ export default {
   addBenefit:'/c10/celebrity/add/benefit',
   //6.添加个人荣誉
   addHonor:'/c10/celebrity/add/honor',
-  
+  // 添加从业信息
+  addWork: '/c10/celebrity/add/working',
 
   //认证信息
   // 1.搜索名称

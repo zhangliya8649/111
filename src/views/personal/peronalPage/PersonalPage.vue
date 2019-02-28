@@ -366,7 +366,8 @@ export default {
         //获取用户信息
         getUserInfo(){
             let data = {
-                celebrityId:Until.getUser().user.id,
+                // celebrityId:Until.getUser().user.id,
+                celebrityId:1,
                 identityType:Until.getUser().user.userType
             }
             this.Http.post(this.Action.userInfo,data).then((res) => {
@@ -394,7 +395,7 @@ export default {
                 token:Until.getUser().token
             }
             this.Http.post(this.Action.jobInfo,data).then((res) => {
-                this.jobInfo = res
+                this.msg = res.list
             }).catch((err) => {
                 console.log(err)
             })

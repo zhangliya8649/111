@@ -84,10 +84,11 @@ export default {
     methods:{
         makeSure(){         //提交
             let data = {
-                workLifeJson:this.tableData,
+                workLifeJson: JSON.stringify(this.tableData),
                 token:Until.getUserToken()
             }
-            this.Http.post(this.Action.jobInfo,data).then((res) => {
+            this.Http.post(this.Action.addWork,data).then((res) => {
+                debugger
                 this.$message({
                     type:'success',
                     message:'提交成功'
