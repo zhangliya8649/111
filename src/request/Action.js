@@ -40,7 +40,7 @@ export default {
   //个人中心
   // 1.根据用户id查看资料
   userInfo:'/c10/celebrity/get/by_id',
-  //2.用户个人公益
+  //2.获取用户个人公益
   benefit:'/c10/celebrity/get/benefit',
   //3.用户从业信息
   jobInfo:'/c10/celebrity/get/by_working',
@@ -52,7 +52,12 @@ export default {
   addHonor:'/c10/celebrity/add/honor',
   // 添加从业信息
   addWork: '/c10/celebrity/add/working',
-
+  // 根据id获取作品
+  getProduction: '/c10/subject/get/by_cid',
+  // 获取用户身份
+  getUserid: '/c10/user/get/by_uid',
+  // 修改密码
+  modifyPwd: '/c10/user/modify/pwd',
   //认证信息
   // 1.搜索名称
   searchActor:'/c10/celebrity/list',

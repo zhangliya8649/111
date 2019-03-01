@@ -38,6 +38,8 @@
 </template>
 <script>
 import Until from '../../../until/until.js'
+import { getUserIdentity } from '../getUser/getUser.js'
+import md5 from 'md5'
 export default {
     data(){
         return{
@@ -82,7 +84,7 @@ export default {
             if(this.checkForm()){
               let data = {
                 phone:this.phone,
-                pwd:this.password,
+                pwd:md5(this.password),
                 imgId:this.imgId,
                 imgCode:this.imgCode
               }
@@ -96,6 +98,8 @@ export default {
                   })
                   sessionStorage.setItem('userInfo',JSON.stringify(res))
                   this.$store.commit('setUserInfo')
+                  //获取身份
+                  getUserIdentity()
                   this.$router.push({path:'/Personal'})
                 }
               }).catch((res) => {

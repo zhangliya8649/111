@@ -193,7 +193,7 @@
                             <el-input class="input" type="password" v-model="ruleForm.newPass" autocomplete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="确认密码" prop="checkPass">
-                            <el-input class="input" v-model.number="ruleForm.checkPass"></el-input>
+                            <el-input type="password" class="input" v-model.number="ruleForm.checkPass"></el-input>
                         </el-form-item>
                         <el-form-item align='right'>
                             <el-button class="editPwd" @click="editSurePass">确认修改</el-button>
@@ -216,6 +216,7 @@ import ExpDialog from './expDialog/expDialog'
 import TimeLine from './timeLine/timeLine'
 import ChoseWorks from './choseWorks/choseWorks'
 import Until from '../../../until/until.js'
+import md5 from 'md5'
 export default {
     components:{Works,Dialog,ExpDialog,TimeLine,ChoseWorks},
     data(){
@@ -232,21 +233,21 @@ export default {
         };
         var validateNewPass = (rule, value, callback) => {
             if (value === '') {
-            callback(new Error('请输入新密码'));
+                callback(new Error('请输入新密码'));
             } else {
             if (this.ruleForm.newPass !== '') {
                 this.$refs.ruleForm.validateField('checkPass');
             }
-            callback();
+                callback();
             }
         };
         var validateCheckPass = (rule, value, callback) => {
             if (value === '') {
-            callback(new Error('请再次输入密码'));
-            } else if (value !== this.ruleForm.newPass) {
-            callback(new Error('两次输入密码不一致!'));
+                callback(new Error('请再次输入密码'));
+            } else if (value != this.ruleForm.newPass) {
+                callback(new Error('两次输入密码不一致!'));
             } else {
-            callback();
+                callback();
             }
         };
         return{
@@ -335,6 +336,9 @@ export default {
 
         }
     },
+    mounted(){
+        this.init()
+    },
     methods:{
         //初始化页面
         init(){
@@ -342,6 +346,7 @@ export default {
             this.getUserBenefit()
             this.getUserJobInfo()
             this.getUserHonor()
+            this.getProduction()
         },
         //补全信息
         editBasic(){
@@ -361,13 +366,35 @@ export default {
             this.$refs.expDialog.openExp()
         },
         editSurePass(){         //确认修改密码
-            this.$router.push({path:'/MakeSure'})
+            this.$refs.ruleForm.validate((valid) => {
+                if(valid) {
+                    console.log(this.ruleForm)
+                    this.modifyPwd(this.ruleForm)
+                } else {
+                    return
+                }
+            })
+            // this.$router.push({path:'/MakeSure'})
+        },
+        // 修改密码
+        modifyPwd(form_data) {
+            let data = {
+                oldPwd: md5(form_data.oldPass),
+                newPwd: md5(form_data.newPass),
+                token:Until.getUser().token
+            }
+            this.Http.post(this.Action.modifyPwd, data).then((res) => {
+                this.$message({
+                    message: '修改成功',
+                    type: 'success'
+                })
+            })
         },
         //获取用户信息
         getUserInfo(){
             let data = {
                 // celebrityId:Until.getUser().user.id,
-                celebrityId:1,
+                celebrityId:Until.getUserSmallInfo().id,
                 identityType:Until.getUser().user.userType
             }
             this.Http.post(this.Action.userInfo,data).then((res) => {
@@ -379,7 +406,7 @@ export default {
         //获取用户社会公益
         getUserBenefit(){
             let data = {
-                celebrityId:Until.getUser().user.id,
+                celebrityId:Until.getUserSmallInfo().id,
                 token:Until.getUser().token
             }
             this.Http.post(this.Action.benefit,data).then((res) => {
@@ -391,7 +418,7 @@ export default {
         //获取用户从业信息
         getUserJobInfo(){
             let data = {
-                celebrityId:Until.getUser().user.id,
+                celebrityId:Until.getUserSmallInfo().id,
                 token:Until.getUser().token
             }
             this.Http.post(this.Action.jobInfo,data).then((res) => {
@@ -403,11 +430,25 @@ export default {
         //获取用户个人荣誉
         getUserHonor(){
             let data = {
-                celebrityId:Until.getUser().user.id,
+                celebrityId:Until.getUserSmallInfo().id,
                 token:Until.getUser().token
             }
             this.Http.post(this.Action.userHonor,data).then((res) => {
                 this.tableData1 = res.list
+            }).catch((err) => {
+                console.log(err)
+            })
+        },
+        // 获取作品
+        getProduction() {
+            let data = {
+                celebrityId:Until.getUserSmallInfo().id,
+                // token:Until.getUser().token,
+                pageNum: 1,
+            }
+            this.Http.post(this.Action.getProduction, data).then((res) => {
+                console.log(res.list)
+                this.worksData = res.list
             }).catch((err) => {
                 console.log(err)
             })
@@ -419,9 +460,6 @@ export default {
         //     return Until.timestampToTime(row.benefitTime)
         // },
     },
-    mounted(){
-        this.init()
-    }
 }
 </script>
 <style lang="less" scoped>

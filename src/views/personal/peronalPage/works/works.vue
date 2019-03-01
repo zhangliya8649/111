@@ -1,9 +1,9 @@
 <template>
     <div class="works">
-        <img class="img" :src="this.data.src">
-        <p class="name">名称：{{this.data.name}}</p>
-        <p class="time">时间：{{this.data.time}}</p>
-        <p class="des">描述：{{this.data.des}}</p>
+        <img class="img" :src="this.data.subjectUrl">
+        <p class="name">名称：{{this.data.subjectName}}</p>
+        <!-- <p class="time">时间：{{this.data.releaseDate[0]}}</p> -->
+        <!-- <p class="des">描述：{{this.data.subjectIntroduce.substring(0, 20) + "..."}}</p> -->
     </div>
 </template>
 <script>

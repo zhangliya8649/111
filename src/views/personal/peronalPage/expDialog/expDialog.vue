@@ -88,7 +88,6 @@ export default {
                 token:Until.getUserToken()
             }
             this.Http.post(this.Action.addWork,data).then((res) => {
-                debugger
                 this.$message({
                     type:'success',
                     message:'提交成功'
@@ -104,7 +103,7 @@ export default {
         },
         add(){              //添加
             let addMsg = {
-                celebrityId:Until.getUserId(),
+                celebrityId:Until.getUserSmallInfo().id,
                 workTime:Until.timestampToTime(this.time),
                 content:this.info,
             }
@@ -123,7 +122,7 @@ export default {
         //获取用户从业信息
         getUserJobInfo(){
             let data = {
-                celebrityId:Until.getUserId(),
+                celebrityId:Until.getUserSmallInfo().id,
                 token:Until.getUser().token
             }
             this.Http.post(this.Action.jobInfo,data).then((res) => {

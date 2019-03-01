@@ -51,7 +51,7 @@ export default {
         makeSure(){
             if(this.num == '1'){
                 let data = {
-                    celebrityId:Until.getUser().user.id,
+                    celebrityId:Until.getUserSmallInfo().id,
                     honorTime:this.time,
                     summary:this.abstract,
                     honorDesc:this.des,
@@ -70,7 +70,7 @@ export default {
             }
             else{
                 let data = {
-                    celebrityId:Until.getUser().user.id,
+                    celebrityId:Until.getUserSmallInfo().id,
                     benefitTime:this.time,
                     summary:this.abstract,
                     benefitDesc:this.des,

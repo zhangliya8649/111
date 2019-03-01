@@ -16,6 +16,11 @@ class Util {
       let user = JSON.parse(sessionStorage.getItem('userInfo')) ? JSON.parse(sessionStorage.getItem('userInfo')).token : null
       return user
     }
+    // 获取用户身份
+    getUserSmallInfo() {
+      let user = JSON.parse(sessionStorage.getItem('userSmallInfo')) ? JSON.parse(sessionStorage.getItem('userSmallInfo')) : null
+      return user
+    }
     //克隆
     cloneObj(obj){
       var str, newobj = obj.constructor === Array ? [] : {};
