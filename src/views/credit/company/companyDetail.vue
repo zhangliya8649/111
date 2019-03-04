@@ -3,116 +3,121 @@
         <div class='basic-detail'>
           <div class='search-people clear w1180'>
             <div class='img'>
-              <img src='' />
+              <img :src='list.businessLicense' />
             </div>
             <div class='desc'>
               <div class='tit'>
-                  北京时信互联网络公司
-                  <router-link to='' class='operator'>未认证</router-link>
+                  {{list.name}}
+                  <router-link to='/register' class='operator' v-if='list.claimState == 1'>未认领</router-link>
+                  <router-link to='/register' class='operator' v-else-if='list.claimState == 2'>审核中</router-link>
+                  <span class='operator' v-else-if='list.claimState == 3'>已认领</span>
               </div>
               <div class='con'>
                 <div class='list'>
-                  公司状态: 良好 {{list.occupation}}
+                  公司状态: {{list.companyState == 1 ? '开业' : list.companyState == 2 ? '停业' : '无'}}
                 </div>
                 <div class='list'>
-                  通讯地址: {{list.certificate}}
+                  通讯地址: {{list.address}}
                 </div>
               </div>
             </div>
             <div class='jc-list credit'>
-              <div class='num'>0{{list.rating}}</div>
+              <div class='num'>{{list.rating}}</div>
               <div class='icon-txt'>信用等级</div>
             </div>
             <div class='jc-list honor'>
-              <div class='num'>5{{list.commendCount}}</div>
+              <div class='num'>{{list.commendCount ? list.commendCount : 0}}</div>
               <div class='icon-txt'>荣誉</div>
             </div>
             <div class='jc-list no-honor'>
-              <div class='num'>0{{list.loseCreditCount}}</div>
+              <div class='num'>{{list.loseCreditCount ? list.loseCreditCount : 0}}</div>
               <div class='icon-txt'>失信信息</div>
             </div>
           </div>
         </div>
         <div class="Personal-content w1180">
-            <div class="papel">
+            <ul class='menu'>
+              <li :class="curIndex == index ? 'active' : ''" v-for="(menu, index) in menus"><a :href="'#' + menu.id">{{menu.name}}</a></li>
+            </ul>
+            <div class="papel" id='basicDetail'>
                 <p class="title">基本信息(影视企业)</p>
                 <div class="content">
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">电话：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">010-34234234234</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{list.phone ? list.phone : '未知'}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">邮箱：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">zhangliya@spap.com</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.email ? list.email : '无'}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">网址：</div></el-col>
-                        <el-col :span="5"><div class="grid-content bg-purple">www.spap.com</div></el-col>
+                        <el-col :span="5"><div class="grid-content bg-purple">{{list.URL}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">地址：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">北京市朝阳区北苑路</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{list.address ? list.address : '无'}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">工商注册号：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">34242342342342342</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.commercialNumber ? list.commercialNumber : '无'}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">组织机构代码：</div></el-col>
-                        <el-col :span="5"><div class="grid-content bg-purple">3424234234989584</div></el-col>
+                        <el-col :span="5"><div class="grid-content bg-purple">{{list.organizingCode ? list.organizingCode : '无'}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">统一社会信用代码：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">sdsfsdf342342432686</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{list.creditCode ? list.creditCode : '无'}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">纳税人识别号：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">56457567567</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.taxpayerID ? list.taxpayerID : '无'}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">营业期限：</div></el-col>
-                        <el-col :span="5"><div class="grid-content bg-purple">2050-10-1</div></el-col>
+                        <el-col :span="5"><div class="grid-content bg-purple">{{list.busnissTerm ? list.busnissTerm : '无'}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">人员规模：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">500+</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{list.staffSize}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">简介：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">084322</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.companyDesc}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">企业类型：</div></el-col>
-                        <el-col :span="5"><div class="grid-content bg-purple">民企</div></el-col>
+                        <el-col :span="5"><div class="grid-content bg-purple">{{list.companyType}}</div></el-col>
                     </el-row>
                 </div>
             </div>
-            <div class="papel">
+            <div class="papel" id='honorDetail'>
                 <p class="title">企业荣誉</p>
                 <div class="content table">
                     <el-table
                         :data="tableData1"
                         style="width: 100%">
                         <el-table-column
-                            prop="date"
+                            prop="honorTime"
                             label="时间"
                             width="180">
                         </el-table-column>
                         <el-table-column
-                            prop="name"
+                            prop="summary"
                             label="摘要"
                             width="180">
                         </el-table-column>
                         <el-table-column
-                            prop="address"
+                            prop="honorDesc"
                             label="概述">
                         </el-table-column>
                     </el-table>
                 </div>
             </div>
             <!-- 面板 -->
-            <div class="papel">
-                <p class="title">社会公益</p>
+            <div class="papel" id='creditDetail'>
+                <p class="title">失信信息</p>
                 <div class="content table">
                     <el-table
                         :data="tableData2"
                         style="width: 100%">
                         <el-table-column
-                            prop="date"
+                            prop="creditTime"
                             label="时间"
                             width="180">
                         </el-table-column>
                         <el-table-column
-                            prop="name"
+                            prop="summary"
                             label="摘要"
                             width="180">
                         </el-table-column>
                         <el-table-column
-                            prop="address"
+                            prop="creditDesc"
                             label="概述">
                         </el-table-column>
                     </el-table>
@@ -126,134 +131,96 @@ import Works from '../../personal/peronalPage/works/works.vue'
 import TimeLine from '../../personal/peronalPage/timeLine/timeLine'
 
 let works = require('../../../assets/img/video.png')
+
+const menuTabs = {
+  'basicDetail': 0,
+  'honorDetail': 1,
+  'creditDetail': 2
+}
+
 export default {
     components:{Works, TimeLine},
+
     data(){
-        //写验证规则
-        var validateOldPass = (rule, value, callback) => {
-            if (value === '') {
-            callback(new Error('请输入密码'));
-            } else {
-            if (this.ruleForm.oldPass !== '') {
-                this.$refs.ruleForm.validateField('newPass');
-            }
-            callback();
-            }
-        };
-        var validateNewPass = (rule, value, callback) => {
-            if (value === '') {
-            callback(new Error('请输入新密码'));
-            } else {
-            if (this.ruleForm.newPass !== '') {
-                this.$refs.ruleForm.validateField('checkPass');
-            }
-            callback();
-            }
-        };
-        var validateCheckPass = (rule, value, callback) => {
-            if (value === '') {
-            callback(new Error('请再次输入密码'));
-            } else if (value !== this.ruleForm.newPass) {
-            callback(new Error('两次输入密码不一致!'));
-            } else {
-            callback();
-            }
-        };
         return{
+            menus: [
+              {id: 'basicDetail', name: '基本信息'},
+              {id: 'honorDetail', name: '社会荣誉'},
+              {id: 'creditDetail', name: '失信信息'}
+            ],
+            curIndex: 0,
             list: {},
-            showBasicInfo:true,//点击补全信息
-            basicInfo: {
-                user: '',
-                region: ''
-            },
             //表格数据
-            tableData1: [{
-                date: '2016-05-02',
-                name: '王小虎1',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-            }],
-            tableData2: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-            }],
+            tableData1: [],
+           // tableData2: [],
             //作品展示
-            worksData:[
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''}
-                ],
-                //密码表单
-             ruleForm: {
-                oldPass: '',
-                newPass: '',
-                checkPass: ''
-            },
-            //密码表单验证规则
-            rules: {
-                oldPass: [
-                    { validator: validateOldPass, trigger: 'blur' }
-                ],
-                newPass: [
-                    { validator: validateNewPass, trigger: 'blur' }
-                ],
-                checkPass: [
-                    { validator: validateCheckPass, trigger: 'blur' }
-                ]
-            },
-            msg:[
-                {time:'2018-02-13',info:'2313421312'},
-                {time:'2018-02-14',info:'2313421312'},
-                {time:'2018-02-15',info:'2313421312'},
-                {time:'2018-02-16',info:'2313421312'},
-            ]
+            worksData:[],
+            msg:[]
         }
     },
+
+    created: function() {
+    /*
+       let param = {
+        companyId: this.$route.query.id,
+        type: this.$route.query.type,
+        token: this.$store.state.token
+       }*/
+       this.getBasicDetail({
+                                     companyId: this.$route.query.id,
+                                     type: this.$route.query.type,
+                                     token: this.$store.state.token
+                                    });
+       //this.getHonorDetail(param);
+       this.getCreditDetail({
+                                                                 companyId: this.$route.query.id,
+                                                                 token: this.$store.state.token
+
+                                                               });
+
+       //监听锚点
+       window.onhashchange = ()=> {
+        this.changeMenu();
+       }
+    },
+
+    mounted: function() {
+      this.changeMenu();
+    },
+
     methods:{
-        //补全信息
-        editBasic(){
-            this.showBasicInfo = false
+        //菜单锚点
+        changeMenu() {
+          let index = menuTabs[location.hash.replace('#', '') || 'hot'];
+          this.curIndex = index;
         },
-         //弹窗
-        addInfo(num){
 
+        //获取公司基本信息
+        getBasicDetail(param) {
+          this.Http.post(this.Action.SearchCompanyById, param).then((data) => {
+            this.list = data.company;
+          }).catch((err) => {
+            console.log(err);
+          })
         },
-        editSure(){     //确认修改
-            this.showBasicInfo = true
-        },
-        moreWorks(){      //更多作品
-            this.$router.push({path:'MakeSure'})
-        },
-        addExp(){
 
-        }
+        //公司荣誉
+        getHonorDetail(param) {
+          this.Http.post(this.Action.SearchCompanyHonorById, param).then((data) => {
+            this.tableData1 = data.list;
+          }).catch((err) => {
+            console.log(err);
+          })
+        },
+
+        //失信信息
+        getCreditDetail(param) {
+          this.Http.post(this.Action.SearchCompanyCreditById, param).then((data) => {
+            this.tableData2 = data.list;
+          }).catch((err) => {
+            console.log(err);
+          })
+        },
     }
 }
 </script>
@@ -384,8 +351,36 @@ export default {
       }
     }
     .Personal-content{
+            position: relative;
             margin-top: 30px;
-            padding-bottom: 30px;
+            padding-bottom: 130px;
+            .menu {
+              position: absolute;
+              left: -167px;
+              top: 30px;
+              width: 120px;
+              height: 150px;
+              padding-bottom: 10px;
+              border-right: 1px solid #e8e8e8;
+              font-size: 14px;
+              li {
+                box-sizing: border-box;
+                width: 120px;
+                height: 38px;
+                margin-bottom: 16px;
+                line-height: 38px;
+                text-align: center;
+                &.active {
+                  border-right: 2px solid #f58523;
+                  a {
+                    color: #f58523;
+                  }
+                }
+              }
+              li:last-child {
+                margin-bottom: 0;
+              }
+            }
             .papel{
                 width: 100%;
                 border: 1px solid #DCDFE6;
@@ -435,62 +430,18 @@ export default {
                         border-radius: 0;
                     }
                 }
-                .exp{
-                    display: flex;
-                    justify-content: space-between;
-                    margin-right:45px;
-                    overflow-x: scroll;
-                    // margin: 144px 45px 184px 38px;
-                }
                 .table{
+                    margin-right: 22px;
                     margin-left: 22px;
                 }
             }
-            .works{
-                .works-title{
-                    color: #F58523;
-                    font-size: 16px;
-                    font-family: 'PingFang-SC-Medium';
-
-                }
-                .more-works{
-                    text-align: right;
-                    cursor: pointer;
-                }
-                .works-box{
-                    display: flex;
-                    flex-wrap: nowrap;
-                    justify-content: space-between;
-                }
-            }
-            .pwdSetting{
-                border: 1px solid #DCDFE6;
-                margin-top: 74px;
-                padding: 30px 50px 43px 38px;
-                height: 293px;
-                margin-bottom: 80px;
-                .title{
-                    font-family: 'PingFang-SC-Medium';
-                    font-size: 18px;
-                    color: #000000;
-                    letter-spacing: 0;
-                    line-height: 18px;
-                    border-left: 2px solid #F58523;
-                    padding-left: 6px;
-                    margin-bottom: 33px;
-                }
-                .form{
-                    .input{
-                        width: 240px!important;
-                    }
-                    .editPwd{
-                        background-color: #F58523;
-                        border: #F58523;
-                        color: #fff;
-                        width: 128px;
-                        height: 40px;
-                    }
-                }
-            }
         }
+</style>
+<style>
+  .el-table::before {
+    display: none;
+  }
+  .el-table thead tr, .el-table thead th {
+    background: #FAFAFA;
+  }
 </style>

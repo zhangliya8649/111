@@ -90,7 +90,7 @@
     },
 
     created: function() {
-      window.onhashchange = () => {
+      window.onhashchange = ()=> {
         this.changeTab();
       };
     },

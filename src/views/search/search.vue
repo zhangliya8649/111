@@ -1,5 +1,11 @@
 <template>
     <div class='search'>
+      <div v-if='isMoreWorks' class='search-result-text'>
+        <p class='w1180'>{{this.$route.query.name}} 的全部作品（{{dataObj.total}}）</p>
+      </div>
+      <div v-else class='search-result-text'>
+        <p class='w1180'>共搜索到{{dataObj.total}}结果</p>
+      </div>
       <div class='list-par' v-if='dataObj.total && dataObj.total > 0'>
         <div v-for='(item, index) in dataObj.list' :key='index'>
            <search-child :list='item' :is='pageData.curCom'></search-child>
@@ -26,7 +32,8 @@
           curIndex: 1,
           curCom: 'searchPeople'
         },
-        dataObj: {}
+        dataObj: {},
+        isMoreWorks: false,
       }
     },
 
@@ -39,18 +46,21 @@
     },
 
     created: function() {
-      this.pageData = JSON.parse(this.$route.query.pageData);
+      let param = {pageNum : 1};
+      if(this.$route.query.id) { //全部作品
+        this.isMoreWorks = true;
+        this.pageData.curCom = 'searchWorks';
+        param.celebrityId = this.$route.query.id;
+        this.getWorksById(param);
+      }else { //首页搜索列表
+        this.pageData = JSON.parse(this.$route.query.pageData);
+        param.searchName = this.pageData.searchKey;
+        param.tags = this.pageData.curIndex,
+        this.getList(param);
+      }
     },
 
     mounted: function() {
-      console.log(this.dataObj);
-      console.log(this.dataObj.total);
-      let param = {
-        searchName: this.pageData.searchKey,
-        tags: this.pageData.curIndex,
-        pageNum: 1
-      };
-      this.getList(param);
 
     },
 
@@ -64,14 +74,26 @@
         });
       },
 
+      //查询更多作品
+      getWorksById(param) {
+        this.Http.post(this.Action.SearchWorkNumById, param).then((data) => {
+          this.dataObj = data;
+        }).catch((err) => {
+          console.log(err);
+        })
+      },
+
       //分页
       changeCurrentPage(val) {
-        let param = {
-          searchName: this.pageData.searchKey,
-          tags: this.pageData.curIndex,
-          pageNum: val
-        };
-        this.getList(param);
+        let param = {pageNum : val};
+        if(this.$route.query.id) { //全部作品
+          param.celebrityId = this.$route.query.id;
+          this.getWorksById(param);
+        }else { //首页搜索列表
+          param.searchName = this.pageData.searchKey;
+          param.tags = this.pageData.curIndex,
+          this.getList(param);
+        }
       }
     }
   }
@@ -79,8 +101,22 @@
 
 <style lang='less' scoped>
   .search {
-    padding-top: 60px;
+    //padding-top: 60px;
     padding-bottom: 30px;
+    .list-par {
+      padding-top: 20px;
+    }
+    .search-result-text {
+      padding-top: 50px;
+      padding-bottom: 20px;
+      background: #FAF8F7;
+      font-size: 28px;
+      color: #4A4A4A;
+      p {
+        height: 40px;
+        line-height: 40px;
+      }
+    }
     .no-result {
       height: 600px;
       text-align: center;

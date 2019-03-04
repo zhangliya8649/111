@@ -218,8 +218,6 @@
           font-size: 16px;
           img {
             width: 180px;
-            height: 254px;
-            background: blue;
             margin-bottom: 16px;
           }
           .name, .rule {

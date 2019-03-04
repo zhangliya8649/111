@@ -67,108 +67,152 @@
           </div>
         </div>
         <div class="Personal-content w1180">
-            <div class="papel">
+            <ul class='menu'>
+              <li :class="curIndex == index ? 'active' : ''" v-for="(menu, index) in menus"><a :href="'#' + menu.id">{{menu.name}}</a></li>
+            </ul>
+            <div class="papel" id='basicDetail'>
                 <p class="title">基本信息</p>
                 <div class="content">
                     <el-row :gutter="20" class="row">
                         <el-col :span="2"><div class="grid-content bg-purple">姓名：</div></el-col>
                         <el-col :span="6"><div class="grid-content bg-purple">{{list.celebrityName}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple">性别：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{list.sex == 1 ? '男' : list.sex == 2 ? '女' : ''}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.sex == 1 ? '男' : list.sex == 2 ? '女' : '未知'}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple">年龄：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">1{{list.age}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.age ? list.age : '未知'}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="2"><div class="grid-content bg-purple">祖籍：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">中国{{list.nationality}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.nationality ? list.nationality : '未知'}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple">公司：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">北京眼缘影视传媒有限公司{{list.agency}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.agency ? list.agency : '未知'}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple">职务：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">1{{list.position}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.position ? list.position : '未知'}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="2"><div class="grid-content bg-purple">学历：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">本科{{list.education}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.education ? list.education : '未知'}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple">职业：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">演员{{list.occupation}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.occupation ? list.occupation : '未知'}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple">政治面貌：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">群众{{list.politics}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.politics ? list.politics : '未知'}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="2"><div class="grid-content bg-purple">执业年限：</div></el-col>
                         <el-col :span="6"><div class="grid-content bg-purple">{{list.workingYear ? list.workingYear : 0}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple">职业证书：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">2{{list.certificate}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.certificate ? list.certificate : '未知'}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple">证书时间：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">2019.2.21{{list.certificateTime}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.certificateTime ? list.certificateTime : '未知'}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="2"><div class="grid-content bg-purple">代表作品：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">3{{list.portfolio}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{list.portfolio ? list.portfolio : ''}}</div></el-col>
                     </el-row>
                 </div>
             </div>
-            <div class="papel">
-                <p class="title">从业信息（执业经历）</p>
-                <div class="content exp">
-                    <TimeLine v-for="(data,index) in msg" :msg='data' :key='index'></TimeLine>
+            <!--登录后可查-->
+            <div class='login-show'>
+              <div class='login-shadow-par'>
+                <div class='login-shadow'>
+                  <div class='s-tip'>登录后，可查看该艺人的详细信息</div>
+                  <div class='s-btn'>登录</div>
                 </div>
-            </div>
-            <div class="papel">
-                <p class="title">个人荣誉</p>
-                <div class="content table">
-                    <el-table
-                        :data="tableData1"
-                        style="width: 100%">
-                        <el-table-column
-                            prop="date"
-                            label="日期"
-                            width="180">
-                        </el-table-column>
-                        <el-table-column
-                            prop="name"
-                            label="姓名"
-                            width="180">
-                        </el-table-column>
-                        <el-table-column
-                            prop="address"
-                            label="地址">
-                        </el-table-column>
-                    </el-table>
-                </div>
-            </div>
-            <!-- 面板 -->
-            <div class="papel">
-                <p class="title">社会公益</p>
-                <div class="content table">
-                    <el-table
-                        :data="tableData2"
-                        style="width: 100%">
-                        <el-table-column
-                            prop="date"
-                            label="日期"
-                            width="180">
-                        </el-table-column>
-                        <el-table-column
-                            prop="name"
-                            label="姓名"
-                            width="180">
-                        </el-table-column>
-                        <el-table-column
-                            prop="address"
-                            label="地址">
-                        </el-table-column>
-                    </el-table>
-                </div>
-            </div>
-            <div class="works-par">
-                <div class='works-title clear'>
-                  <p class="tit-desc">作品（与<span>XXX</span>相关的，共有<span>XXX</span>部作品）</p>
-                  <p class="more-works" @click="moreWorks()">全部作品》</p>
-                </div>
-                <div class="works-box">
-                    <Works v-for="(data,index) in worksData" :data='data' :key='index'></Works>
-                </div>
+              </div>
+              <div class="papel" id='jobDetail'>
+                  <p class="title">从业信息（执业经历）</p>
+                  <div class="content exp">
+                      <div class='no-detail' v-if='msg.length < 1'>暂无数据</div>
+                      <TimeLine v-for="(data,index) in msg" :msg='data' :key='index' :index='index'></TimeLine>
+                  </div>
+              </div>
+              <div class="papel" id='honorDetail'>
+                  <p class="title">个人荣誉</p>
+                  <div class="content table">
+                      <el-table
+                          :data="tableData1"
+                          style="width: 100%">
+                          <el-table-column
+                              prop="honorTime"
+                              label="时间"
+                              width="180">
+                          </el-table-column>
+                          <el-table-column
+                              prop="summary"
+                              label="摘要"
+                              width="180">
+                          </el-table-column>
+                          <el-table-column
+                              prop="honorDesc"
+                              label="描述">
+                          </el-table-column>
+                      </el-table>
+                  </div>
+              </div>
+              <!-- 面板 -->
+              <div class="papel" id='benefitDetail'>
+                  <p class="title">社会公益</p>
+                  <div class="content table">
+                      <el-table
+                          :data="tableData2"
+                          style="width: 100%">
+                          <el-table-column
+                              prop="benefitTime"
+                              label="时间"
+                              width="180">
+                          </el-table-column>
+                          <el-table-column
+                              prop="summary"
+                              label="摘要"
+                              width="180">
+                          </el-table-column>
+                          <el-table-column
+                              prop="benefitDesc"
+                              label="描述">
+                          </el-table-column>
+                      </el-table>
+                  </div>
+              </div>
+              <div class="papel" id='worksDetail'>
+                  <p class="title">失信信息</p>
+                  <div class="content table">
+                      <el-table
+                          :data="tableData3"
+                          style="width: 100%">
+                          <el-table-column
+                              prop="creditTime"
+                              label="时间"
+                              width="180">
+                          </el-table-column>
+                          <el-table-column
+                              prop="summary"
+                              label="摘要"
+                              width="180">
+                          </el-table-column>
+                          <el-table-column
+                              prop="creditDesc"
+                              label="描述">
+                          </el-table-column>
+                      </el-table>
+                  </div>
+              </div>
+              <div class="works-par">
+                  <div class='works-title clear'>
+                    <p class="tit-desc">作品（与<span>{{list.celebrityName}}</span>相关的，共有<span>{{worksData.total}}</span>部作品）</p>
+                    <p v-if='worksData.total > 6' class="more-works" @click="moreWorks(list.id, list.celebrityName)">全部作品》</p>
+                  </div>
+                  <div class="works-box">
+                      <div class='list' v-for='item in workList'>
+                        <a href='javascript:;' @click='openWorkDetail(item.id)'>
+                          <img v-if = 'item.subjectUrl != "None"' :src='item.subjectUrl'/>
+                          <img v-else src='../../../assets/credit/default-man.png'/>
+                        </a>
+                        <div class='name'>名称：{{item.subjectName}}</div>
+                        <div class='time'>时间：{{item.releaseDate ? item.releaseDate[0] : '无'}}</div>
+                        <div class='desc'>描述：{{item.subjectIntroduce}}</div>
+                      </div>
+                  </div>
+              </div>
             </div>
         </div>
     </div>
@@ -178,153 +222,147 @@ import Works from '../../personal/peronalPage/works/works.vue'
 import TimeLine from '../../personal/peronalPage/timeLine/timeLine'
 
 let works = require('../../../assets/img/video.png')
+
+const menuTabs = {
+  'basicDetail': 0,
+  'jobDetail': 1,
+  'honorDetail': 2,
+  'benefitDetail': 3,
+  'creditDetail': 4,
+  'worksDetail' : 5
+}
+
 export default {
     components:{Works, TimeLine},
+
     data(){
-        //写验证规则
-        var validateOldPass = (rule, value, callback) => {
-            if (value === '') {
-            callback(new Error('请输入密码'));
-            } else {
-            if (this.ruleForm.oldPass !== '') {
-                this.$refs.ruleForm.validateField('newPass');
-            }
-            callback();
-            }
-        };
-        var validateNewPass = (rule, value, callback) => {
-            if (value === '') {
-            callback(new Error('请输入新密码'));
-            } else {
-            if (this.ruleForm.newPass !== '') {
-                this.$refs.ruleForm.validateField('checkPass');
-            }
-            callback();
-            }
-        };
-        var validateCheckPass = (rule, value, callback) => {
-            if (value === '') {
-            callback(new Error('请再次输入密码'));
-            } else if (value !== this.ruleForm.newPass) {
-            callback(new Error('两次输入密码不一致!'));
-            } else {
-            callback();
-            }
-        };
         return{
+            menus: [
+              {id: 'basicDetail', name: '基本信息'},
+              {id: 'jobDetail', name: '从业信息'},
+              {id: 'honorDetail', name: '个人荣誉'},
+              {id: 'benefitDetail', name: '社会公益'},
+              {id: 'creditDetail', name: '失信信息'},
+              {id: 'worksDetail', name: '作品'},
+            ],
+            curIndex: 0,
             list: {},
-            basicInfo: {
-                user: '',
-                region: ''
-            },
+            msg:[],
             //表格数据
-            tableData1: [{
-                date: '2016-05-02',
-                name: '王小虎1',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-            }],
-            tableData2: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-            }],
+            tableData1: [],
+            tableData2: [],
+            tableData3: [],
             //作品展示
-            worksData:[
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''}
-                ],
-                //密码表单
-             ruleForm: {
-                oldPass: '',
-                newPass: '',
-                checkPass: ''
-            },
-            //密码表单验证规则
-            rules: {
-                oldPass: [
-                    { validator: validateOldPass, trigger: 'blur' }
-                ],
-                newPass: [
-                    { validator: validateNewPass, trigger: 'blur' }
-                ],
-                checkPass: [
-                    { validator: validateCheckPass, trigger: 'blur' }
-                ]
-            },
-            msg:[
-                {time:'2018-02-13',info:'2313421312'},
-                {time:'2018-02-14',info:'2313421312'},
-                {time:'2018-02-15',info:'2313421312'},
-                {time:'2018-02-16',info:'2313421312'},
-            ]
+            worksData: {},
+            workList: []
         }
     },
 
+    mounted: function() {
+      let param = {
+        celebrityId: this.id,
+       // token: this.token
+        pageNum: 1
+      };
+     // 从业信息this.getWorkDetail(param);
+      //个人荣誉this.getHonorDetail(param);
+      //社会公益this.getBenefitDetail(param);
+      //失信信息this.getCreditDetail(param);
+      this.getWorksById(param);
+      this.changeMenu();
+    },
+
     created: function() {
-       this.getDataDetail(this.$route.query.id, this.$route.query.type);
+       this.id = this.$route.query.id;
+       this.token = this.$store.state.token;
+       let param = {
+         celebrityId: this.id,
+         identityType: this.$route.query.type
+       };
+       this.getBasicDetail(param);
+       //监听锚点
+       window.onhashchange = ()=> {
+        this.changeMenu();
+       }
     },
 
     methods:{
-        //补全信息
-        editBasic(){
-            this.showBasicInfo = false
-        },
-         //弹窗
-        addInfo(num){
-
-        },
-        editSure(){     //确认修改
-            this.showBasicInfo = true
-        },
-        moreWorks(){      //更多作品
-            this.$router.push({path:'MakeSure'})
-        },
-        addExp(){
-
+        //菜单锚点
+        changeMenu() {
+          let index = menuTabs[location.hash.replace('#', '') || 'basicDetail'];
+          this.curIndex = index;
         },
 
-        getDataDetail(id, type) {
-          let param = {
-            celebrityId: id,
-            identityType: type
-          };
+        //获取人的基本信息
+        getBasicDetail(param) {
           this.Http.post(this.Action.SearchPersonById, param).then((data) => {
             this.list = data.celebrity;
-            console.log(this.list);
           }).catch((err) => {
             console.log(err);
           })
         },
 
+        //获取从业信息
+        getWorkDetail(param) {
+          this.Http.post(this.Action.SearchPersonWorkById, param).then((data) => {
+            this.msg = data.list;
+          }).catch((err) => {
+            console.log(err);
+          })
+        },
 
+        //个人荣誉
+        getHonorDetail(param) {
+          this.Http.post(this.Action.SearchPersonHonorById, param).then((data) => {
+            this.tableData1 = data.list;
+          }).catch((err) => {
+            console.log(err);
+          })
+        },
+
+        //社会公益
+        getBenefitDetail(param) {
+          this.Http.post(this.Action.SearchPersonBenefitById, param).then((data) => {
+            this.tableData2 = data.list;
+          }).catch((err) => {
+            console.log(err);
+          })
+        },
+
+        //失信信息
+        getCreditDetail(param) {
+          this.Http.post(this.Action.SearchPersonCreditById, param).then((data) => {
+            this.tableData3 = data.list;
+          }).catch((err) => {
+            console.log(err);
+          })
+        },
+
+        //查询作品
+        getWorksById(param) {
+          this.Http.post(this.Action.SearchWorkNumById, param).then((data) => {
+            this.worksData = data;
+            this.workList = data.list.length > 6 ? data.list.slice(0, 6) : data.list;
+          }).catch((err) => {
+            console.log(err);
+          })
+        },
+
+        //查询作品详情
+        openWorkDetail(id) {
+          this.$router.push({
+            path: '/credit/works/worksDetail',
+            query: {id}
+          })
+        },
+
+        //更多作品
+        moreWorks(id, name) {
+          this.$router.push({
+            path: '/search',
+            query: {id, name}
+          })
+        },
     }
 }
 </script>
@@ -486,118 +524,196 @@ export default {
       }
     }
     .Personal-content{
-            padding-bottom: 136px;
-            margin-top: 30px;
-            .papel{
+          position: relative;
+          padding-bottom: 136px;
+          margin-top: 30px;
+          .menu {
+            position: absolute;
+            left: -167px;
+            top: 30px;
+            width: 120px;
+            height: 300px;
+            padding-bottom: 10px;
+            border-right: 1px solid #e8e8e8;
+            font-size: 14px;
+            li {
+              box-sizing: border-box;
+              width: 120px;
+              height: 38px;
+              margin-bottom: 16px;
+              line-height: 38px;
+              text-align: center;
+              &.active {
+                border-right: 2px solid #f58523;
+                a {
+                  color: #f58523;
+                }
+              }
+            }
+            li:last-child {
+              margin-bottom: 0;
+            }
+          }
+          .papel{
+              box-sizing: border-box;
+              width: 1180px;
+              border: 1px solid #DCDFE6;
+              margin-left: auto;
+              margin-right: auto;
+              margin-bottom: 20px;
+              padding-bottom: 25px;
+              padding-top: 32px;
+              .no-detail {
                 width: 100%;
-                border: 1px solid #DCDFE6;
-                padding-bottom: 25px;
-                margin-bottom: 20px;
-                padding-top: 32px;
-                .btn{
-                    display: flex;
-                    justify-content: flex-end;
-                    .papelBtn{
-                        height: 40px;
-                        width: 128px;
-                        background-color: #F58523;
-                        border-color: #F58523;
-                        color: #fff;
-                        border-radius: 0;
-                    }
-                }
-                .title{
-                    height: 16px;
-                    margin-left: 38px;
-                    border-left: 2px solid #F58523;
-                    font-size: 16px;
-                    color: #303133;
-                    font-family: 'PingFang-SC-Medium';
-                    padding-left: 6px;
-                }
-                .content{
-                    margin-top: 25px;
-                    margin-left: 38px;
-                    .el-form--inline .el-form-item{
-                        margin-right: 84px;
-                        .input{
-                            width: 202px!important;
-                        }
-                    }
-                    .row{
-                        margin-top: 25px;
-                        color: #333;
-                        font-size: 14px;
-                    }
-                    .editInfo{
-                        background-color: #F58523;
-                        border: 1px solid #F58523;
-                        color: #fff;
-                        border-radius: 0;
-                    }
-                }
-                .exp{
-                    display: flex;
-                    justify-content: space-between;
-                    margin-right:45px;
-                    overflow-x: scroll;
-                    // margin: 144px 45px 184px 38px;
-                }
-                .table{
-                    margin-left: 22px;
-                }
-            }
-            .works-par {
-                margin-top: 52px;
-                .works-title{
-                    color: #F58523;
-                    font-size: 16px;
-                    .tit-desc {
-                      float: left;
-                      width: 300px;
-                    }
-                    .more-works{
-                        float: right;
-                        width: 80px;
-                        text-align: right;
-                        cursor: pointer;
-                    }
-                }
+                padding-top: 100px;
+                text-align: center;
+                color: #909399;
+                font-size: 14px;
+              }
+              .btn{
+                  display: flex;
+                  justify-content: flex-end;
+                  .papelBtn{
+                      height: 40px;
+                      width: 128px;
+                      background-color: #F58523;
+                      border-color: #F58523;
+                      color: #fff;
+                      border-radius: 0;
+                  }
+              }
+              .title{
+                  height: 16px;
+                  margin-left: 38px;
+                  border-left: 2px solid #F58523;
+                  font-size: 16px;
+                  color: #303133;
+                  font-family: 'PingFang-SC-Medium';
+                  padding-left: 6px;
+              }
+              .content{
+                  margin-top: 25px;
+                  margin-left: 38px;
+                  .el-form--inline .el-form-item{
+                      margin-right: 84px;
+                      .input{
+                          width: 202px!important;
+                      }
+                  }
+                  .row{
+                      margin-top: 25px;
+                      color: #333;
+                      font-size: 14px;
+                  }
+                  .editInfo{
+                      background-color: #F58523;
+                      border: 1px solid #F58523;
+                      color: #fff;
+                      border-radius: 0;
+                  }
+              }
+              .exp{
+                  display: flex;
+                  height: 316px;
+                  justify-content: space-between;
+                  margin-right:45px;
+                  overflow-x: auto;
+              }
+              .table{
+                  margin-right: 22px;
+                  margin-left: 22px;
+              }
+          }
+          .works-par {
+              margin-top: 52px;
+              .works-title{
+                  color: #F58523;
+                  font-size: 16px;
+                  .tit-desc {
+                    float: left;
+                  }
+                  .more-works{
+                      float: right;
+                      width: 80px;
+                      text-align: right;
+                      cursor: pointer;
+                  }
+              }
 
-                .works-box{
-                    display: flex;
-                    flex-wrap: nowrap;
-                    justify-content: space-between;
-                }
-            }
-            .pwdSetting{
-                border: 1px solid #DCDFE6;
-                margin-top: 74px;
-                padding: 30px 50px 43px 38px;
-                height: 293px;
-                margin-bottom: 80px;
-                .title{
-                    font-family: 'PingFang-SC-Medium';
-                    font-size: 18px;
-                    color: #000000;
-                    letter-spacing: 0;
-                    line-height: 18px;
-                    border-left: 2px solid #F58523;
-                    padding-left: 6px;
-                    margin-bottom: 33px;
-                }
-                .form{
-                    .input{
-                        width: 240px!important;
+              .works-box{
+                  display: flex;
+                  flex-wrap: nowrap;
+                  justify-content: space-between;
+                  padding-top: 26px;
+                  .list {
+                    float: left;
+                    width: 180px;
+                    margin-right: 20px;
+                    font-size: 16px;
+                    img {
+                      width: 180px;
+                      margin-bottom: 16px;
                     }
-                    .editPwd{
-                        background-color: #F58523;
-                        border: #F58523;
-                        color: #fff;
-                        width: 128px;
-                        height: 40px;
+                    div {
+                      width: 100%;
+                      height: 22px;
+                      line-height: 22px;
+                      overflow: hidden;
+                      white-space: nowrap;
+                      text-overflow: ellipsis;
+                      font-size: 14px;
+                      color: #4A4A4A;
                     }
+                  }
+                  .list:last-child {
+                    margin-right: 0;
+                  }
+              }
+          }
+          //登录可查遮罩
+          .login-show {
+            position: relative;
+            //遮罩
+            .login-shadow-par {
+              display: none;
+              position: absolute;
+              width: 1180px;
+              height: 100%;
+              background: rgba(0, 0, 0, 0.5);
+              text-align: center;
+              z-index: 999;
+              .login-shadow {
+                position: absolute;
+                width: 360px;
+                height: 160px;
+                left: 50%;
+                top: 50%;
+                margin-left: -180px;
+                margin-top: -80px;
+                .s-tip {
+                  margin-bottom: 36px;
+                  font-weight: bold;
+                  font-size: 20px;
                 }
+                .s-btn {
+                  width: 120px;
+                  height: 40px;
+                  margin-left: auto;
+                  margin-right: auto;
+                  line-height: 40px;
+                  background: #f58523;
+                  color: #fff;
+                }
+              }
             }
+          }
         }
+</style>
+<style>
+  .el-table::before {
+    display: none;
+  }
+  .el-table thead tr, .el-table thead th {
+    background: #FAFAFA;
+  }
 </style>
