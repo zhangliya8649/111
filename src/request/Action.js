@@ -6,20 +6,28 @@ export default {
 
   // 搜索
   SearchList: '/c10/search/list',
-  GetHomeData: '/c10/statistics/data/show',
+  GetHomeData: '/c10/statistics/data/show',   //获取首页统计数据
 
 
   // 人
   SearchPeopleListByKey: '/c10/celebrity/list',
-  SearchPersonById: '/c10/celebrity/get/by_id',   //根据艺人列表id查询详情
+  SearchPersonById: '/c10/celebrity/get/by_id',   //根据id查询基本信息
+  SearchPersonWorkById: '/c10/celebrity/get/by_working',  //查询从业信息
+  SearchPersonHonorById: '/c10/celebrity/get/honor',       //查询个人荣誉
+  SearchPersonBenefitById: '/c10/celebrity/get/benefit',  //查询社会公益
+  SearchPersonCreditById: '/c10/celebrity/get/credit',  //查询失信信息
 
   // 作品
   SearchWorksListByKey: '/c10/subject/list',    //根据条件查作品列表
-  SearchWorkById: '/c10/subject/get/by_id',
+  SearchWorkById: '/c10/subject/get/by_id',     //根据作品id查询详情
+  SearchWorkNumById: '/c10/subject/get/by_cid',     //根据人物id作品数量
+
 
   //公司
   SearchCompanyListByKey: '/c10/company/list',       //查询公司列表
-
+  SearchCompanyById: '/c10/company/get/by_id',       //查询公司列表
+  SearchCompanyHonorById: '/c10/company/get/honor',   //查询公司荣誉
+  SearchCompanyCreditById: '/c10/company/get/credit', //查询公司失信信息
 
   //图片验证码
   imgCode:'/c10/account/img/code/get',

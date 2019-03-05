@@ -8,6 +8,7 @@ export default new Vuex.Store({
     state: {
         userInfo: sessionStorage.getItem('userInfo') ? JSON.parse(sessionStorage.getItem('userInfo')) : '',
         isLogin: sessionStorage.getItem('userInfo') ? true : false,
+        token: sessionStorage.getItem('userInfo') ? JSON.parse(sessionStorage.getItem('userInfo')).token : null
     },
     //get
     getters: {
@@ -20,7 +21,7 @@ export default new Vuex.Store({
         },
         //token
         getToken(state){
-            return state.userInfo.token 
+            return state.userInfo.token
         },
     },
     //更新状态
@@ -47,7 +48,7 @@ export default new Vuex.Store({
         modifyUserInfo({commit}, data){
             commit('setUserInfo', data)
         }
-    
+
     }
 })
 

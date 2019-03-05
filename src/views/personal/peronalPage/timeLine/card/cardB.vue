@@ -25,7 +25,7 @@ export default {
         border: 1px solid #E4E7ED;
         box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
         border-radius: 0 5px 5px 5px;
-        padding: 30px;
+        padding: 12px;
         box-sizing: border-box;
         color: #fff;
         position: relative;

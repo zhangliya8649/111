@@ -1,13 +1,13 @@
 <template>
   <div class='search-con'>
-    <div class='search-par' :data-id='list.id'>
+    <div class='search-par' :data-id='list.id' :data-type='list.type'>
       <div class='search-people clear w1180'>
         <div class='img'>
-          <a href='javascript:;' @click='openCompanyDetail(list.id)'><img :src='list.businessLicense' /></a>
+          <a href='javascript:;' @click='openCompanyDetail(list.id, list.type)'><img :src='list.businessLicense' /></a>
         </div>
         <div class='desc'>
           <div class='tit'>
-              <a href='javascript:;' @click='openCompanyDetail(list.id)'>{{list.name}}</a>
+              <a href='javascript:;' @click='openCompanyDetail(list.id, list.type)'>{{list.name}}</a>
               <router-link to='/register' class='operator'>未认证</router-link>
           </div>
           <div class='con'>
@@ -48,10 +48,10 @@
     },
 
     methods: {
-      openCompanyDetail(id) {
+      openCompanyDetail(id, type) {
         this.$router.push({
           path: '/credit/company',
-          query: {id: id}
+          query: {id, type}
         });
       },
 

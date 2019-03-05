@@ -7,7 +7,7 @@
         <div class="hideTop" v-else>
             <div class="hide"></div>
             <p class="time" style="marginTop:10px;height:22px"></p>
-        </div>  
+        </div>
         <div class="timeLineBox">
             <img class="point" src="../../../../assets/img/point.png">
             <div class="line">
