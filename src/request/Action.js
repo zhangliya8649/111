@@ -78,6 +78,8 @@ export default {
   //2.认领用户信息
   claimUser:'/c10/celebrity/claim',
 
+  // 搜索公司
+  searchCompany: '/c10/company/list',
 }
 
 

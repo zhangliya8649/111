@@ -401,15 +401,15 @@ export default {
             this.$refs.expDialog.openExp()
         },
         editSurePass(){         //确认修改密码
-            // this.$refs.ruleForm.validate((valid) => {
-            //     if(valid) {
-            //         console.log(this.ruleForm)
-            //         this.modifyPwd(this.ruleForm)
-            //     } else {
-            //         return
-            //     }
-            // })
-            this.$router.push({path:'/MakeSure'})
+            this.$refs.ruleForm.validate((valid) => {
+                if(valid) {
+                    console.log(this.ruleForm)
+                    this.modifyPwd(this.ruleForm)
+                } else {
+                    return
+                }
+            })
+            // this.$router.push({path:'/MakeSure'})
         },
         // 修改密码
         modifyPwd(form_data) {
@@ -428,10 +428,10 @@ export default {
         //获取用户信息
         getUserInfo(){
             let data = {
-                // celebrityId:Until.getUserSmallInfo().id,
-                celebrityId: 1046960,
-                // identityType:Until.getUser().user.userType
-                identityType: 3
+                celebrityId:Until.getUserSmallInfo().id,
+                // celebrityId: 1046960,
+                identityType:Until.getUser().user.userType
+                // identityType: 3
             }
             this.Http.post(this.Action.userInfo,data).then((res) => {
                 // 处理sex性别

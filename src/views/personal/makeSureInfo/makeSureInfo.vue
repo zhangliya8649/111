@@ -162,6 +162,7 @@ export default {
   }
   .makeSure-content {
     // min-height: 100vh;
+    margin-bottom: 20px;
   }
 }
 </style>

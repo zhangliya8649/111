@@ -167,11 +167,11 @@ export default {
             let choseWorks = this.tableData
             for(let i = 0, length = choseWorks.length; i < length; i ++) {
                 arr.push({
-                    // celebrityId: Until.getUserSmallInfo().id,
-                    celebrityId: 1046960,
+                    celebrityId: Until.getUserSmallInfo().id,
+                    // celebrityId: 1046960,
                     subjectId: choseWorks[i].id,
-                    // celebrityType: Until.getUser().user.userType
-                    celebrityType: 3
+                    celebrityType: Until.getUser().user.userType
+                    // celebrityType: 3
                 })
             }
             let data = {

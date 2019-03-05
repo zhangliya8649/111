@@ -11,7 +11,7 @@
                         width="250">
                     </el-table-column>
                     <el-table-column
-                        prop="class"
+                        prop="rating"
                         label="公司信用评级"
                         width="180">
                     </el-table-column>
@@ -195,7 +195,14 @@ export default {
         // type: 类型 searchName: 搜索内容
         search(type, searchName){           //找到公司
             console.log(type, searchName)
-            //this.
+            let data = {
+                type,
+                name: searchName,
+                pageNum: 1
+            }
+            this.Http.post(this.Action.searchCompany, data).then(res => {
+                this.tableData = res.list
+            })
         },
         clear(){            //清空信息
             this.tableData = []
