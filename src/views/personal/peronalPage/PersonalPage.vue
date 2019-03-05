@@ -50,7 +50,14 @@
                             <el-input :disabled='true' v-model="basicInfo.celebrityName" style="width:202px;"></el-input>
                         </el-form-item>
                         <el-form-item label="性别：" label-width='90px'>
-                            <el-input v-model="basicInfo.sex" placeholder="请输入您的性别" style="width:202px;"></el-input>
+                            <el-select v-model="basicInfo.sex" placeholder="请输入您的性别" style="width:202px;">
+                                <el-option 
+                                    v-for="item in sexSelect"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                         <el-form-item label="年龄：" label-width='90px'>
                             <el-input v-model="basicInfo.age" placeholder="请输入您的年龄" style="width:202px;"></el-input>
@@ -68,10 +75,7 @@
                             <el-input v-model="basicInfo.education" placeholder="请输入您的学历" style="width:202px;"></el-input>
                         </el-form-item>
                         <el-form-item label="职业：" label-width='90px'>
-                            <el-select v-model="basicInfo.occupation" placeholder="请选择您的职业" class="input">
-                            <el-option label="区域一" value="shanghai"></el-option>
-                            <el-option label="区域二" value="beijing"></el-option>
-                            </el-select>
+                            <el-input v-model="basicInfo.occupation" placeholder="请输入您的职业" class="input"/>
                         </el-form-item>
                         <el-form-item label="政治面貌：" label-width='90px'>
                             <el-input v-model="basicInfo.politics" placeholder="请输入您的政治面貌" style="width:202px;"></el-input>
@@ -103,8 +107,9 @@
                             <el-input v-model="basicInfo.magnumOpus" placeholder="请输入您的代表作品" style="width:202px;"></el-input>
                         </el-form-item>
                             </el-col>
-                            <el-col :span="8" :offset="8" style="paddingLeft:19.5%">
+                            <el-col :span="8" :offset="8" style="textAlign: right">
                                 <el-form-item>
+                                    <el-button class="editInfo" @click="cancelPersonInfo">取消</el-button>
                                     <el-button class="editInfo" @click="editSureInfo">确认</el-button>
                                 </el-form-item>
                             </el-col>
@@ -252,21 +257,28 @@ export default {
         };
         return{
             showBasicInfo:true,//点击补全信息
+            // 个人信息
             basicInfo: {
-                celebrityName: '乔杉',
-                sex:'男',
-                age: '31',
-                nationality:'中国',
-                agency:'北京眼缘影视有限公司',
-                position:'制片人',
-                education:'本科',
-                occupation:"演员",
-                politics:'党员',
-                workingYear:'2012.08.09',
-                certificate:'084322',
-                certificateTime:'2019.09.09',
-                magnumOpus:'设计部'
+                celebrityName: '',
+                sex:'',
+                age: '',
+                nationality:'',
+                agency:'',
+                position:'',
+                education:'',
+                occupation:"",
+                politics:'',
+                workingYear:'',
+                certificate:'',
+                certificateTime:'',
+                magnumOpus:''
             },
+            sexSelect: [
+                {label: '男',value: '1'},
+                {label: '女',value: '2'},
+            ],
+            // 暂存个人信息
+            cacheBasicInfo: {},
             //表格数据
             tableData1: [{
                 honorTime:'2005-11-13',
@@ -350,14 +362,37 @@ export default {
         },
         //补全信息
         editBasic(){
-            this.showBasicInfo = false
+            this.personInfoswitch()
+        },
+        // 个人信息切换开关
+        personInfoswitch() {
+            this.showBasicInfo = !this.showBasicInfo
+        },
+        // 取消个人修改按钮
+        cancelPersonInfo() {
+            console.log(this.cacheBasicInfo)
+            this.basicInfo = this.cacheBasicInfo
+            this.personInfoswitch()
         },
          //弹窗
         addInfo(num){
             this.$refs.dialog.openDialog(num)
         },
         editSureInfo(){     //确认修改个人信息
-            this.showBasicInfo = true
+            let basicInfo = this.basicInfo
+            basicInfo.sex == '男' ? basicInfo.sex = 1 : basicInfo.sex = 2
+            let data = {
+                celebrityJson: JSON.stringify(this.basicInfo),
+                token: Until.getUser().token
+            }
+            this.Http.post(this.Action.updatePersonInfo, data).then(res => {
+                this.getUserInfo()
+                this.$message({
+                    message: '修改成功',
+                    type: 'success'
+                })
+                this.personInfoswitch()
+            })
         },
         moreWorks(){      //更多作品
             this.$refs.choseWorks.openDialog()
@@ -366,15 +401,15 @@ export default {
             this.$refs.expDialog.openExp()
         },
         editSurePass(){         //确认修改密码
-            this.$refs.ruleForm.validate((valid) => {
-                if(valid) {
-                    console.log(this.ruleForm)
-                    this.modifyPwd(this.ruleForm)
-                } else {
-                    return
-                }
-            })
-            // this.$router.push({path:'/MakeSure'})
+            // this.$refs.ruleForm.validate((valid) => {
+            //     if(valid) {
+            //         console.log(this.ruleForm)
+            //         this.modifyPwd(this.ruleForm)
+            //     } else {
+            //         return
+            //     }
+            // })
+            this.$router.push({path:'/MakeSure'})
         },
         // 修改密码
         modifyPwd(form_data) {
@@ -393,12 +428,17 @@ export default {
         //获取用户信息
         getUserInfo(){
             let data = {
-                // celebrityId:Until.getUser().user.id,
-                celebrityId:Until.getUserSmallInfo().id,
-                identityType:Until.getUser().user.userType
+                // celebrityId:Until.getUserSmallInfo().id,
+                celebrityId: 1046960,
+                // identityType:Until.getUser().user.userType
+                identityType: 3
             }
             this.Http.post(this.Action.userInfo,data).then((res) => {
-                console.log(res)
+                // 处理sex性别
+                res.celebrity.sex == 1 ? res.celebrity.sex = '男' : res.celebrity.sex = '女'
+                this.basicInfo = res.celebrity
+                // 缓存数据,克隆
+                this.cacheBasicInfo = Until.cloneObj(res.celebrity)
             }).catch((err) => {
                 console.log(err)
             })

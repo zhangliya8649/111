@@ -1,9 +1,9 @@
 <template>
     <div class="dialog">
-        <el-dialog title="选择作品" :visible.sync="dialogFormVisible" center width='984px'>
+        <el-dialog @closed='closeDialog' @opened='searchSubject()' title="选择作品" :visible.sync="dialogFormVisible" center width='984px'>
             <div class="search">
-                <input class="input" type="text" placeholder="搜索作品名称">
-                <button class="btn">搜 索</button>
+                <input v-model="search_name" class="input" type="text" placeholder="搜索作品名称">
+                <button class="btn" @click="searchSubject">搜 索</button>
             </div>
             <div class="job">
                 <p class="title">担任的职位：</p>
@@ -16,16 +16,24 @@
                     </el-option>
                 </el-select>
             </div>
-            <div class="works">
+            <div class="works" v-if="works.length > 0">
                 <div class="work" v-for="(item,index) in works" :key='index' @click="chose(item,index)">
                     <div :class="active.includes(index) ? 'activeIcon' : 'icon'"></div>
-                    <img src="../../../../assets/img/video.png">
+                    <img width="180px" height="253px" :src="item.subjectUrl">
                     <div class="info">
-                        <p class="name">名称：{{item.name}}</p>
-                        <p class="time">时间：{{item.time}}</p>
+                        <p class="name">名称：{{item.subjectName}}</p>
+                        <p class="time">时间：{{item.releaseDate ? item.releaseDate[0] : ''}}</p>
                     </div>
                 </div>
             </div>
+            <el-pagination class="works-page"
+                small
+                layout="prev, pager, next"
+                :current-page='current'
+                :total="total"
+                @current-change='changePage'
+            >
+            </el-pagination>
             <div class="table">
                 <el-table
                     :data="tableData"
@@ -36,21 +44,24 @@
                         label="序号">
                     </el-table-column>
                     <el-table-column
-                        prop="name"
+                        prop="subjectName"
                         label="作品名称"
                         width="180">
                     </el-table-column>
                     <el-table-column
-                        prop="time"
+                        prop="releaseDate"
                         label="作品时间"
                         width="180">
+                        <!-- <template slot-scope="scope">
+                            {{scope.id }}
+                        </template> -->
                     </el-table-column>
                     <el-table-column
                         prop="job"
                         label="担任职位">
                     </el-table-column>
                     <el-table-column
-                        prop="des"
+                        prop="subjectIntroduce"
                         label="作品描述">
                     </el-table-column>
                 </el-table>
@@ -63,75 +74,123 @@
     </div>
 </template>
 <script>
+import Until from '../../../../until/until.js'
 export default {
     props:['showDialog'],
     data(){
         return{
+            search_name: '', // 搜索作品名称
             dialogFormVisible:false,
             options:[           //选项
                 {
-                    value:'演员',
-                    label:'演员'
-                },
-                {
-                    value:'导演',
+                    value:'1',
                     label:'导演'
                 },
                 {
-                    value:'制片人',
-                    label:'制片人'
-                }
+                    value:'2',
+                    label:'编剧'
+                },
+                {
+                    value:'3',
+                    label:'演员'
+                },
             ],
             value:'演员',       //选中项
+            current: 1,
+            total: 0,
             works:[             //作品
-                {
-                    name:'来电狂想1',
-                    time:'2018.02.13'
-                },
-                {
-                    name:'来电狂想2',
-                    time:'2018.02.13'
-                },
-                {
-                    name:'来电狂想3',
-                    time:'2018.02.13'
-                },
-                {
-                    name:'来电狂想4',
-                    time:'2018.02.13'
-                },
-                {
-                    name:'来电狂想5',
-                    time:'2018.02.13'
-                },
-                {
-                    name:'来电狂想6',
-                    time:'2018.02.13'
-                },
-                {
-                    name:'来电狂想7',
-                    time:'2018.02.13'
-                },
+                // {
+                //     name:'来电狂想1',
+                //     time:'2018.02.13'
+                // },
+                // {
+                //     name:'来电狂想2',
+                //     time:'2018.02.13'
+                // },
+                // {
+                //     name:'来电狂想3',
+                //     time:'2018.02.13'
+                // },
+                // {
+                //     name:'来电狂想4',
+                //     time:'2018.02.13'
+                // },
+                // {
+                //     name:'来电狂想5',
+                //     time:'2018.02.13'
+                // },
+                // {
+                //     name:'来电狂想6',
+                //     time:'2018.02.13'
+                // },
+                // {
+                //     name:'来电狂想7',
+                //     time:'2018.02.13'
+                // },
             ],
-            tableData: [{
-                name: '来电狂响',
-                time: '2018.02.13',
-                job: '导演',
-                des:'xxxxxxxxxxxx'
-            }],
+            tableData: [],
             ischose:'icon',       //选择图标
             active:[],          //选择作品索引
             choseWorks:[],      //选择作品
         }
     },
     methods:{
+        // 搜索电影名
+        searchSubject() {
+            let data = {
+                subjectName: this.search_name,
+                pageNum: this.current,
+            }
+            this.Http.post(this.Action.getSubject, data).then((res) => {
+                console.log(res)
+                this.works = res.list
+                this.current = res.page
+                this.total = res.total
+            })
+        },
+        closeDialog() {
+            this.search_name = ''
+            this.current = 1
+            this.total = 0
+            this.works = []
+            this.tableData = []
+            this.active = []
+            this.choseWorks = []
+        },
+        // 修改页数
+        changePage(current) {
+            this.current = current
+            this.searchSubject()
+        },
         makeSure(){     //提交
-            console.log(111)
+            let arr = []
+            let choseWorks = this.tableData
+            for(let i = 0, length = choseWorks.length; i < length; i ++) {
+                arr.push({
+                    // celebrityId: Until.getUserSmallInfo().id,
+                    celebrityId: 1046960,
+                    subjectId: choseWorks[i].id,
+                    // celebrityType: Until.getUser().user.userType
+                    celebrityType: 3
+                })
+            }
+            let data = {
+                celebritySubjectJson: JSON.stringify(arr),
+                token: Until.getUser().token
+            }
+            console.log(data)
+            this.Http.post(this.Action.personAddSub, data).then(res => {
+                this.$message({
+                    message: '提交成功',
+                    type: 'success'
+                })
+            })
         },
         openDialog(num){        //打开弹窗
             this.dialogFormVisible = true
         },
         chose(item,index){            //选择作品
+            console.log(item, index)
             if(this.active.includes(index)){
                 let num = this.active.indexOf(index)
                 this.active.splice(num,1)
@@ -140,7 +199,13 @@ export default {
                 this.active.push(index)
                 this.choseWorks.push(item)
             }
+            console.log(this.choseWorks)
+            this.setAddTable()
         },
+        // 设置添加表格
+        setAddTable() {
+            this.tableData = this.choseWorks
+        }
     }
 }
 </script>
@@ -190,7 +255,7 @@ export default {
                 overflow-x: scroll;
                 height: 276px;
                 display: flex;
-                margin-bottom: 60px;
+                margin-bottom: 10px;
                 .work{
                     position: relative;
                     margin-right: 20px;
@@ -234,6 +299,9 @@ export default {
                         }
                     }
                 }
+            }
+            .works-page{
+                text-align: right;
             }
         }
         .dialog-footer{

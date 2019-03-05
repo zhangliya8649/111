@@ -58,6 +58,12 @@ export default {
   getUserid: '/c10/user/get/by_uid',
   // 修改密码
   modifyPwd: '/c10/user/modify/pwd',
+  // 补全个人信息
+  updatePersonInfo: '/c10/celebrity/update',
+  // 根据名字获取电影名
+  getSubject: '/c10/subject/list',
+  // 人物关联添加作品 
+  personAddSub:'/c10/celebrity/relative/subject',
   //认证信息
   // 1.搜索名称
   searchActor:'/c10/celebrity/list',

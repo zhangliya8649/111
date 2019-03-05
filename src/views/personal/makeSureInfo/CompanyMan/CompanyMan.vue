@@ -192,8 +192,10 @@ export default {
         cancel(){           //取消查找
             this.find = true
         },
-        search(num){           //找到公司
-            
+        // type: 类型 searchName: 搜索内容
+        search(type, searchName){           //找到公司
+            console.log(type, searchName)
+            //this.
         },
         clear(){            //清空信息
             this.tableData = []
