@@ -8,8 +8,8 @@
             <div class='desc'>
               <div class='tit'>
                   {{list.name}}
-                  <router-link to='/register' class='operator' v-if='list.claimState == 1'>未认领</router-link>
-                  <router-link to='/register' class='operator' v-else-if='list.claimState == 2'>审核中</router-link>
+                  <router-link :to='this.$store.state.isLogin ? "/MakeSure" : "/register"' class='operator' v-if='list.claimState == 1'>未认领</router-link>
+                  <span class='operator' v-else-if='list.claimState == 2'>审核中</span>
                   <span class='operator' v-else-if='list.claimState == 3'>已认领</span>
               </div>
               <div class='con'>
@@ -76,61 +76,36 @@
                     </el-row>
                 </div>
             </div>
-            <div class="papel" id='honorDetail'>
-                <p class="title">企业荣誉</p>
-                <div class="content table">
-                    <el-table
-                        :data="tableData1"
-                        style="width: 100%">
-                        <el-table-column
-                            prop="honorTime"
-                            label="时间"
-                            width="180">
-                        </el-table-column>
-                        <el-table-column
-                            prop="summary"
-                            label="摘要"
-                            width="180">
-                        </el-table-column>
-                        <el-table-column
-                            prop="honorDesc"
-                            label="概述">
-                        </el-table-column>
-                    </el-table>
+            <!--登录后可查-->
+            <div class='login-show'>
+              <div class='login-shadow-par' v-if='!this.$store.state.isLogin'>
+                <div class='login-shadow'>
+                  <div class='s-tip'>登录后，可查看该公司的详细信息</div>
+                  <div class='s-btn'>登录</div>
                 </div>
-            </div>
-            <!-- 面板 -->
-            <div class="papel" id='creditDetail'>
-                <p class="title">失信信息</p>
-                <div class="content table">
-                    <el-table
-                        :data="tableData2"
-                        style="width: 100%">
-                        <el-table-column
-                            prop="creditTime"
-                            label="时间"
-                            width="180">
-                        </el-table-column>
-                        <el-table-column
-                            prop="summary"
-                            label="摘要"
-                            width="180">
-                        </el-table-column>
-                        <el-table-column
-                            prop="creditDesc"
-                            label="概述">
-                        </el-table-column>
-                    </el-table>
-                </div>
+              </div>
+              <div class="papel" id='honorDetail'>
+                  <p class="title">企业荣誉</p>
+                  <div class="content table">
+                      <honor/>
+                  </div>
+              </div>
+              <div class="papel" id='creditDetail'>
+                  <p class="title">失信信息</p>
+                  <div class="content table">
+                      <credit/>
+                  </div>
+              </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-import Works from '../../personal/peronalPage/works/works.vue'
+import honor from './detailSection/honor.vue'
+import credit from './detailSection/credit.vue'
+
 import TimeLine from '../../personal/peronalPage/timeLine/timeLine'
 
-let works = require('../../../assets/img/video.png')
 
 const menuTabs = {
   'basicDetail': 0,
@@ -139,7 +114,7 @@ const menuTabs = {
 }
 
 export default {
-    components:{Works, TimeLine},
+    components:{honor, credit, TimeLine},
 
     data(){
         return{
@@ -150,33 +125,16 @@ export default {
             ],
             curIndex: 0,
             list: {},
-            //表格数据
-            tableData1: [],
-           // tableData2: [],
-            //作品展示
-            worksData:[],
-            msg:[]
         }
     },
 
     created: function() {
-    /*
        let param = {
         companyId: this.$route.query.id,
         type: this.$route.query.type,
         token: this.$store.state.token
-       }*/
-       this.getBasicDetail({
-                                     companyId: this.$route.query.id,
-                                     type: this.$route.query.type,
-                                     token: this.$store.state.token
-                                    });
-       //this.getHonorDetail(param);
-       this.getCreditDetail({
-                                                                 companyId: this.$route.query.id,
-                                                                 token: this.$store.state.token
-
-                                                               });
+       }
+       this.getBasicDetail(param);
 
        //监听锚点
        window.onhashchange = ()=> {
@@ -191,7 +149,7 @@ export default {
     methods:{
         //菜单锚点
         changeMenu() {
-          let index = menuTabs[location.hash.replace('#', '') || 'hot'];
+          let index = menuTabs[location.hash.replace('#', '') || 'basicDetail'];
           this.curIndex = index;
         },
 
@@ -199,24 +157,6 @@ export default {
         getBasicDetail(param) {
           this.Http.post(this.Action.SearchCompanyById, param).then((data) => {
             this.list = data.company;
-          }).catch((err) => {
-            console.log(err);
-          })
-        },
-
-        //公司荣誉
-        getHonorDetail(param) {
-          this.Http.post(this.Action.SearchCompanyHonorById, param).then((data) => {
-            this.tableData1 = data.list;
-          }).catch((err) => {
-            console.log(err);
-          })
-        },
-
-        //失信信息
-        getCreditDetail(param) {
-          this.Http.post(this.Action.SearchCompanyCreditById, param).then((data) => {
-            this.tableData2 = data.list;
           }).catch((err) => {
             console.log(err);
           })
@@ -387,18 +327,6 @@ export default {
                 padding-bottom: 25px;
                 margin-bottom: 20px;
                 padding-top: 32px;
-                .btn{
-                    display: flex;
-                    justify-content: flex-end;
-                    .papelBtn{
-                        height: 40px;
-                        width: 128px;
-                        background-color: #F58523;
-                        border-color: #F58523;
-                        color: #fff;
-                        border-radius: 0;
-                    }
-                }
                 .title{
                     height: 16px;
                     margin-left: 38px;
@@ -411,29 +339,53 @@ export default {
                 .content{
                     margin-top: 25px;
                     margin-left: 38px;
-                    .el-form--inline .el-form-item{
-                        margin-right: 84px;
-                        .input{
-                            width: 202px!important;
-                        }
-                    }
                     .row{
                         margin-top: 25px;
                         color: #333;
                         font-size: 14px;
                         font-family: 'PingFangSC-Regular';
                     }
-                    .editInfo{
-                        background-color: #F58523;
-                        border: 1px solid #F58523;
-                        color: #fff;
-                        border-radius: 0;
-                    }
                 }
                 .table{
                     margin-right: 22px;
                     margin-left: 22px;
                 }
+            }
+            //登录可查遮罩
+            .login-show {
+              position: relative;
+              //遮罩
+              .login-shadow-par {
+                position: absolute;
+                width: 1180px;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                text-align: center;
+                z-index: 999;
+                .login-shadow {
+                  position: absolute;
+                  width: 360px;
+                  height: 160px;
+                  left: 50%;
+                  top: 50%;
+                  margin-left: -180px;
+                  margin-top: -80px;
+                  .s-tip {
+                    margin-bottom: 36px;
+                    font-weight: bold;
+                    font-size: 20px;
+                  }
+                  .s-btn {
+                    width: 120px;
+                    height: 40px;
+                    margin-left: auto;
+                    margin-right: auto;
+                    line-height: 40px;
+                    background: #f58523;
+                    color: #fff;
+                  }
+                }
+              }
             }
         }
 </style>
