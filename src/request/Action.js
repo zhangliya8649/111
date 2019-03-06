@@ -80,6 +80,13 @@ export default {
 
   // 搜索公司
   searchCompany: '/c10/company/list',
+
+  // 上传文件
+  upload: '/c10/upload',
+  // 提交公司证认证
+  companyCertificate: '/c10/company/certificate',
+  // 非业内人士资料修改
+  outer: '/c10/user/modify/user/info',
 }
 
 

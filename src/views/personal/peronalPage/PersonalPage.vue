@@ -280,46 +280,9 @@ export default {
             // 暂存个人信息
             cacheBasicInfo: {},
             //表格数据
-            tableData1: [{
-                honorTime:'2005-11-13',
-                summary:'金河马奖',
-                honorDesc:'荣获年度最佳演员'
-            },{
-                honorTime:'2008-12-11',
-                summary:'金马奖',
-                honorDesc:'荣获年度最佳配角'
-            },{
-                honorTime:'2005-11-13',
-                summary:'百花奖',
-                honorDesc:'提名年度最佳演员'
-            },],
-            tableData2:[{
-                benefitTime:'2002-11-13',
-                summary:'援助孤寡老人',
-                benefitDesc:'捐献物资2车'
-            },{
-                benefitTime:'2008-05-15',
-                summary:'灾区捐献',
-                benefitDesc:'地震捐献5万元'
-            },
-            {
-                benefitTime:'2010-06-18',
-                summary:'爱心捐献',
-                benefitDesc:'爱心捐献3万元'
-            },{
-                benefitTime:'2011-10-15',
-                summary:'爱心捐献',
-                benefitDesc:'爱心捐献8万元'
-            }],
+            tableData1: [],
             //作品展示
-            worksData:[
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
-                {src:works,name:'来电狂想',time:'2018.12.30',des:''},
-                ],
+            worksData:[],
                 //密码表单
              ruleForm: {
                 oldPass: '',
@@ -341,10 +304,7 @@ export default {
             msg:[                                       //时间轴数据
             ],
             //从业信息
-            JobInfo:[{
-                time:'2019-02-09',
-                info:'2eqeqw'
-            }],
+            JobInfo:[],
 
         }
     },
@@ -401,15 +361,15 @@ export default {
             this.$refs.expDialog.openExp()
         },
         editSurePass(){         //确认修改密码
-            this.$refs.ruleForm.validate((valid) => {
-                if(valid) {
-                    console.log(this.ruleForm)
-                    this.modifyPwd(this.ruleForm)
-                } else {
-                    return
-                }
-            })
-            // this.$router.push({path:'/MakeSure'})
+            // this.$refs.ruleForm.validate((valid) => {
+            //     if(valid) {
+            //         console.log(this.ruleForm)
+            //         this.modifyPwd(this.ruleForm)
+            //     } else {
+            //         return
+            //     }
+            // })
+            this.$router.push({path:'/MakeSure'})
         },
         // 修改密码
         modifyPwd(form_data) {

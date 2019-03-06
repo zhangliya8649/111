@@ -36,7 +36,7 @@
                     <div class="certificationLeft">
                         <p class="leftTitle">上传法人身份证照片</p>
                         <div class="leftUpload">
-                            <Upload></Upload>
+                            <Upload @show="showImg" @saveIDCard="saveIDCard" ref="upload"></Upload>
                         </div>
                     </div>
                     <div class="certificationRight">
@@ -44,11 +44,13 @@
                         <div class="rightUpload">
                             <el-upload
                                 class="upload-demo"
-                                action="https://jsonplaceholder.typicode.com/posts/"
+                                :action="actionUrl"
                                 :on-preview="handlePreview"
                                 :on-remove="handleRemove"
                                 :before-remove="beforeRemove"
+                                :on-success="handleAvatarSuccess"
                                 multiple
+                                :data="token"
                                 :limit="3"
                                 :on-exceed="handleExceed"
                                 :file-list="fileList">
@@ -56,6 +58,10 @@
                             </el-upload>
                         </div>
                     </div>
+                </div>
+                <div class="companyCertification-btn">
+                    <el-button class="cencel-btn" @click="certification">取消</el-button>
+                    <el-button class="affirm-btn" @click='submitCertification'>提交</el-button>
                 </div>
             </div>
         </div>
@@ -108,8 +114,10 @@
 </template>
 <script>
 import Upload from './upload/upload'
+import Until from "../../../../until/until.js";
 export default {
     components:{Upload},
+    props: ['active'],
     data(){
         var validateName = (rule, value, callback) => {
             if (value == '') {
@@ -128,7 +136,10 @@ export default {
             }
         }
         return{
-            find:true, //是否查询到公司
+            file: [],
+            find: true, //是否查询到公司
+            actionUrl: '', //上传地址
+            token: '',
             tableData:[],
             tableData1:[{     //未查询到占位
                 name: 'xxx',
@@ -139,13 +150,7 @@ export default {
                     name:'',
                     url:''
             },
-            fileList:[{
-                name: 'food.jpeg',
-                url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-                }, {
-                name: 'food2.jpeg',
-                url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-            }],      //文件上传
+            fileList:[],      //文件上传
             rule:{              //验证规则
                 name:[
                     { validator: validateName, trigger: 'blur' }
@@ -155,6 +160,13 @@ export default {
                 ]
             },
             companyCertific:false,      //点击认证按钮显示
+            currentRow: ''
+        }
+    },
+    mounted() {
+        this.actionUrl = this.Action.BaseUrl + this.Action.upload
+        this.token = {
+            token: Until.getUserToken()
         }
     },
     methods:{
@@ -170,6 +182,13 @@ export default {
         beforeRemove(file, fileList) {
             return this.$confirm(`确定移除 ${ file.name }？`);
         },
+        // 成功回调
+        handleAvatarSuccess(res, file) {
+            console.log(res, file)
+            if(res.code === 200) {
+              this.file.push(res.data.url)  
+            }
+        },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
             if (valid) {
@@ -183,8 +202,31 @@ export default {
         findNot(){      //切换显示查找公司
             this.find = false
         },
-        certification(){        //认证按钮
-            this.companyCertific = true;
+        certification(row){        //认证按钮
+            this.companyCertific = !this.companyCertific;
+            this.row = row
+            console.log(this.row)
+        },
+        // 提交认证
+        submitCertification() {
+            console.log('提交')
+            console.log(this.file)
+            console.log(this.active)
+            let data = {
+                companyId: this.row.id,
+                companyName: this.row.name,
+                identityType: this.active,
+                filePath: '[' + this.file + ']',
+                token: Until.getUserToken()
+            }
+            
+            this.Http.post(this.Action.companyCertificate, data).then(res => {
+                this.$message({
+                    message: '提交成功',
+                    type: 'success'
+                })
+                this.certification()
+            })
         },
         handleClick2(){     //未找到公司占位
             return false
@@ -206,7 +248,15 @@ export default {
         },
         clear(){            //清空信息
             this.tableData = []
-        }
+        },
+        // 获取上传组件传来的url,type参数
+        showImg({type, src}) {
+            type == 1 ? (this.idCard1 = src) : (this.idCard2 = src);
+        },
+        // 保存上传图片的url数组
+        saveIDCard(files) {
+            this.file = files;
+        },
     }
 }
 </script>
@@ -262,6 +312,19 @@ export default {
                             margin-bottom: 50px;
                         }
                     }
+                }
+            }
+            .companyCertification-btn{
+                display: flex;
+                justify-content: center;
+                margin-top: 10px;
+                button{
+                    height: 40px;
+                    width: 148px;
+                    background-color: #f58523;
+                    border-color: #f58523;
+                    color: #fff;
+                    border-radius: 0;
                 }
             }
         }

@@ -28,8 +28,8 @@
     </div>
     <div class="makeSure-content w1180">
       <Actor v-if="this.active == 0 ||this.active == 1" ref="actor"></Actor>
-      <CompanyMan v-if="this.active == 2 ||this.active == 3" ref="companyMan"></CompanyMan>
-      <Outer v-if="this.active == 4"></Outer>
+      <CompanyMan :active="active + 2" v-if="this.active == 2 ||this.active == 3" ref="companyMan"></CompanyMan>
+      <Outer :active="active + 2" v-if="this.active == 4"></Outer>
     </div>
   </div>
 </template>
