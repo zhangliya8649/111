@@ -1,64 +1,64 @@
 <template>
-    <div>
+    <div id='people'>
         <div class='basic-detail'>
           <div class='search-people clear w1180'>
             <div class='img'>
-              <img :src='list.celebrityHeadUrl' />
+              <img :src='basicDetail.celebrityHeadUrl' />
             </div>
             <div class='desc'>
               <div class='tit'>
-                  {{list.celebrityName}}
-                  <router-link to='/register' class='operator' v-if='list.claimState == 1'>未认领</router-link>
-                  <router-link to='/register' class='operator' v-else-if='list.claimState == 2'>审核中</router-link>
-                  <span class='operator' v-else-if='list.claimState == 3'>已认领</span>
+                  {{basicDetail.celebrityName}}
+                  <router-link :to='this.$store.state.isLogin ? "/MakeSure" : "/register"' class='operator' v-if='basicDetail.claimState == 1'>未认领</router-link>
+                  <span class='operator' v-else-if = 'basicDetail.claimState == 2'>审核中</span>
+                  <span class='operator' v-else>已认领</span>
               </div>
               <div class='con'>
                 <div class='list'>
-                  职业: {{list.occupation}}
+                  职业: {{basicDetail.occupation}}
                 </div>
                 <div class='list'>
-                  所属机构: {{list.agency}}
+                  所属机构: {{basicDetail.agency}}
                 </div>
               </div>
             </div>
             <div class='jc'>
               <div class='jc-head clear'>
                 <div class='jc-list credit'>
-                  <div class='num'>{{list.rating}}</div>
+                  <div class='num'>{{basicDetail.rating}}</div>
                   <div class='icon-txt'>信用等级</div>
                 </div>
                 <div class='jc-list honor'>
-                  <div class='num'>{{list.commendCount ? list.commendCount : 0}}</div>
+                  <div class='num'>{{basicDetail.commendCount ? basicDetail.commendCount : 0}}</div>
                   <div class='icon-txt'>荣誉</div>
                 </div>
                 <div class='jc-list no-honor'>
-                  <div class='num'>{{list.loseCreditCount ? list.loseCreditCount : 0}}</div>
+                  <div class='num'>{{basicDetail.loseCreditCount ? basicDetail.loseCreditCount : 0}}</div>
                   <div class='icon-txt'>失信信息</div>
                 </div>
               </div>
               <div class='jc-foot clear'>
                 <div class='jc-list credit'>
-                  <div class='num'>{{list.workingYear ? list.workingYear : 0}}<span>年</span></div>
+                  <div class='num'>{{basicDetail.workingYear ? basicDetail.workingYear : 0}}<span>年</span></div>
                   <div class='icon-txt'>执业年限</div>
                 </div>
                 <div class='jc-list honor'>
-                  <div class='num'>{{list.subjectCount ? list.subjectCount : 0}}<span>部</span></div>
+                  <div class='num'>{{basicDetail.subjectCount ? basicDetail.subjectCount : 0}}<span>部</span></div>
                   <div class='icon-txt'>作品数量</div>
                 </div>
                 <div class='jc-list no-honor'>
-                  <div class='num'>{{list.xzPenalty ? list.xzPenalty : 0}}<span>条</span></div>
+                  <div class='num'>{{basicDetail.xzPenalty ? basicDetail.xzPenalty : 0}}<span>条</span></div>
                   <div class='icon-txt'>行政处罚</div>
                 </div>
                 <div class='jc-list no-honor'>
-                  <div class='num'>{{list.xsPenalty ? list.xsPenalty : 0}}<span>条</span></div>
+                  <div class='num'>{{basicDetail.xsPenalty ? basicDetail.xsPenalty : 0}}<span>条</span></div>
                   <div class='icon-txt'>行事处罚</div>
                 </div>
                 <div class='jc-list no-honor'>
-                  <div class='num'>{{list.industryDispose ? list.industryDispose : 0}}<span>条</span></div>
+                  <div class='num'>{{basicDetail.industryDispose ? basicDetail.industryDispose : 0}}<span>条</span></div>
                   <div class='icon-txt'>行业处分</div>
                 </div>
                 <div class='jc-list no-honor'>
-                  <div class='num'>{{list.negligence ? list.negligence : 0}}<span>条</span></div>
+                  <div class='num'>{{basicDetail.negligence ? basicDetail.negligence : 0}}<span>条</span></div>
                   <div class='icon-txt'>责任事故</div>
                 </div>
               </div>
@@ -75,45 +75,45 @@
                 <div class="content">
                     <el-row :gutter="20" class="row">
                         <el-col :span="2"><div class="grid-content bg-purple">姓名：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{list.celebrityName}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicDetail.celebrityName}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple">性别：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{list.sex == 1 ? '男' : list.sex == 2 ? '女' : '未知'}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicDetail.sex == 1 ? '男' : basicDetail.sex == 2 ? '女' : '未知'}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple">年龄：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{list.age ? list.age : '未知'}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicDetail.age ? basicDetail.age : '未知'}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="2"><div class="grid-content bg-purple">祖籍：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{list.nationality ? list.nationality : '未知'}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicDetail.nationality ? basicDetail.nationality : '未知'}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple">公司：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{list.agency ? list.agency : '未知'}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicDetail.agency ? basicDetail.agency : '未知'}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple">职务：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{list.position ? list.position : '未知'}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicDetail.position ? basicDetail.position : '未知'}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="2"><div class="grid-content bg-purple">学历：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{list.education ? list.education : '未知'}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicDetail.education ? basicDetail.education : '未知'}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple">职业：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{list.occupation ? list.occupation : '未知'}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicDetail.occupation ? basicDetail.occupation : '未知'}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple">政治面貌：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{list.politics ? list.politics : '未知'}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicDetail.politics ? basicDetail.politics : '未知'}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="2"><div class="grid-content bg-purple">执业年限：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{list.workingYear ? list.workingYear : 0}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicDetail.workingYear ? basicDetail.workingYear : 0}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple">职业证书：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{list.certificate ? list.certificate : '未知'}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicDetail.certificate ? basicDetail.certificate : '未知'}}</div></el-col>
                         <el-col :span="2"><div class="grid-content bg-purple">证书时间：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{list.certificateTime ? list.certificateTime : '未知'}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicDetail.certificateTime ? certificateTime : '未知'}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="2"><div class="grid-content bg-purple">代表作品：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{list.portfolio ? list.portfolio : ''}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicDetail.portfolio ? basicDetail.portfolio : ''}}</div></el-col>
                     </el-row>
                 </div>
             </div>
             <!--登录后可查-->
             <div class='login-show'>
-              <div class='login-shadow-par'>
+              <div class='login-shadow-par' v-if='!this.$store.state.isLogin'>
                 <div class='login-shadow'>
                   <div class='s-tip'>登录后，可查看该艺人的详细信息</div>
                   <div class='s-btn'>登录</div>
@@ -122,106 +122,42 @@
               <div class="papel" id='jobDetail'>
                   <p class="title">从业信息（执业经历）</p>
                   <div class="content exp">
-                      <div class='no-detail' v-if='msg.length < 1'>暂无数据</div>
-                      <TimeLine v-for="(data,index) in msg" :msg='data' :key='index' :index='index'></TimeLine>
+                      <job/>
                   </div>
               </div>
               <div class="papel" id='honorDetail'>
                   <p class="title">个人荣誉</p>
                   <div class="content table">
-                      <el-table
-                          :data="tableData1"
-                          style="width: 100%">
-                          <el-table-column
-                              prop="honorTime"
-                              label="时间"
-                              width="180">
-                          </el-table-column>
-                          <el-table-column
-                              prop="summary"
-                              label="摘要"
-                              width="180">
-                          </el-table-column>
-                          <el-table-column
-                              prop="honorDesc"
-                              label="描述">
-                          </el-table-column>
-                      </el-table>
+                      <honor/>
                   </div>
               </div>
               <!-- 面板 -->
               <div class="papel" id='benefitDetail'>
                   <p class="title">社会公益</p>
                   <div class="content table">
-                      <el-table
-                          :data="tableData2"
-                          style="width: 100%">
-                          <el-table-column
-                              prop="benefitTime"
-                              label="时间"
-                              width="180">
-                          </el-table-column>
-                          <el-table-column
-                              prop="summary"
-                              label="摘要"
-                              width="180">
-                          </el-table-column>
-                          <el-table-column
-                              prop="benefitDesc"
-                              label="描述">
-                          </el-table-column>
-                      </el-table>
+                      <benefit/>
                   </div>
               </div>
-              <div class="papel" id='worksDetail'>
+              <div class="papel" id='creditDetail'>
                   <p class="title">失信信息</p>
                   <div class="content table">
-                      <el-table
-                          :data="tableData3"
-                          style="width: 100%">
-                          <el-table-column
-                              prop="creditTime"
-                              label="时间"
-                              width="180">
-                          </el-table-column>
-                          <el-table-column
-                              prop="summary"
-                              label="摘要"
-                              width="180">
-                          </el-table-column>
-                          <el-table-column
-                              prop="creditDesc"
-                              label="描述">
-                          </el-table-column>
-                      </el-table>
+                      <credit/>
                   </div>
               </div>
-              <div class="works-par">
-                  <div class='works-title clear'>
-                    <p class="tit-desc">作品（与<span>{{list.celebrityName}}</span>相关的，共有<span>{{worksData.total}}</span>部作品）</p>
-                    <p v-if='worksData.total > 6' class="more-works" @click="moreWorks(list.id, list.celebrityName)">全部作品》</p>
-                  </div>
-                  <div class="works-box">
-                      <div class='list' v-for='item in workList'>
-                        <a href='javascript:;' @click='openWorkDetail(item.id)'>
-                          <img v-if = 'item.subjectUrl != "None"' :src='item.subjectUrl'/>
-                          <img v-else src='../../../assets/credit/default-man.png'/>
-                        </a>
-                        <div class='name'>名称：{{item.subjectName}}</div>
-                        <div class='time'>时间：{{item.releaseDate ? item.releaseDate[0] : '无'}}</div>
-                        <div class='desc'>描述：{{item.subjectIntroduce}}</div>
-                      </div>
-                  </div>
-              </div>
+              <works/>
             </div>
         </div>
     </div>
 </template>
 <script>
-import Works from '../../personal/peronalPage/works/works.vue'
+import job from './detailSection/job.vue'
+import honor from './detailSection/honor.vue'
+import benefit from './detailSection/benefit.vue'
+import credit from './detailSection/credit.vue'
+import works from './detailSection/works.vue'
 import TimeLine from '../../personal/peronalPage/timeLine/timeLine'
+import Until from '../../../until/until.js'
 
-let works = require('../../../assets/img/video.png')
 
 const menuTabs = {
   'basicDetail': 0,
@@ -233,7 +169,7 @@ const menuTabs = {
 }
 
 export default {
-    components:{Works, TimeLine},
+    components:{job, honor, benefit, credit, works, TimeLine},
 
     data(){
         return{
@@ -246,44 +182,67 @@ export default {
               {id: 'worksDetail', name: '作品'},
             ],
             curIndex: 0,
-            list: {},
-            msg:[],
-            //表格数据
-            tableData1: [],
-            tableData2: [],
-            tableData3: [],
-            //作品展示
-            worksData: {},
-            workList: []
+            basicDetail: {},
+            certificateTime: '',
+            jobDetail: [],
+            honorDetail: [],
+            benefitDetail: [],
+            creditDetail: [],
+            worksDetail: [],
+            workTotal : 0,
         }
     },
 
-    mounted: function() {
-      let param = {
-        celebrityId: this.id,
-       // token: this.token
-        pageNum: 1
-      };
-     // 从业信息this.getWorkDetail(param);
-      //个人荣誉this.getHonorDetail(param);
-      //社会公益this.getBenefitDetail(param);
-      //失信信息this.getCreditDetail(param);
-      this.getWorksById(param);
-      this.changeMenu();
+    created: function() {
+        window.onhashchange = () => {
+          this.changeMenu();
+        }
+
+        //赋值
+        this.id = this.$route.query.id;
+        this.token = this.$store.state.token;
+
+        //查询人物基本信息
+        let param = {
+          celebrityId: this.id
+        };
+        this.getDetail('basicDetail', Object.assign({identityType: this.$route.query.type}, param));
+
     },
 
-    created: function() {
-       this.id = this.$route.query.id;
-       this.token = this.$store.state.token;
-       let param = {
-         celebrityId: this.id,
-         identityType: this.$route.query.type
-       };
-       this.getBasicDetail(param);
-       //监听锚点
-       window.onhashchange = ()=> {
-        this.changeMenu();
-       }
+    mounted: function() {
+      this.changeMenu();
+
+      /*滚动导航
+      //let beforeTop = 0;
+      document.getElementById('people').addEventListener('scroll', function(e) {
+        let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        let maxTop = document.documentElement.scrollHeight || document.body.scrollHeight;
+        let webHeight = window.innerHeight;
+        //let top = scrollTop - beforeTop;
+        //beforeTop = scrollTop;
+        //导航内容总宽度
+        let h1 = document.getElementById('basicDetail').offsetHeight + 20;
+        let h2 = document.getElementById('jobDetail').offsetHeight + 20;
+        let h3 = document.getElementById('honorDetail').offsetHeight + 20;
+        let h4 = document.getElementById('benefitDetail').offsetHeight + 20;
+        let h5 = document.getElementById('creditDetail').offsetHeight + 20;
+        let h6 = document.getElementById('worksDetail').offsetHeight;
+        let sHeight = maxTop - webHeight;
+        if(sHeight - h6 < scrollTop && scrollTop <= sHeight) {
+            this.curIndex = 5;
+         }else if(sHeight - h6 - h5 < scrollTop && scrollTop <= sHeight - h6) {
+            this.curIndex = 4;
+         }else if(sHeight - h6 - h5 - h4 < scrollTop && scrollTop <= sHeight - h6 - h5) {
+            this.curIndex = 3;
+         }else if(520 + h1 < scrollTop && scrollTop <= 520 + h1 + h2) {
+               this.curIndex = 2;
+         }else if(520 < scrollTop && scrollTop <= 520 + h1) {
+            this.curIndex = 1;
+         }else if(0 <= scrollTop && scrollTop <= 520) {
+            this.curIndex = 0;
+         }
+      })*/
     },
 
     methods:{
@@ -293,56 +252,27 @@ export default {
           this.curIndex = index;
         },
 
-        //获取人的基本信息
-        getBasicDetail(param) {
-          this.Http.post(this.Action.SearchPersonById, param).then((data) => {
-            this.list = data.celebrity;
-          }).catch((err) => {
-            console.log(err);
-          })
-        },
-
-        //获取从业信息
-        getWorkDetail(param) {
-          this.Http.post(this.Action.SearchPersonWorkById, param).then((data) => {
-            this.msg = data.list;
-          }).catch((err) => {
-            console.log(err);
-          })
-        },
-
-        //个人荣誉
-        getHonorDetail(param) {
-          this.Http.post(this.Action.SearchPersonHonorById, param).then((data) => {
-            this.tableData1 = data.list;
-          }).catch((err) => {
-            console.log(err);
-          })
-        },
-
-        //社会公益
-        getBenefitDetail(param) {
-          this.Http.post(this.Action.SearchPersonBenefitById, param).then((data) => {
-            this.tableData2 = data.list;
-          }).catch((err) => {
-            console.log(err);
-          })
-        },
-
-        //失信信息
-        getCreditDetail(param) {
-          this.Http.post(this.Action.SearchPersonCreditById, param).then((data) => {
-            this.tableData3 = data.list;
-          }).catch((err) => {
-            console.log(err);
-          })
-        },
-
-        //查询作品
-        getWorksById(param) {
-          this.Http.post(this.Action.SearchWorkNumById, param).then((data) => {
-            this.worksData = data;
-            this.workList = data.list.length > 6 ? data.list.slice(0, 6) : data.list;
+        //获取人物详情基本信息
+        getDetail(type, param) {
+          let typeObj = {
+            'basicDetail': 'SearchPersonById',
+            'jobDetail': 'SearchPersonWorkById',
+            'honorDetail': 'SearchPersonHonorById',
+            'benefitDetail': 'SearchPersonBenefitById',
+            'creditDetail': 'SearchPersonCreditById',
+            'worksDetail' : 'SearchWorkNumById'
+          }
+          this.Http.post(this.Action[typeObj[type]], param).then((data) => {
+            if(type == 'basicDetail') {
+              this[type] = data.celebrity;
+              this.certificateTime = Until.timestampToTime(data.celebrity.certificateTime);
+            }else {
+              this[type] = data.list;
+            }
+            if(type == 'worksDetail') {
+              this.workTotal = data.total;
+              this[type] = this[type].length > 6 ? this[type].slice(0, 6) : this[type];
+            }
           }).catch((err) => {
             console.log(err);
           })
@@ -526,7 +456,7 @@ export default {
     .Personal-content{
           position: relative;
           padding-bottom: 136px;
-          margin-top: 30px;
+          margin-top: 80px;
           .menu {
             position: absolute;
             left: -167px;
@@ -563,25 +493,6 @@ export default {
               margin-bottom: 20px;
               padding-bottom: 25px;
               padding-top: 32px;
-              .no-detail {
-                width: 100%;
-                padding-top: 100px;
-                text-align: center;
-                color: #909399;
-                font-size: 14px;
-              }
-              .btn{
-                  display: flex;
-                  justify-content: flex-end;
-                  .papelBtn{
-                      height: 40px;
-                      width: 128px;
-                      background-color: #F58523;
-                      border-color: #F58523;
-                      color: #fff;
-                      border-radius: 0;
-                  }
-              }
               .title{
                   height: 16px;
                   margin-left: 38px;
@@ -594,22 +505,10 @@ export default {
               .content{
                   margin-top: 25px;
                   margin-left: 38px;
-                  .el-form--inline .el-form-item{
-                      margin-right: 84px;
-                      .input{
-                          width: 202px!important;
-                      }
-                  }
                   .row{
                       margin-top: 25px;
                       color: #333;
                       font-size: 14px;
-                  }
-                  .editInfo{
-                      background-color: #F58523;
-                      border: 1px solid #F58523;
-                      color: #fff;
-                      border-radius: 0;
                   }
               }
               .exp{
@@ -624,58 +523,11 @@ export default {
                   margin-left: 22px;
               }
           }
-          .works-par {
-              margin-top: 52px;
-              .works-title{
-                  color: #F58523;
-                  font-size: 16px;
-                  .tit-desc {
-                    float: left;
-                  }
-                  .more-works{
-                      float: right;
-                      width: 80px;
-                      text-align: right;
-                      cursor: pointer;
-                  }
-              }
-
-              .works-box{
-                  display: flex;
-                  flex-wrap: nowrap;
-                  justify-content: space-between;
-                  padding-top: 26px;
-                  .list {
-                    float: left;
-                    width: 180px;
-                    margin-right: 20px;
-                    font-size: 16px;
-                    img {
-                      width: 180px;
-                      margin-bottom: 16px;
-                    }
-                    div {
-                      width: 100%;
-                      height: 22px;
-                      line-height: 22px;
-                      overflow: hidden;
-                      white-space: nowrap;
-                      text-overflow: ellipsis;
-                      font-size: 14px;
-                      color: #4A4A4A;
-                    }
-                  }
-                  .list:last-child {
-                    margin-right: 0;
-                  }
-              }
-          }
           //登录可查遮罩
           .login-show {
             position: relative;
             //遮罩
             .login-shadow-par {
-              display: none;
               position: absolute;
               width: 1180px;
               height: 100%;
@@ -710,6 +562,9 @@ export default {
         }
 </style>
 <style>
+  .el-table {
+    overflow-y: auto;
+  }
   .el-table::before {
     display: none;
   }
