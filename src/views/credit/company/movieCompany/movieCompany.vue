@@ -56,6 +56,7 @@
             type: 'area',
             title: '地区：',
             con: [
+                   {name: '全部'},
                    {name: '北京'},
                    {name: '东城区'},
                    {name: '西城区'},
@@ -184,13 +185,16 @@
           color: #fff;
         }
       }
+      button[data-type='全部'] {
+        margin-right: 1020px;
+      }
       button[data-type='延庆区'] {
         margin-right: 875px;
       }
       button[data-type='密云区'] {
         margin-left: 105px;
       }
-      button[data-type='天津'], button[data-type='河北'] {
+      button[data-type='北京'], button[data-type='天津'], button[data-type='河北'] {
         margin-left: 46px;
       }
       button[data-type='静海区'] {

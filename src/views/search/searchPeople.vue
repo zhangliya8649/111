@@ -12,7 +12,7 @@
           <div class='tit'>
               <a href='javascript:;' @click='openDetail(list.id, list.identityType)'>{{list.celebrityName}}</a>
               <router-link to='/register' class='operator' v-if='list.claimState == 1'>未认领</router-link>
-              <router-link to='/register' class='operator' v-else-if='list.claimState == 2'>审核中</router-link>
+              <span class='operator' v-else-if='list.claimState == 2'>审核中</span>
               <span class='operator' v-else-if='list.claimState == 3'>已认领</span>
           </div>
           <div class='con'>
