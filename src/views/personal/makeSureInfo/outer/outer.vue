@@ -246,7 +246,6 @@ export default {
         token: Until.getUser().token
       };
       this.Http.post(this.Action.modifyPwd, data).then(res => {
-        debugger
         if(res === null) {
           this.$message({
             message: "修改成功",
