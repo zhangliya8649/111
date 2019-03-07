@@ -122,7 +122,7 @@
               <div class="papel" id='jobDetail'>
                   <p class="title">从业信息（执业经历）</p>
                   <div class="content exp">
-                      <job/>
+                    <job/>
                   </div>
               </div>
               <div class="papel" id='honorDetail'>
@@ -144,7 +144,7 @@
                       <credit/>
                   </div>
               </div>
-              <works/>
+              <works :cName='basicDetail.celebrityName'></works>
             </div>
         </div>
     </div>
@@ -278,21 +278,6 @@ export default {
           })
         },
 
-        //查询作品详情
-        openWorkDetail(id) {
-          this.$router.push({
-            path: '/credit/works/worksDetail',
-            query: {id}
-          })
-        },
-
-        //更多作品
-        moreWorks(id, name) {
-          this.$router.push({
-            path: '/search',
-            query: {id, name}
-          })
-        },
     }
 }
 </script>
@@ -512,11 +497,7 @@ export default {
                   }
               }
               .exp{
-                  display: flex;
-                  height: 316px;
-                  justify-content: space-between;
-                  margin-right:45px;
-                  overflow-x: auto;
+
               }
               .table{
                   margin-right: 22px;

@@ -51,7 +51,7 @@
         </div>
       </div>
       <div class='people-detail'>
-        <div class='tit'>来电狂响演职员</div>
+        <div class='tit'>{{list.subjectName}}演职员</div>
         <div class='con clear'>
           <div class='list' v-for='item in list.subjectDirectors'>
             <a href='javascript:;' @click='openDetail(item.id, item.identityType)'>
@@ -215,10 +215,16 @@
           float: left;
           width: 180px;
           margin-right: 20px;
+          margin-bottom: 10px;
           font-size: 16px;
+          a {
+            display: block;
+            width: 180px;
+            height: 255px;
+            margin-bottom: 16px;
+          }
           img {
             width: 180px;
-            margin-bottom: 16px;
           }
           .name, .rule {
             height: 22px;

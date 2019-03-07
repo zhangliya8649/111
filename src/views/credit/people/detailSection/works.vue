@@ -2,8 +2,8 @@
     <div class='works'>
         <div class="works-par" id='worksDetail'>
             <div class='works-title clear'>
-              <p class="tit-desc">作品（与<span></span>相关的，共有<span>{{workTotal}}</span>部作品）</p>
-              <p v-if='workTotal > 6' class="more-works" @click="moreWorks(basicDetail.id, basicDetail.celebrityName)">全部作品》</p>
+              <p class="tit-desc">作品（与<span>{{cName}}</span>相关的，共有<span>{{workTotal}}</span>部作品）</p>
+              <p v-if='workTotal > 6' class="more-works" @click="moreWorks(id, cName)">全部作品》</p>
             </div>
             <div class="works-box">
                 <div class='list' v-for='item in worksDetail'>
@@ -32,7 +32,7 @@ export default {
         }
     },
 
-    props: [],
+    props: ['cName'],
 
     created: function() {
         //赋值
@@ -74,6 +74,22 @@ export default {
             console.log(err);
           })
         },
+
+        //更多作品
+        moreWorks(id, name) {
+          this.$router.push({
+            path: '/search',
+            query: {id, name}
+          })
+        },
+
+        //查询作品详情
+        openWorkDetail(id) {
+          this.$router.push({
+            path: '/credit/works/worksDetail',
+            query: {id}
+          })
+        },
     }
 }
 </script>
@@ -103,9 +119,13 @@ export default {
             width: 180px;
             margin-right: 20px;
             font-size: 16px;
+            a {
+              display: block;
+              height: 270px;
+              margin-bottom: 16px;
+            }
             img {
               width: 180px;
-              margin-bottom: 16px;
             }
             div {
               width: 100%;
