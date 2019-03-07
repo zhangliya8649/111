@@ -11,7 +11,7 @@
             @click="tabMenu(index)"
           >{{tab.name}}</el-button>
         </div>
-        <div class="search-box" v-if="this.active != 4">
+        <div class="search-box" v-show="this.active != 4">
           <div class="search">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
             <input
@@ -23,13 +23,13 @@
             <el-button class="search-btn" @click="search">搜索</el-button>
           </div>
         </div>
-        <span v-if="this.active == 2 || this.active == 3" class="findNot" @click="findNot">查询后未找到？</span>
+        <span v-show="this.active == 2 || this.active == 3" class="findNot" @click="findNot">查询后未找到？</span>
       </div>
     </div>
     <div class="makeSure-content w1180">
-      <Actor v-if="this.active == 0 ||this.active == 1" ref="actor"></Actor>
-      <CompanyMan :active="active + 2" v-if="this.active == 2 ||this.active == 3" ref="companyMan"></CompanyMan>
-      <Outer :active="active + 2" v-if="this.active == 4"></Outer>
+      <Actor v-show="this.active == 0 ||this.active == 1" ref="actor"></Actor>
+      <CompanyMan :active="active + 2" v-show="this.active == 2 ||this.active == 3" ref="companyMan"></CompanyMan>
+      <Outer :active="active + 2" v-show="this.active == 4"></Outer>
     </div>
   </div>
 </template>
