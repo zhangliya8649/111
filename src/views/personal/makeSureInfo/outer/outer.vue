@@ -101,6 +101,7 @@
 </template>
 <script>
 import Until from "../../../../until/until";
+import md5 from 'md5'
 export default {
   props: ["active"],
   data() {
@@ -230,7 +231,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           console.log(this.ruleForm);
-        //   this.modifyPwd()
+          this.modifyPwd(this.ruleForm)
         } else {
           return false;
         }
@@ -245,10 +246,17 @@ export default {
         token: Until.getUser().token
       };
       this.Http.post(this.Action.modifyPwd, data).then(res => {
-        this.$message({
-          message: "修改成功",
-          type: "success"
-        });
+        debugger
+        if(res === null) {
+          this.$message({
+            message: "修改成功",
+            type: "success"
+          });
+        } else 
+        if(res.data) {
+          Until.ErrorCode(res.data.code)
+        } 
+        
       });
     }
   }
