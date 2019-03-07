@@ -65,7 +65,11 @@ export default {
 </script>
 <style lang="less" scoped>
     .job {
-      width: 100%;
+      display: flex;
+      height: 316px;
+      justify-content: space-between;
+      margin-right:45px;
+      overflow-x: auto;
       .no-detail {
         width: 100%;
         padding-top: 100px;
