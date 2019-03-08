@@ -93,6 +93,9 @@ export default {
             notIcon: notIcon,   //失信信息图标
         }
     },
+    beforeDestroy() {
+        this.clear()
+    },
     methods:{
         goSure(index){       //认领
             this.$refs.dialog.showDialog()

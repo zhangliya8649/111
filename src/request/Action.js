@@ -87,6 +87,8 @@ export default {
   companyCertificate: '/c10/company/certificate',
   // 非业内人士资料修改
   outer: '/c10/user/modify/user/info',
+  // 天眼查提交
+  eyeCompany: '/c10/company/certificate/by_url',
 }
 
 

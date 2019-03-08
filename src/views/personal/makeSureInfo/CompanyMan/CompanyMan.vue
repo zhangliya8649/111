@@ -1,368 +1,452 @@
 <template>
-    <div>
-        <div class="companyMan" v-if="find">
-            <div class="companyInfo">
-                <el-table
-                :data="tableData"
-                style="width: 100%">
-                    <el-table-column
-                        prop="name"
-                        label="公司名称"
-                        width="250">
-                    </el-table-column>
-                    <el-table-column
-                        prop="rating"
-                        label="公司信用评级"
-                        width="180">
-                    </el-table-column>
-                    <el-table-column
-                        prop="address"
-                        label="公司地址"
-                        width="550">
-                    </el-table-column>
-                    <el-table-column
-                        prop="action"
-                        label="操作"
-                        align="center">
-                        <template slot-scope="scope">
-                            <el-button @click="certification(scope.row)" type="text" size="small">去认证</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
+  <div>
+    <div class="companyMan" v-if="find">
+      <div class="companyInfo">
+        <el-table :data="tableData" style="width: 100%">
+          <el-table-column prop="name" label="公司名称" width="250"></el-table-column>
+          <el-table-column prop="rating" label="公司信用评级" width="180"></el-table-column>
+          <el-table-column prop="address" label="公司地址" width="550"></el-table-column>
+          <el-table-column prop="action" label="操作" align="center">
+            <template slot-scope="scope">
+              <el-button v-if='scope.row.claimState === 1' type="text" size="small">未认证</el-button>
+              <el-button v-if='scope.row.claimState === 2' type="text" size="small">认证中</el-button>
+              <el-button v-if='scope.row.claimState === 3' @click="certification(scope.row)" type="text" size="small">去认证</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div class="companyCertification" v-if="companyCertific">
+        <p class="certification">企业认证</p>
+        <div class="certificationBox">
+          <div class="certificationLeft">
+            <p class="leftTitle">上传法人身份证照片</p>
+            <div class="leftUpload">
+              <Upload @show="showImg" @saveIDCard="saveIDCard" ref="upload"></Upload>
             </div>
-            <div class="companyCertification" v-if="companyCertific">
-                <p class="certification">企业认证</p>
-                <div class="certificationBox">
-                    <div class="certificationLeft">
-                        <p class="leftTitle">上传法人身份证照片</p>
-                        <div class="leftUpload">
-                            <Upload @show="showImg" @saveIDCard="saveIDCard" ref="upload"></Upload>
-                        </div>
-                    </div>
-                    <div class="certificationRight">
-                        <p class="rightTitle">上传企业通讯录</p>
-                        <div class="rightUpload">
-                            <el-upload
-                                class="upload-demo"
-                                :action="actionUrl"
-                                :on-preview="handlePreview"
-                                :on-remove="handleRemove"
-                                :before-remove="beforeRemove"
-                                :on-success="handleAvatarSuccess"
-                                multiple
-                                :data="token"
-                                :limit="3"
-                                :on-exceed="handleExceed"
-                                :file-list="fileList">
-                                <el-button size="small" icon="el-icon-upload2" class="upload">上传文件</el-button>
-                            </el-upload>
-                        </div>
-                    </div>
-                </div>
-                <div class="companyCertification-btn">
-                    <el-button class="cencel-btn" @click="certification">取消</el-button>
-                    <el-button class="affirm-btn" @click='submitCertification'>提交</el-button>
-                </div>
+          </div>
+          <div class="certificationRight">
+            <p class="rightTitle">上传企业通讯录</p>
+            <div class="rightUpload">
+              <el-upload
+                class="upload-demo"
+                :action="actionUrl"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :before-remove="beforeRemove"
+                :on-success="handleAvatarSuccess"
+                multiple
+                :data="token"
+                :limit="3"
+                :on-exceed="handleExceed"
+                :file-list="fileList"
+              >
+                <el-button size="small" icon="el-icon-upload2" class="upload">上传文件</el-button>
+              </el-upload>
             </div>
+          </div>
         </div>
-        <div class="companyMan" v-else>
-            <div class="companyInfo">
-                <el-table
-                :data="tableData1"
-                style="width: 100%">
-                    <el-table-column
-                        prop="name"
-                        label="公司名称"
-                        width="250">
-                    </el-table-column>
-                    <el-table-column
-                        prop="class"
-                        label="公司信用评级"
-                        width="180">
-                    </el-table-column>
-                    <el-table-column
-                        prop="address"
-                        label="公司地址"
-                        width="550">
-                    </el-table-column>
-                    <el-table-column
-                        prop="action"
-                        label="操作"
-                        align="center">
-                        <template slot-scope="scope">
-                            <el-button @click="handleClick2(scope.row)" type="text" size="small">去认证</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </div>
-            <div class="findNot">
-                <el-form label-position="right" :rules="rule" ref="FindCompany" label-width="112px" :model="findCompany">
-                    <el-form-item label="公司名称">
-                        <el-input v-model="findCompany.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="天眼查链接">
-                        <el-input v-model="findCompany.url" placeholder="请输入贵公司在天眼查的查询结果页链接"></el-input>
-                    </el-form-item>
-                    <el-form-item class="btn-box">
-                        <button class="btn submit" @click="submitForm('FindCompany')">提 交</button>
-                        <button class="btn cancel" @click="cancel">取 消</button>
-                    </el-form-item>
-                </el-form>
-            </div>
+        <div class="companyCertification-btn">
+          <el-button class="cencel-btn" @click="certification">取消</el-button>
+          <el-button class="affirm-btn" @click="submitCertification">提交</el-button>
         </div>
+      </div>
     </div>
+    <div class="companyMan" v-else>
+      <div class="companyInfo">
+        <el-table :data="tableData1" style="width: 100%">
+          <el-table-column prop="name" label="公司名称" width="250"></el-table-column>
+          <el-table-column prop="class" label="公司信用评级" width="180"></el-table-column>
+          <el-table-column prop="address" label="公司地址" width="550"></el-table-column>
+          <el-table-column prop="action" label="操作" align="center">
+            <template slot-scope="scope">
+              <el-button @click="handleClick2(scope.row)" type="text" size="small">去认证</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div class="findNot">
+        <el-form
+          label-position="right"
+          :rules="rule"
+          ref="FindCompany"
+          label-width="112px"
+          :model="findCompany"
+        >
+          <div class="not-find-upload">
+            <div class="certificationBox">
+              <div class="certificationLeft">
+                <p class="leftTitle">上传法人身份证照片</p>
+                <div class="leftUpload">
+                  <Upload @show="showImg" @saveIDCard="saveIDCard" ref="upload"></Upload>
+                </div>
+              </div>
+              <div class="certificationRight">
+                <p class="rightTitle">上传企业通讯录</p>
+                <div class="rightUpload">
+                  <el-upload
+                    class="upload-demo"
+                    :action="actionUrl"
+                    :on-preview="handlePreview"
+                    :on-remove="handleRemove"
+                    :before-remove="beforeRemove"
+                    :on-success="handleAvatarSuccess"
+                    multiple
+                    :data="token"
+                    :limit="3"
+                    :on-exceed="handleExceed"
+                    :file-list="fileList"
+                  >
+                    <el-button size="small" icon="el-icon-upload2" class="upload">上传文件</el-button>
+                  </el-upload>
+                </div>
+              </div>
+            </div>
+          </div>
+          <el-form-item label="公司名称">
+            <el-input v-model="findCompany.name"></el-input>
+          </el-form-item>
+          <el-form-item label="天眼查链接">
+            <el-input v-model="findCompany.url" placeholder="请输入贵公司在天眼查的查询结果页链接"></el-input>
+          </el-form-item>
+          <el-form-item class="btn-box">
+            <el-button class="btn submit" @click="submitForm('FindCompany')">提 交</el-button>
+            <el-button class="btn cancel" @click="cancel">取 消</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
-import Upload from './upload/upload'
+import Upload from "./upload/upload";
 import Until from "../../../../until/until.js";
 export default {
-    components:{Upload},
-    props: ['active'],
-    data(){
-        var validateName = (rule, value, callback) => {
-            if (value == '') {
-                return callback(new Error('公司名称不能为空'));
-            }else{
-                callback();
-            }
-            
+  components: { Upload },
+  props: ["active"],
+  data() {
+    var validateName = (rule, value, callback) => {
+      if (value == "") {
+        return callback(new Error("公司名称不能为空"));
+      } else {
+        callback();
+      }
+    };
+    var validateUrl = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("公司名称不能为空"));
+      } else {
+        callback();
+      }
+    };
+    return {
+      file: [],
+      find: true, //是否查询到公司
+      actionUrl: "", //上传地址
+      token: "",
+      tableData: [],
+      tableData1: [
+        {
+          //未查询到占位
+          name: "xxx",
+          class: "0级",
+          address: "xxxxxxxxx"
         }
-        var validateUrl = (rule, value, callback) => {
-            if (!value) {
-                return callback(new Error('公司名称不能为空'));
-                }
-            else{
-                callback();
-            }
-        }
-        return{
-            file: [],
-            find: true, //是否查询到公司
-            actionUrl: '', //上传地址
-            token: '',
-            tableData:[],
-            tableData1:[{     //未查询到占位
-                name: 'xxx',
-                class: '0级',
-                address: 'xxxxxxxxx'
-            }],
-            findCompany:{     //天眼查公司
-                    name:'',
-                    url:''
-            },
-            fileList:[],      //文件上传
-            rule:{              //验证规则
-                name:[
-                    { validator: validateName, trigger: 'blur' }
-                ],
-                url:[
-                    { validator: validateUrl, trigger: 'blur' }
-                ]
-            },
-            companyCertific:false,      //点击认证按钮显示
-            currentRow: ''
-        }
+      ],
+      findCompany: {
+        //天眼查公司
+        name: "",
+        url: ""
+      },
+      fileList: [], //文件上传
+      rule: {
+        //验证规则
+        name: [{ validator: validateName, trigger: "blur" }],
+        url: [{ validator: validateUrl, trigger: "blur" }]
+      },
+      companyCertific: false, //点击认证按钮显示
+      currentRow: ""
+    };
+  },
+  mounted() {
+    this.actionUrl = this.Action.BaseUrl + this.Action.upload;
+    this.token = {
+      token: Until.getUserToken()
+    };
+  },
+  beforeDestroy() {
+    this.clear();
+  },
+  methods: {
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
     },
-    mounted() {
-        this.actionUrl = this.Action.BaseUrl + this.Action.upload
-        this.token = {
-            token: Until.getUserToken()
-        }
+    handlePreview(file) {
+      console.log(file);
     },
-    methods:{
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        handlePreview(file) {
-            console.log(file);
-        },
-        handleExceed(files, fileList) {
-            this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-        },
-        beforeRemove(file, fileList) {
-            return this.$confirm(`确定移除 ${ file.name }？`);
-        },
-        // 成功回调
-        handleAvatarSuccess(res, file) {
-            console.log(res, file)
-            if(res.code === 200) {
-              this.file.push(res.data.url)  
-            }
-        },
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
-            if (valid) {
-                alert('submit!');
-            } else {
-                console.log('error submit!!');
-                return false;
-            }
-            });
-        },
-        findNot(){      //切换显示查找公司
-            this.find = false
-        },
-        certification(row){        //认证按钮
-            this.companyCertific = !this.companyCertific;
-            this.row = row
-            console.log(this.row)
-        },
-        // 提交认证
-        submitCertification() {
-            console.log('提交')
-            console.log(this.file)
-            console.log(this.active)
-            let data = {
-                companyId: this.row.id,
-                companyName: this.row.name,
-                identityType: this.active,
-                filePath: '[' + this.file + ']',
-                token: Until.getUserToken()
-            }
-            
-            this.Http.post(this.Action.companyCertificate, data).then(res => {
-                this.$message({
-                    message: '提交成功',
-                    type: 'success'
-                })
-                this.certification()
-            })
-        },
-        handleClick2(){     //未找到公司占位
-            return false
-        },
-        cancel(){           //取消查找
-            this.find = true
-        },
-        // type: 类型 searchName: 搜索内容
-        search(type, searchName){           //找到公司
-            console.log(type, searchName)
-            let data = {
-                type,
-                name: searchName,
-                pageNum: 1
-            }
-            this.Http.post(this.Action.searchCompany, data).then(res => {
-                this.tableData = res.list
-            })
-        },
-        clear(){            //清空信息
-            this.tableData = []
-        },
-        // 获取上传组件传来的url,type参数
-        showImg({type, src}) {
-            type == 1 ? (this.idCard1 = src) : (this.idCard2 = src);
-        },
-        // 保存上传图片的url数组
-        saveIDCard(files) {
-            this.file = files;
-        },
+    handleExceed(files, fileList) {
+      this.$message.warning(
+        `当前限制选择 3 个文件，本次选择了 ${
+          files.length
+        } 个文件，共选择了 ${files.length + fileList.length} 个文件`
+      );
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
+    },
+    // 成功回调
+    handleAvatarSuccess(res, file) {
+      console.log(res, file);
+      if (res.code === 200) {
+        this.file.push(res.data.url);
+      }
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.eyeCompany();
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    // 根据天眼链接认证
+    eyeCompany() {
+      let data = {
+        url: this.findCompany.url,
+        companyName: this.findCompany.name,
+        identityType: this.active,
+        filePath: "[" + this.file + "]",
+        token: Until.getUserToken()
+      };
+      this.Http.post(this.Action.eyeCompany, data).then(res => {
+        if (res.data) {
+          Until.ErrorCode(res.data.code);
+        } else {
+          // 触发搜索方法
+          this.$emit('search')
+          this.$message({
+            type: "success",
+            message: "提交成功"
+          });
+          this.find = !this.find;
+        }
+        console.log(res);
+      });
+    },
+    findNot() {
+      //切换显示查找公司
+      this.find = false;
+    },
+    certification(row) {
+      //认证按钮
+      this.companyCertific = !this.companyCertific;
+      this.row = row;
+      console.log(this.row);
+    },
+    // 提交认证
+    submitCertification() {
+      console.log("提交");
+      console.log(this.file);
+      console.log(this.active);
+      let data = {
+        companyId: this.row.id,
+        companyName: this.row.name,
+        identityType: this.active,
+        filePath: "[" + this.file + "]",
+        token: Until.getUserToken()
+      };
+      this.Http.post(this.Action.companyCertificate, data).then(res => {
+        this.$message({
+          message: "提交成功",
+          type: "success"
+        });
+        this.certification();
+      });
+    },
+    handleClick2() {
+      //未找到公司占位
+      return false;
+    },
+    cancel() {
+      //取消查找
+      this.find = true;
+    },
+    // type: 类型 searchName: 搜索内容
+    search(type, searchName) {
+      //找到公司
+      console.log(type, searchName);
+      let data = {
+        type,
+        name: searchName,
+        pageNum: 1
+      };
+      this.Http.post(this.Action.searchCompany, data).then(res => {
+        this.tableData = res.list;
+      });
+    },
+    clear() {
+      //清空信息
+      this.tableData = [];
+      this.file = [];
+      this.findCompany = {
+        name: '',
+        url: ''
+      }
+    },
+    // 获取上传组件传来的url,type参数
+    showImg({ type, src }) {
+      type == 1 ? (this.idCard1 = src) : (this.idCard2 = src);
+    },
+    // 保存上传图片的url数组
+    saveIDCard(files) {
+      this.file = files;
     }
-}
+  }
+};
 </script>
 <style lang="less" scoped>
-    .companyMan{
-        margin-top: 40px;
-        .companyInfo{
-            margin-bottom: 60px;
-        }
-        .companyCertification{
-            .certification{
-                font-family: PingFangSC-Medium;
-                font-size: 16px;
-                color: #4A4A4A;
-                letter-spacing: 0;
-                line-height: 20px;
-                margin-bottom: 24px;
-            }
-            .certificationBox{
-                width: 100%;
-                padding: 20px 42px 0px 42px;
-                background: #FFFFFF;
-                border: 1px solid #DCDFE6;
-                display: flex;
-                justify-content: space-between;
-                box-sizing: border-box;
-                height: 280px;
-                .certificationLeft{
-                    height: 232px;
-                    width: 502px;
-                    .leftTitle{
-                        font-family: PingFang-SC-Medium;
-                        font-size: 14px;
-                        color: #4A4A4A;
-                        letter-spacing: 0;
-                        line-height: 20px;
-                        margin-bottom: 22px;
-                    }
-                }
-                .certificationRight{
-                    height: 232px;
-                    width: 502px;
-                    .rightTitle{
-                        font-family: PingFang-SC-Medium;
-                        font-size: 14px;
-                        color: #4A4A4A;
-                        letter-spacing: 0;
-                        line-height: 20px;
-                        margin-bottom: 22px;
-                    }
-                    .rightUpload{
-                        .upload{
-                            margin-bottom: 50px;
-                        }
-                    }
-                }
-            }
-            .companyCertification-btn{
-                display: flex;
-                justify-content: center;
-                margin-top: 10px;
-                button{
-                    height: 40px;
-                    width: 148px;
-                    background-color: #f58523;
-                    border-color: #f58523;
-                    color: #fff;
-                    border-radius: 0;
-                }
-            }
-        }
-        .findNot{
-            width: 100%;
-            padding: 36px 42px;
-            box-sizing: border-box;
-            background: #FFFFFF;
-            border: 1px solid #DCDFE6;
-            .el-form{
-                width: 592px;
-                .btn-box{
-                    display: flex;
-                    justify-content: flex-end;
-                    .btn{
-                        width: 110px;
-                        height: 40px;
-                        border-radius: 4px;
-                        font-family: PingFang-SC-Medium;
-                        font-size: 16px;
-                        letter-spacing: 0;
-                        line-height: 14px;
-                        cursor: pointer;
-                    }
-                    .submit{
-                        background: #F58523;
-                        border: 1px solid #F58523;
-                        color: #FFFFFF;
-                        margin-right: 40px;
-                    }
-                    .cancel{
-                        background: none;
-                        border: 1px solid #C0C4CC;
-                        font-family: PingFang-SC-Medium;
-                        color: #9B9B9B;
-                    }
-                }
-            }
-        }
+.companyMan {
+  margin-top: 40px;
+  .companyInfo {
+    margin-bottom: 60px;
+  }
+  .companyCertification {
+    .certification {
+      font-family: PingFangSC-Medium;
+      font-size: 16px;
+      color: #4a4a4a;
+      letter-spacing: 0;
+      line-height: 20px;
+      margin-bottom: 24px;
     }
+    .certificationBox {
+      width: 100%;
+      padding: 20px 42px 0px 42px;
+      background: #ffffff;
+      border: 1px solid #dcdfe6;
+      display: flex;
+      justify-content: space-between;
+      box-sizing: border-box;
+      height: 280px;
+      .certificationLeft {
+        height: 232px;
+        width: 502px;
+        .leftTitle {
+          font-family: PingFang-SC-Medium;
+          font-size: 14px;
+          color: #4a4a4a;
+          letter-spacing: 0;
+          line-height: 20px;
+          margin-bottom: 22px;
+        }
+      }
+      .certificationRight {
+        height: 232px;
+        width: 502px;
+        .rightTitle {
+          font-family: PingFang-SC-Medium;
+          font-size: 14px;
+          color: #4a4a4a;
+          letter-spacing: 0;
+          line-height: 20px;
+          margin-bottom: 22px;
+        }
+        .rightUpload {
+          .upload {
+            margin-bottom: 50px;
+          }
+        }
+      }
+    }
+    .companyCertification-btn {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+      button {
+        height: 40px;
+        width: 148px;
+        background-color: #f58523;
+        border-color: #f58523;
+        color: #fff;
+        border-radius: 0;
+      }
+    }
+  }
+  .findNot {
+    width: 100%;
+    padding: 36px 42px;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #dcdfe6;
+    .not-find-upload {
+      margin-bottom: 20px;
+    }
+    .certificationBox {
+      padding: 20px 42px 0px 42px;
+      width: 100px;
+      display: flex;
+      justify-content: space-between;
+      .certificationLeft {
+        height: 232px;
+        width: 502px;
+        .leftTitle {
+          font-family: PingFang-SC-Medium;
+          font-size: 14px;
+          color: #4a4a4a;
+          letter-spacing: 0;
+          line-height: 20px;
+          margin-bottom: 22px;
+        }
+      }
+      .certificationRight {
+        height: 232px;
+        width: 502px;
+        margin-left: 50px;
+        .rightTitle {
+          font-family: PingFang-SC-Medium;
+          font-size: 14px;
+          color: #4a4a4a;
+          letter-spacing: 0;
+          line-height: 20px;
+          margin-bottom: 22px;
+        }
+        .rightUpload {
+          .upload {
+            margin-bottom: 50px;
+          }
+        }
+      }
+    }
+    .el-form {
+      width: 592px;
+      .btn-box {
+        display: flex;
+        justify-content: flex-end;
+        .btn {
+          width: 110px;
+          height: 40px;
+          border-radius: 4px;
+          font-family: PingFang-SC-Medium;
+          font-size: 16px;
+          letter-spacing: 0;
+          line-height: 14px;
+          cursor: pointer;
+        }
+        .submit {
+          background: #f58523;
+          border: 1px solid #f58523;
+          color: #ffffff;
+          margin-right: 40px;
+        }
+        .cancel {
+          background: none;
+          border: 1px solid #c0c4cc;
+          font-family: PingFang-SC-Medium;
+          color: #9b9b9b;
+        }
+      }
+    }
+  }
+}
 </style>
