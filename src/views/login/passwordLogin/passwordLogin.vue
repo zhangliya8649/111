@@ -99,8 +99,8 @@ export default {
                   sessionStorage.setItem('userInfo',JSON.stringify(res))
                   this.$store.commit('setUserInfo')
                   //获取身份
-                  getUserIdentity()
-                  this.$router.push({path:'/Personal'})
+                  getUserIdentity(this)
+                  // this.$router.push({path:'/Personal'})
                 }
               }).catch((res) => {
                 this.$message({

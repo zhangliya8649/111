@@ -18,7 +18,7 @@ import Search from '../views/search/search.vue'
 import Register from '../views/register/regist.vue'
 
 Vue.use(Router)
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -92,12 +92,18 @@ export default new Router({
     {
       path: '/Personal',
       name: 'Personal',
-      component: Personal
+      component: Personal,
+      meta: { 
+        requireAuth: true
+      },
     },
     {
       path: '/MakeSure',
       name: 'MakeSure',
-      component: MakeSure
+      component: MakeSure,
+      meta: { 
+        requireAuth: true
+      },
     },
     {
       path: '/search',
@@ -107,3 +113,18 @@ export default new Router({
   ],
   mode: 'history'
 })
+// 判断是否需要权限
+router.beforeEach((to, from, next) => {
+  if(to.matched.some(res => res.meta.requireAuth)) {
+    if(sessionStorage.getItem('userInfo')) {
+      next()
+    } else {
+      next({
+        path: '/login'
+      })
+    }
+  } else {
+    next()
+  }
+}) 
+export default router

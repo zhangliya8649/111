@@ -34,6 +34,7 @@ export default new Vuex.Store({
         //sign out
         signOut(state) {
             sessionStorage.removeItem('userInfo')
+            sessionStorage.removeItem('userSmallInfo')
             state.userInfo = ''
             state.isLogin = false
         },

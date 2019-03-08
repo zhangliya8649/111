@@ -7,7 +7,7 @@ import QS from 'qs'
 import {Message} from 'element-ui'
 import { resolve } from 'upath';
 import { rejects } from 'assert';
-
+import store from '../vuex/store'
 const TIME_OUT_MS = 60 * 1000 // 默认请求超时时间
 
 export default {
@@ -44,6 +44,11 @@ export default {
         }
         }).then(
           (res) => {
+              // token失效
+              if(res.data.code == 10017) {
+                store.commit('signOut')
+                resolve(res.data.data)
+              }
               if (res.data.code == 200) {
                   resolve(res.data.data)
               } else {
