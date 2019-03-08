@@ -8,9 +8,14 @@
           <el-table-column prop="address" label="公司地址" width="550"></el-table-column>
           <el-table-column prop="action" label="操作" align="center">
             <template slot-scope="scope">
-              <el-button v-if='scope.row.claimState === 1' type="text" size="small">未认证</el-button>
-              <el-button v-if='scope.row.claimState === 2' type="text" size="small">认证中</el-button>
-              <el-button v-if='scope.row.claimState === 3' @click="certification(scope.row)" type="text" size="small">去认证</el-button>
+              <el-button
+                v-if="scope.row.claimState === 1"
+                @click="certification(scope.row)"
+                type="text"
+                size="small"
+              >未认证</el-button>
+              <el-button v-if="scope.row.claimState === 2" type="text" size="small">认证中</el-button>
+              <el-button v-if="scope.row.claimState === 3" type="text" size="small">已认证</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -45,6 +50,7 @@
             </div>
           </div>
         </div>
+        <!-- 认证按钮 -->
         <div class="companyCertification-btn">
           <el-button class="cencel-btn" @click="certification">取消</el-button>
           <el-button class="affirm-btn" @click="submitCertification">提交</el-button>
@@ -108,6 +114,7 @@
           <el-form-item label="天眼查链接">
             <el-input v-model="findCompany.url" placeholder="请输入贵公司在天眼查的查询结果页链接"></el-input>
           </el-form-item>
+          <!-- 新增认证 -->
           <el-form-item class="btn-box">
             <el-button class="btn submit" @click="submitForm('FindCompany')">提 交</el-button>
             <el-button class="btn cancel" @click="cancel">取 消</el-button>
@@ -223,8 +230,6 @@ export default {
         if (res.data) {
           Until.ErrorCode(res.data.code);
         } else {
-          // 触发搜索方法
-          this.$emit('search')
           this.$message({
             type: "success",
             message: "提交成功"
@@ -237,6 +242,13 @@ export default {
     findNot() {
       //切换显示查找公司
       this.find = false;
+    },
+    findNotSwitch() {
+      this.find = !this.find;
+    },
+    // 企业认证(不是新增)开关
+    companyCertificSwitch() {
+      this.companyCertific = false;
     },
     certification(row) {
       //认证按钮
@@ -257,6 +269,7 @@ export default {
         token: Until.getUserToken()
       };
       this.Http.post(this.Action.companyCertificate, data).then(res => {
+        this.$emit("search");
         this.$message({
           message: "提交成功",
           type: "success"
@@ -274,6 +287,8 @@ export default {
     },
     // type: 类型 searchName: 搜索内容
     search(type, searchName) {
+      this.clear();
+      this.find = true;
       //找到公司
       console.log(type, searchName);
       let data = {
@@ -290,9 +305,9 @@ export default {
       this.tableData = [];
       this.file = [];
       this.findCompany = {
-        name: '',
-        url: ''
-      }
+        name: "",
+        url: ""
+      };
     },
     // 获取上传组件传来的url,type参数
     showImg({ type, src }) {
