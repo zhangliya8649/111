@@ -59,9 +59,11 @@ export default {
     tabMenu(index) {
       this.active = index;
       this.searchName = "";
+      // 切换的时候清空
       if(this.$refs.companyMan) {
         this.$refs.companyMan.clear()
         this.$refs.companyMan.cancel()
+        this.$refs.companyMan.companyCertificSwitch()
       }
       if (this.active == 0 || this.active == 1) {
         // this.$refs.actor.clear();
@@ -76,6 +78,11 @@ export default {
     //搜索
     search() {
       //根据type传值
+      // 搜索的时候
+      if(this.$refs.companyMan) {
+        this.$refs.companyMan.clear()
+        this.$refs.companyMan.companyCertificSwitch()
+      }
       if (this.active == 0 || this.active == 1) {
         this.$refs.actor.search(this.active + 2, this.searchName);
       } else if (this.active == 2 || this.active == 3) {
