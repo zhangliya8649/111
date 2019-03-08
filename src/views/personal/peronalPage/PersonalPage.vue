@@ -361,15 +361,15 @@ export default {
             this.$refs.expDialog.openExp()
         },
         editSurePass(){         //确认修改密码
-            // this.$refs.ruleForm.validate((valid) => {
-            //     if(valid) {
-            //         console.log(this.ruleForm)
-            //         this.modifyPwd(this.ruleForm)
-            //     } else {
-            //         return
-            //     }
-            // })
-            this.$router.push({path:'/MakeSure'})
+            this.$refs.ruleForm.validate((valid) => {
+                if(valid) {
+                    console.log(this.ruleForm)
+                    this.modifyPwd(this.ruleForm)
+                } else {
+                    return
+                }
+            })
+            // this.$router.push({path:'/MakeSure'})
         },
         // 修改密码
         modifyPwd(form_data) {
