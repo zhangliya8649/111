@@ -110,7 +110,7 @@ class Util {
         });break;
         case 10015 : Message({
           type:'error',
-          message:'密码错误'
+          message:'原密码错误'
         });break;
         case 10016 : Message({
           type:'error',
@@ -133,4 +133,3 @@ class Util {
     
   }
   export default new Util()
-  

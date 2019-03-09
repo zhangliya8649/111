@@ -2,7 +2,8 @@
     <div class='job'>
         <el-table
             :data="honorDetail"
-            style="width: 100%; height: 216px;">
+            height='216'
+            style="width: 100%;">
             <el-table-column
                 prop="honorTime"
                 label="时间"

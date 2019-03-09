@@ -52,7 +52,7 @@ import SpapLogin from './spapLogin/spapLogin'
   }
 </script>
 
-<style lang='less' scoped>
+<style lang='less';; llx scoped>
   .bg {
     position: relative;
     width: 100%;

@@ -52,7 +52,7 @@ export default {
               if (res.data.code == 200) {
                   resolve(res.data.data)
               } else {
-                  resolve(res)
+                 reject(res.data);
               }
           }
         ).catch(

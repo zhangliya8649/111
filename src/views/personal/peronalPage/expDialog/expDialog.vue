@@ -2,8 +2,8 @@
     <div class="dialog">
         <el-dialog @closed='clear()' :title="addexp.title" :visible.sync="dialogFormVisible" center width='984px' :before-close='beforeClose'>
             <div class="contentBox">
-                <el-form :model="form" :rules="rules" ref="ruleForm" label-position='right' label-width='70px'>
-                    <el-form-item label="时间点:" prop="time">
+                <el-form :model="form" :rules='rules' ref='form' label-position='right'>
+                    <el-form-item label="时间点:" label-width='60px' prop='time'>
                         <el-date-picker
                             v-model="form.time"
                             type="date"
@@ -13,7 +13,7 @@
                             class="input">
                         </el-date-picker>
                     </el-form-item>
-                    <el-form-item label="描述:" prop="info">
+                    <el-form-item label="描述:" label-width='60px' prop='info'>
                         <el-input
                             type="textarea"
                             :rows="5"
@@ -27,29 +27,67 @@
                     </el-form-item>
                 </el-form>
                 <div class="table">
+                    <!--
                     <el-table
                     :data="tableData"
-                    style="width: 100%">
+                    height='216'
+                    style="width: 100%;">
                         <el-table-column
                             prop="workTime"
                             label="时间点"
                             width="250">
+                            <template slot-scope='scope'>
+                              <span v-if='scope.row.isSet'>
+                                <el-input size='mini' v-model='scope.row.workTime'></el-input>
+                              </span>
+                              <span v-else>{{scope.row.workTime}}</span>
+                            </template>
                         </el-table-column>
                         <el-table-column
                             prop="content"
                             label="描述"
                             width="300">
+                            <template slot-scope='scope'>
+                              <span v-if='scope.row.isSet'>
+                                <el-input size='mini' v-model='scope.row.content'></el-input>
+                              </span>
+                              <span v-else>{{scope.row.content}}</span>
+                            </template>
                         </el-table-column>
                         <el-table-column
                             prop="action"
                             label="操作"
                             align="center">
                             <template slot-scope="scope">
-                                <el-button @click="edit(scope.$index,tableData)" type="text" size="small">编辑</el-button>
-                                <el-button @click="del(scope.$index,tableData)" type="text" size="small">删除</el-button>
+                                <el-button @click="edit(scope.row, scope.$index, true)" type="text">
+                                  {{scope.row.isSet ? '保存' : '编辑'}}
+                                </el-button>
+                                <el-button v-if='!scope.row.isSet' @click="del(scope.$index,master_user.tableData)" type="text">删除</el-button>
+                                <el-button v-else @click="edit(scope.row, scope.$index, false)" type="text">取消</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
+                    -->
+                    <el-table :data="master_user.tableData" height='216' style="width: 100%">
+                      <el-table-column v-for="(v,i) in master_user.columns" :key='i' :prop="v.field" :label="v.title" :width="v.width">
+                          <template slot-scope="scope">
+                              <span v-if="scope.row.isSet">
+                                  <el-input size="mini" placeholder="请输入内容" v-model="master_user.sel[v.field]">
+                                  </el-input>
+                              </span>
+                              <span v-else>{{scope.row[v.field]}}</span>
+                          </template>
+                      </el-table-column>
+                      <el-table-column label="操作" width="100">
+                          <template slot-scope="scope">
+                              <el-button @click="edit(scope.row, scope.$index, true)" type="text">
+                                {{scope.row.isSet ? '保存' : '编辑'}}
+                              </el-button>
+                              <el-button v-if='!scope.row.isSet' @click="del(scope.$index,master_user.tableData)" type="text">删除</el-button>
+                              <el-button v-else @click="edit(scope.row, scope.$index, false)" type="text">取消</el-button>
+                          </template>
+                      </el-table-column>
+                  </el-table>
                 </div>
                 <div class="timeLineBox" v-if="msg.length > 0">
                     <TimeLine v-for="(data,index) in msg" :msg='data' :index='index' :key='index'></TimeLine>
@@ -69,75 +107,123 @@ export default {
     components:{TimeLine},
     props:['jobInfo'],
     data(){
+        var validateTime = (rule, value, callback) => {
+          if(value == '') {
+            callback(new Error('请输入密码'));
+          }else {
+            callback();
+          }
+        }
+        var validateInfo = (rule, value, callback) => {
+          if(value == '') {
+            callback(new Error('请输入描述'));
+          }else {
+            callback();
+          }
+        }
         return{
             dialogFormVisible:false,
             form:{
-                time: '',
-                info: ''
+              time:'',
+              info:''
             },        //表单绑定
-            title: '添加从业信息',//弹窗标题
-            time:'',               //时间点
-            info:'',                 //描述
-            addexp:{title:'添加从业信息',des:'从业信息描述'},   //默认文本描述
-            tableData:[],
-            msg:[], //时间轴数据
+            title: '添加从业信息',
             rules: {
-                time: [{type: 'date', required: true, message: '请选择日期', trigger: 'change'}],
-                info: [{
-                    required: true, message: '请填写描述', trigger: 'blur'
-                }]
-            }
+              time: [{validator: validateTime, trigger: 'change'}],
+              info: [{validator: validateInfo, trigger: 'blur'}]
+            },
+            addexp:{title:'添加从业信息',des:'从业信息描述'},   //默认文本描述
+            master_user: {
+                sel: null,//选中行
+                columns: [
+                    { field: "workTime", title: "时间点", width: 250 },
+                    { field: "content", title: "描述", width: 420 }
+                ],
+                tableData:[]
+            },
+            msg:[]
         }
     },
     methods:{
-        makeSure(){         //提交
-            let data = {
-                workLifeJson: JSON.stringify(this.tableData),
-                token:Until.getUserToken()
-            }
-            this.Http.post(this.Action.addWork,data).then((res) => {
-                this.$message({
-                    type:'success',
-                    message:'提交成功'
-                })
-                this.$emit('getUserJobInfo')
-                this.dialogFormVisible = false
-            }).catch((err) => {
-
-            })
-            this.dialogFormVisible = false
+        //读取表格数据
+        readTableData() {
+          this.master_user.tableData.map((item) => {
+            item.isSet = false;
+            return item;
+          })
         },
+
+        //修改
+        edit(row, index, cg) {
+            console.log(this.master_user);
+            //点击修改 判断是否已经保存所有操作
+            for (let i of this.master_user.tableData) {
+                if (i.isSet && i.celebrityId != row.celebrityId) {
+                    this.$message.warning("请先保存当前编辑项");
+                    return false;
+                }
+            }
+            //是否是取消操作
+            if (!cg) {
+                if (!this.master_user.sel.celebrityId) this.master_user.tableData.splice(index, 1);
+                return row.isSet = !row.isSet;
+            }
+            if (row.isSet) {
+                let data = JSON.parse(JSON.stringify(this.sel));
+                for (let k in data) row[k] = data[k];
+                this.readTableData();
+                row.isSet = false;
+            } else {
+                this.sel = JSON.parse(JSON.stringify(row));
+                row.isSet = true;
+            }
+        },
+
+        makeSure(){         //提交
+            this.$refs['form'].validate((valid) => {
+              if(valid) {
+                let data = {
+                    workLifeJson: JSON.stringify(this.master_user.tableData),
+                    token:Until.getUserToken()
+                }
+                this.Http.post(this.Action.addWork, data).then((res) => {
+                    this.$message({
+                        type:'success',
+                        message:'提交成功'
+                    })
+                    this.beforeClose();
+                }).catch((err) => {
+                    this.beforeClose();
+                })
+              }
+            })
+        },
+
         openExp(){          //打开弹窗
             this.dialogFormVisible = true
         },
-        // 添加经历验证
-        addExpSubmitForm(name) {
-            this.$refs[name].validate((valid) => {
-                if(valid) {
-                    this.add()
-                } else {
-                    return false
+
+        add(){              //添加
+            this.$refs['form'].validate((valid) => {
+              if(valid) {
+                let addMsg = {
+                    celebrityId:Until.getUserSmallInfo().id,
+                    workTime:Until.timestampToTime(this.form.time),
+                    content:this.form.info,
                 }
+               // this.form.time = '';
+                this.form.info = '';
+                this.master_user.tableData.push(addMsg);
+                this.msg.push(addMsg);
+              }
             })
         },
-        add(){              //添加
-            let addMsg = {
-                celebrityId:Until.getUserSmallInfo().id,
-                workTime:Until.timestampToTime(this.form.time),
-                content:this.form.info,
-            }
-            this.form.time = ''
-            this.form.info = ''
-            this.tableData.push(addMsg)
-            this.msg.push(addMsg)
-        },
-        edit(){             //编辑
 
-        },
-        del(index,rows){              //删除
+        del(index, rows){              //删除
             rows.splice(index,1)
             this.msg.splice(index,1)
         },
+
         //获取用户从业信息
         getUserJobInfo(){
             let data = {
@@ -151,22 +237,18 @@ export default {
                 console.log(err)
             })
         },
+
         //关闭弹窗前
         beforeClose(){
             this.dialogFormVisible = false
-            this.tableData = []
-            this.msg = []
-        },
-        clear() {
-            this.form = {
-                time: '',
-                info: ''
-            }
-            this.tableData = []
-            this.msg = []
+            this.$refs['form'].resetFields();
+            this.master_user.tableData = [];
+            this.msg =[];
         }
     },
+
     mounted(){
+
     }
 }
 </script>
