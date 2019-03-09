@@ -2,12 +2,12 @@
     <div class="dialog">
         <el-dialog @closed='closeDialog' @opened='searchSubject()' title="选择作品" :visible.sync="dialogFormVisible" center width='984px'>
             <div class="search">
-                <input v-model="search_name" class="input" type="text" placeholder="搜索作品名称">
+                <input @keyup.enter='searchSubject' v-model="search_name" class="input" type="text" placeholder="搜索作品名称">
                 <button class="btn" @click="searchSubject">搜 索</button>
             </div>
             <div class="job">
                 <p class="title">担任的职位：</p>
-                <el-select v-model="value" placeholder="请选择" style="width:238px">
+                <el-select v-model="role" placeholder="请选择" style="width:238px">
                     <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -83,48 +83,24 @@ export default {
             dialogFormVisible:false,
             options:[           //选项
                 {
-                    value:'1',
+                    value: 1,
                     label:'导演'
                 },
                 {
-                    value:'2',
+                    value: 2,
                     label:'编剧'
                 },
                 {
-                    value:'3',
+                    value: 3,
                     label:'演员'
                 },
             ],
-            value:'演员',       //选中项
+            role: 3,       //选中项
             current: 1,
             total: 0,
             works:[             //作品
                 // {
                 //     name:'来电狂想1',
-                //     time:'2018.02.13'
-                // },
-                // {
-                //     name:'来电狂想2',
-                //     time:'2018.02.13'
-                // },
-                // {
-                //     name:'来电狂想3',
-                //     time:'2018.02.13'
-                // },
-                // {
-                //     name:'来电狂想4',
-                //     time:'2018.02.13'
-                // },
-                // {
-                //     name:'来电狂想5',
-                //     time:'2018.02.13'
-                // },
-                // {
-                //     name:'来电狂想6',
-                //     time:'2018.02.13'
-                // },
-                // {
-                //     name:'来电狂想7',
                 //     time:'2018.02.13'
                 // },
             ],
@@ -168,10 +144,8 @@ export default {
             for(let i = 0, length = choseWorks.length; i < length; i ++) {
                 arr.push({
                     celebrityId: Until.getUserSmallInfo().id,
-                    // celebrityId: 1046960,
                     subjectId: choseWorks[i].id,
-                    celebrityType: Until.getUser().user.userType
-                    // celebrityType: 3
+                    celebrityType: this.role
                 })
             }
             let data = {
@@ -240,14 +214,15 @@ export default {
                 }
             }
             .job{
+                height: 40px;
+                line-height: 40px;
                 margin-bottom: 50px;
                 .title{
-                    display: inline-block;
+                    float: left;
                     font-family: PingFang-SC-Medium;
                     font-size: 16px;
                     color: #4A4A4A;
                     letter-spacing: 0;
-                    line-height: 16px;
                     margin-right: 42px;
                 }
             }
@@ -257,6 +232,7 @@ export default {
                 display: flex;
                 margin-bottom: 10px;
                 .work{
+                    height: 253px;
                     position: relative;
                     margin-right: 20px;
                     display: inline-block;
@@ -316,4 +292,12 @@ export default {
             }
         }
     }
+</style>
+<style>
+  .el-select {
+    float: left;
+  }
+  .el-input {
+    height: 40px;
+  }
 </style>

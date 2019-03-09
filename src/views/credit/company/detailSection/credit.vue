@@ -2,6 +2,7 @@
     <div class='credit'>
         <el-table
             :data="creditDetail"
+            height='216'
             style="width: 100%;">
             <el-table-column
                 prop="creditTime"

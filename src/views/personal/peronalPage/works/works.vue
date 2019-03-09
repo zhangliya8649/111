@@ -22,6 +22,7 @@ export default {
 </script>
 <style lang="less" scoped>
     .works{
+        margin-right: 20px;
         color: #4A4A4A;
         font-size: 14px;
         .img{

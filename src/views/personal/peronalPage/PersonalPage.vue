@@ -51,7 +51,7 @@
                         </el-form-item>
                         <el-form-item label="性别：" label-width='90px'>
                             <el-select v-model="basicInfo.sex" placeholder="请输入您的性别" style="width:202px;">
-                                <el-option 
+                                <el-option
                                     v-for="item in sexSelect"
                                     :key="item.value"
                                     :label="item.label"
@@ -134,7 +134,8 @@
                 <div class="content table">
                     <el-table
                         :data="tableData1"
-                        style="width: 100%">
+                        height="216"
+                        style="width: 100%;">
                         <el-table-column
                             prop="honorTime"
                             label="时间"
@@ -161,7 +162,8 @@
                 <div class="content table">
                     <el-table
                         :data="tableData2"
-                        style="width: 100%">
+                         height="216"
+                        style="width: 100%;">
                         <el-table-column
                             prop="benefitTime"
                             label="时间"
@@ -180,8 +182,9 @@
                 </div>
             </div>
             <div class="works">
-                <p class="works-title">作品（与XXX相关的，共有XXX部作品）</p>
-                <p class="works-title more-works" @click="moreWorks">添加作品</p>
+                <p class="works-title clear">作品（与{{basicInfo.celebrityName}}相关的，共有{{worksData.length}}部作品）
+                  <span class="works-title more-works" @click="moreWorks">添加作品</span>
+                </p>
                 <div class="works-box">
                     <Works v-for="(data,index) in worksData" :data='data' :key='index'></Works>
                 </div>
@@ -198,7 +201,7 @@
                             <el-input class="input" type="password" v-model="ruleForm.newPass" autocomplete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="确认密码" prop="checkPass">
-                            <el-input type="password" class="input" v-model.number="ruleForm.checkPass"></el-input>
+                            <el-input type="password" class="input" v-model="ruleForm.checkPass"></el-input>
                         </el-form-item>
                         <el-form-item align='right'>
                             <el-button class="editPwd" @click="editSurePass">确认修改</el-button>
@@ -210,6 +213,17 @@
             <Dialog :showDialog='2' @getBenefit='getUserBenefit' @getHonor='getUserHonor' ref='dialog'></Dialog>
             <ExpDialog ref='expDialog' :data='JobInfo'></ExpDialog>
             <ChoseWorks ref='choseWorks'></ChoseWorks>
+            <el-dialog
+              id="dialog"
+              title="提示"
+              :visible.sync="pwdDialog"
+              width="20%" >
+              <span>当前密码已经修改，请您重新登录</span>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="pwdDialog = false">取 消</el-button>
+                <el-button @click="logOutSure" class="btn">确 定</el-button>
+              </span>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -228,21 +242,20 @@ export default {
         //写验证规则
         var validateOldPass = (rule, value, callback) => {
             if (value === '') {
-            callback(new Error('请输入密码'));
+              callback(new Error('请输入密码'));
             } else {
-            if (this.ruleForm.oldPass !== '') {
-                this.$refs.ruleForm.validateField('newPass');
-            }
-            callback();
+              callback();
             }
         };
         var validateNewPass = (rule, value, callback) => {
             if (value === '') {
                 callback(new Error('请输入新密码'));
-            } else {
-            if (this.ruleForm.newPass !== '') {
-                this.$refs.ruleForm.validateField('checkPass');
-            }
+            }else if(!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$/.test(value)) {
+                callback(new Error('密码只支持8~16位数字字母组合'));
+            }else {
+                if (this.ruleForm.newPass !== '') {
+                    this.$refs.ruleForm.validateField('checkPass');
+                }
                 callback();
             }
         };
@@ -281,6 +294,7 @@ export default {
             cacheBasicInfo: {},
             //表格数据
             tableData1: [],
+            tableData2: [],
             //作品展示
             worksData:[],
                 //密码表单
@@ -305,34 +319,33 @@ export default {
             ],
             //从业信息
             JobInfo:[],
-
+            pwdDialog: false
         }
     },
     mounted(){
-        this.init()
+        this.init();
     },
     methods:{
         //初始化页面
         init(){
-            this.getUserInfo()
-            this.getUserBenefit()
-            this.getUserJobInfo()
-            this.getUserHonor()
-            this.getProduction()
+            this.getUserInfo();
+            this.getUserBenefit();
+            this.getUserJobInfo();
+            this.getUserHonor();
+            this.getProduction();
         },
         //补全信息
         editBasic(){
-            this.personInfoswitch()
+            this.personInfoswitch();
         },
         // 个人信息切换开关
         personInfoswitch() {
-            this.showBasicInfo = !this.showBasicInfo
+            this.showBasicInfo = !this.showBasicInfo;
         },
         // 取消个人修改按钮
         cancelPersonInfo() {
-            console.log(this.cacheBasicInfo)
-            this.basicInfo = this.cacheBasicInfo
-            this.personInfoswitch()
+            this.basicInfo = this.cacheBasicInfo;
+            this.personInfoswitch();
         },
          //弹窗
         addInfo(num){
@@ -382,9 +395,20 @@ export default {
                 this.$message({
                     message: '修改成功',
                     type: 'success'
-                })
+                });
+                this.pwdDialog = true;
+            }).catch((err) => {
+                Until.ErrorCode(err.code);
             })
         },
+
+        //提示是否重新登录
+        logOutSure(){
+          this.pwdDialog = false;
+          this.$store.commit('signOut');
+          this.$router.push({path:'/login'});
+        },
+
         //获取用户信息
         getUserInfo(){
             let data = {
@@ -516,13 +540,14 @@ export default {
                 .exp{
                     display: flex;
                     justify-content: space-between;
-                    margin-right:45px; 
+                    margin-right:45px;
                     overflow-x: scroll;
                     height: 320px;
                     // margin: 144px 45px 184px 38px;
                 }
                 .table{
                     margin-left: 22px;
+                    margin-right: 22px;
                 }
             }
             .works{
@@ -533,15 +558,16 @@ export default {
 
                 }
                 .more-works{
-                    text-align: right;
+                    float: right;
                     cursor: pointer;
                 }
                 .works-box{
                     display: flex;
                     flex-wrap: nowrap;
                     justify-content: space-between;
+                    overflow-x: auto;
                 }
-            }   
+            }
             .pwdSetting{
                 border: 1px solid #DCDFE6;
                 margin-top: 74px;
@@ -572,4 +598,15 @@ export default {
                 }
             }
         }
+</style>
+<style>
+  .el-table {
+    overflow-y: auto;
+  }
+  .el-table::before {
+    display: none;
+  }
+  .el-table thead tr, .el-table thead th {
+    background: #FAFAFA;
+  }
 </style>
