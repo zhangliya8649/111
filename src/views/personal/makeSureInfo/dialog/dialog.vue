@@ -64,13 +64,13 @@ export default {
         token: Until.getUserToken()
       };
       this.Http.post(this.Action.claimUser, data).then(res => {
-        if (res) {
-          Until.ErrorCode(res.data.code);
-        } else {
-          this.DialogVisible = false;
-          this.uploadOver = true;
-          this.$emit("editClaim", this.index);
-        }
+        this.DialogVisible = false;
+        this.uploadOver = true;
+        this.$message.success('提交成功')
+        this.$emit("editClaim", this.index);
+      }).catch((err) => {
+        Until.ErrorCode(err.code);
+        this.DialogVisible = false;
       });
     },
     konw() {

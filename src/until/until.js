@@ -128,6 +128,10 @@ class Util {
           type:'error',
           message:'账号不存在'
         });break;
+        case 10025 : Message({
+          type:'error',
+          message:'该人已被认领'
+        });break;
       }
     }
     

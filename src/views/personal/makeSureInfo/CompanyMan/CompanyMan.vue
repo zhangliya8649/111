@@ -109,10 +109,10 @@
               </div>
             </div>
           </div>
-          <el-form-item label="公司名称">
+          <el-form-item label="公司名称" prop="name">
             <el-input v-model="findCompany.name"></el-input>
           </el-form-item>
-          <el-form-item label="天眼查链接">
+          <el-form-item label="天眼查链接" prop="url">
             <el-input v-model="findCompany.url" placeholder="请输入贵公司在天眼查的查询结果页链接"></el-input>
           </el-form-item>
           <!-- 新增认证 -->
@@ -141,7 +141,7 @@ export default {
     };
     var validateUrl = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("公司名称不能为空"));
+        return callback(new Error("链接不能为空"));
       } else {
         callback();
       }
@@ -211,7 +211,12 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.eyeCompany();
+          console.log(this.file.length);
+          if (this.file.length >= 3) {
+            this.eyeCompany();
+          } else {
+            this.$message.error("请上传必要文件和图片");
+          }
         } else {
           console.log("error submit!!");
           return false;
@@ -227,18 +232,17 @@ export default {
         filePath: "[" + this.file + "]",
         token: Until.getUserToken()
       };
-      this.Http.post(this.Action.eyeCompany, data).then(res => {
-        if (res.data) {
-          Until.ErrorCode(res.data.code);
-        } else {
+      this.Http.post(this.Action.eyeCompany, data)
+        .then(res => {
           this.$message({
             type: "success",
             message: "提交成功"
           });
-          this.find = !this.find;
-        }
-        console.log(res);
-      });
+          this.find = true;
+        })
+        .catch(err => {
+          Until.ErrorCode(err.code);
+        });
     },
     findNot() {
       //切换显示查找公司
@@ -261,7 +265,7 @@ export default {
     submitCertification() {
       console.log("提交");
       console.log(this.file.length);
-      if(this.file.length >= 3) {
+      if (this.file.length >= 3) {
         let data = {
           companyId: this.row.id,
           companyName: this.row.name,
@@ -269,18 +273,21 @@ export default {
           filePath: "[" + this.file + "]",
           token: Until.getUserToken()
         };
-        this.Http.post(this.Action.companyCertificate, data).then(res => {
-          this.$emit("search");
-          this.$message({
-            message: "提交成功",
-            type: "success"
+        this.Http.post(this.Action.companyCertificate, data)
+          .then(res => {
+            this.$emit("search");
+            this.$message({
+              message: "提交成功",
+              type: "success"
+            });
+            this.certification();
+          })
+          .catch(err => {
+            Until.ErrorCode(err.code);
           });
-          this.certification();
-        });
       } else {
-        this.$message.error('请上传必要文件或者图片')
-      } 
-      
+        this.$message.error("请上传必要文件或者图片");
+      }
     },
     handleClick2() {
       //未找到公司占位

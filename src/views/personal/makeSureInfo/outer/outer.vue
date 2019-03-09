@@ -149,7 +149,11 @@ export default {
         callback(new Error("请输入新密码"));
       } else {
         if (this.ruleForm.newPass !== "") {
-          this.$refs.ruleForm.validateField("checkPass");
+          if(Until.checkPass(value) != 'success') {
+            callback(new Error("密码只支持8~16位数字字母组合!"));
+          } else {
+            this.$refs.ruleForm.validateField("checkPass");
+          }
         }
         callback();
       }
@@ -159,6 +163,8 @@ export default {
         callback(new Error("请再次输入密码"));
       } else if (value != this.ruleForm.newPass) {
         callback(new Error("两次输入密码不一致!"));
+      } else if(Until.checkPass(value) != 'success') {
+         callback(new Error("密码只支持8~16位数字字母组合!"));
       } else {
         callback();
       }
@@ -179,10 +185,16 @@ export default {
       },
       personalRule: {
         //个人信息验证
-        name: [{ validator: checkName, trigger: "blur" }],
-        sex: [{ validator: checkSex, trigger: "blur" }],
-        age: [{ validator: checkAge, trigger: "blur" }],
-        telphone: [{ validator: checkTel, trigger: "blur" }]
+        name: [{ required: true, message: '姓名不能为空', trigger: "blur" }],
+        sex: [{ required: true, message: '选择性别', trigger: "change" }],
+        age: [
+          { required: true, message: '年龄不能为空', trigger: "blur" },
+          // { type: 'number', message: '年龄必须为数字值' }
+        ],
+        telphone: [
+          {required: true, validator: checkTel, trigger: "blur" },
+          // { type: 'number', message: '电话必须为数字值',trigger: "blur" }
+        ]
       },
       //密码表单验证规则
       rules: {
@@ -224,7 +236,7 @@ export default {
           message: "提交成功",
           type: "success"
         });
-      });
+      }).catch(() => {Until.ErrorCode(err.code)});
     },
     editPass(formName) {
       // 确认修改密码
@@ -246,16 +258,12 @@ export default {
         token: Until.getUser().token
       };
       this.Http.post(this.Action.modifyPwd, data).then(res => {
-        if(res === null) {
-          this.$message({
+        this.$message({
             message: "修改成功",
             type: "success"
           });
-        } else 
-        if(res.data) {
-          Until.ErrorCode(res.data.code)
-        } 
-        
+      }).catch((err) => {
+        Until.ErrorCode(err.code)
       });
     }
   }

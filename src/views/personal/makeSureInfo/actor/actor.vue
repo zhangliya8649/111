@@ -108,11 +108,9 @@ export default {
                 pageNum:1
             }
             this.Http.post(this.Action.searchActor,data).then((res) => {
-                if(res.data){
-                    Until.ErrorCode(res.data.code)
-                }else{
-                    this.searchMsg = res.list
-                }
+                this.searchMsg = res.list    
+            }).catch((err) => {
+                Until.ErrorCode(err.code)
             })
             this.identityType = num
         },
