@@ -139,7 +139,7 @@ export default {
         searchSubject() {
             let data = {
                 subjectName: this.search_name,
-                pageNum: this.current,
+                pageNum: 1,
             }
             this.Http.post(this.Action.getSubject, data).then((res) => {
                 console.log(res)

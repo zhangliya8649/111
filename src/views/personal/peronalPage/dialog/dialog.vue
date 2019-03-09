@@ -1,10 +1,10 @@
 <template>
     <div class="dialog">
-        <el-dialog :title="addexp.title" :visible.sync="dialogFormVisible" center width='984px' :before-close='beforeClose'>
-            <el-form :model="form" label-position='right'>
-                <el-form-item label="时间点:" label-width='60px'>
+        <el-dialog @closed='clear()' :title="addexp.title" :visible.sync="dialogFormVisible" center width='984px' :before-close='beforeClose'>
+            <el-form :model="form" :rules="rules" ref="ruleForm" label-width='70px' label-position='right'>
+                <el-form-item label="时间点:" prop='time'>
                     <el-date-picker
-                        v-model="time"
+                        v-model="form.time"
                         type="date"
                         placeholder="选择日期"
                         format="yyyy 年 MM 月 dd 日"
@@ -12,22 +12,22 @@
                         class="input">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="摘要:" label-width='60px'>
-                     <el-input v-model="abstract" :placeholder="addexp.abstract" class="input"></el-input>
+                <el-form-item label="摘要:" prop='abstract'>
+                     <el-input v-model="form.abstract" :placeholder="addexp.abstract" class="input"></el-input>
                 </el-form-item>
-                <el-form-item label="描述:" label-width='60px'>
+                <el-form-item label="描述:" prop="des">
                      <el-input
                         type="textarea"
                         :rows="5"
                         :placeholder="addexp.des"
-                        v-model="des"
+                        v-model="form.des"
                         class="text">
                     </el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button class="dialogBtn" @click="beforeClose">取 消</el-button>
-                <el-button class="dialogBtn submit" type="primary" @click="makeSure">提 交</el-button>
+                <el-button class="dialogBtn submit" type="primary" @click="submitForm('ruleForm')">提 交</el-button>
             </div>
         </el-dialog>
     </div>
@@ -39,22 +39,40 @@ export default {
         return{
             dialogFormVisible:false,
             num:'',             //类型判断
-            form:{},        //表单绑定
+            form:{
+                time: '',
+                abstract: '',
+                des: ''
+            },        //表单绑定
             title: '添加个人荣誉',//弹窗标题
             time:'',               //时间点
             abstract:'',            //摘要
             des:'',                 //描述
-            addexp:{title:'添加个人荣誉',abstract:'添加荣誉摘要',des:'添加荣誉描述'}//默认文本描述
+            addexp:{title:'添加个人荣誉',abstract:'添加荣誉摘要',des:'添加荣誉描述'},//默认文本描述
+            rules: {
+                time: [{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }],
+                abstract: [{ required: true, message: '请填写摘要', trigger: 'blur' }],
+                des: [{ required: true, message: '请填写描述', trigger: 'blur' }]
+            }
         }
     },
     methods:{
+        submitForm(name) {
+            this.$refs[name].validate((valid) =>{
+                if(valid) {
+                    this.makeSure()
+                } else {
+                    return false
+                }
+            })
+        },
         makeSure(){
             if(this.num == '1'){
                 let data = {
                     celebrityId:Until.getUserSmallInfo().id,
-                    honorTime:this.time,
-                    summary:this.abstract,
-                    honorDesc:this.des,
+                    honorTime:this.form.time,
+                    summary:this.form.abstract,
+                    honorDesc:this.form.des,
                     type:Until.getUser().user.userType,
                     token:Until.getUser().token
                 }
@@ -71,9 +89,9 @@ export default {
             else{
                 let data = {
                     celebrityId:Until.getUserSmallInfo().id,
-                    benefitTime:this.time,
-                    summary:this.abstract,
-                    benefitDesc:this.des,
+                    benefitTime:this.form.time,
+                    summary:this.form.abstract,
+                    benefitDesc:this.form.des,
                     type:Until.getUser().user.userType,
                     token:Until.getUser().token
                 }
@@ -107,6 +125,13 @@ export default {
             this.time = ''
             this.des = ''
             this.abstract = ''
+        },
+        clear(){
+            this.form = {
+                time:'',
+                des: '',
+                abstract: ''
+            }
         }
     }
 }

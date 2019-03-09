@@ -70,6 +70,7 @@
           </el-table-column>
         </el-table>
       </div>
+      <!-- 没有查询到的上传 -->
       <div class="findNot">
         <el-form
           label-position="right"
@@ -259,23 +260,27 @@ export default {
     // 提交认证
     submitCertification() {
       console.log("提交");
-      console.log(this.file);
-      console.log(this.active);
-      let data = {
-        companyId: this.row.id,
-        companyName: this.row.name,
-        identityType: this.active,
-        filePath: "[" + this.file + "]",
-        token: Until.getUserToken()
-      };
-      this.Http.post(this.Action.companyCertificate, data).then(res => {
-        this.$emit("search");
-        this.$message({
-          message: "提交成功",
-          type: "success"
+      console.log(this.file.length);
+      if(this.file.length >= 3) {
+        let data = {
+          companyId: this.row.id,
+          companyName: this.row.name,
+          identityType: this.active,
+          filePath: "[" + this.file + "]",
+          token: Until.getUserToken()
+        };
+        this.Http.post(this.Action.companyCertificate, data).then(res => {
+          this.$emit("search");
+          this.$message({
+            message: "提交成功",
+            type: "success"
+          });
+          this.certification();
         });
-        this.certification();
-      });
+      } else {
+        this.$message.error('请上传必要文件或者图片')
+      } 
+      
     },
     handleClick2() {
       //未找到公司占位

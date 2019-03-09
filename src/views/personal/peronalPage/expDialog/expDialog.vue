@@ -1,11 +1,11 @@
 <template>
     <div class="dialog">
-        <el-dialog :title="addexp.title" :visible.sync="dialogFormVisible" center width='984px' :before-close='beforeClose'>
+        <el-dialog @closed='clear()' :title="addexp.title" :visible.sync="dialogFormVisible" center width='984px' :before-close='beforeClose'>
             <div class="contentBox">
-                <el-form :model="form" label-position='right'>
-                    <el-form-item label="时间点:" label-width='60px'>
+                <el-form :model="form" :rules="rules" ref="ruleForm" label-position='right' label-width='70px'>
+                    <el-form-item label="时间点:" prop="time">
                         <el-date-picker
-                            v-model="time"
+                            v-model="form.time"
                             type="date"
                             placeholder="选择日期"
                             format="yyyy 年 MM 月 dd 日"
@@ -13,17 +13,17 @@
                             class="input">
                         </el-date-picker>
                     </el-form-item>
-                    <el-form-item label="描述:" label-width='60px'>
+                    <el-form-item label="描述:" prop="info">
                         <el-input
                             type="textarea"
                             :rows="5"
                             :placeholder="addexp.des"
-                            v-model="info"
+                            v-model="form.info"
                             class="text">
                         </el-input>
                     </el-form-item>
                     <el-form-item class="btnBox">
-                        <el-button class="add" @click="add">添加</el-button>
+                        <el-button class="add" @click="addExpSubmitForm('ruleForm')">添加</el-button>
                     </el-form-item>
                 </el-form>
                 <div class="table">
@@ -71,14 +71,22 @@ export default {
     data(){
         return{
             dialogFormVisible:false,
-            form:{},        //表单绑定
+            form:{
+                time: '',
+                info: ''
+            },        //表单绑定
             title: '添加从业信息',//弹窗标题
             time:'',               //时间点
             info:'',                 //描述
             addexp:{title:'添加从业信息',des:'从业信息描述'},   //默认文本描述
             tableData:[],
-            msg:[                                       //时间轴数据
-            ]
+            msg:[], //时间轴数据
+            rules: {
+                time: [{type: 'date', required: true, message: '请选择日期', trigger: 'change'}],
+                info: [{
+                    required: true, message: '请填写描述', trigger: 'blur'
+                }]
+            }
         }
     },
     methods:{
@@ -92,6 +100,7 @@ export default {
                     type:'success',
                     message:'提交成功'
                 })
+                this.$emit('getUserJobInfo')
                 this.dialogFormVisible = false
             }).catch((err) => {
 
@@ -101,14 +110,24 @@ export default {
         openExp(){          //打开弹窗
             this.dialogFormVisible = true
         },
+        // 添加经历验证
+        addExpSubmitForm(name) {
+            this.$refs[name].validate((valid) => {
+                if(valid) {
+                    this.add()
+                } else {
+                    return false
+                }
+            })
+        },
         add(){              //添加
             let addMsg = {
                 celebrityId:Until.getUserSmallInfo().id,
-                workTime:Until.timestampToTime(this.time),
-                content:this.info,
+                workTime:Until.timestampToTime(this.form.time),
+                content:this.form.info,
             }
-            this.time = ''
-            this.info = ''
+            this.form.time = ''
+            this.form.info = ''
             this.tableData.push(addMsg)
             this.msg.push(addMsg)
         },
@@ -135,6 +154,14 @@ export default {
         //关闭弹窗前
         beforeClose(){
             this.dialogFormVisible = false
+            this.tableData = []
+            this.msg = []
+        },
+        clear() {
+            this.form = {
+                time: '',
+                info: ''
+            }
             this.tableData = []
             this.msg = []
         }

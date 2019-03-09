@@ -79,34 +79,22 @@ export default {
     data(){
         return{
             basicInfo: {
-                celebrityName: '乔杉',
-                sex:'男',
-                age: '31',
-                nationality:'中国',
-                agency:'北京眼缘影视有限公司',
-                position:'制片人',
-                education:'本科',
-                occupation:"演员",
-                politics:'党员',
-                workingYear:'2012.08.09',
-                certificate:'084322',
-                certificateTime:'2019.09.09',
-                magnumOpus:'设计部'
+                celebrityName: '',
+                sex:'',
+                age: '',
+                nationality:'',
+                agency:'',
+                position:'',
+                education:'',
+                occupation:"",
+                politics:'',
+                workingYear:'',
+                certificate:'',
+                certificateTime:'',
+                magnumOpus:''
             },
             //表格数据
-            tableData: [{
-                benefitTime:'2005-11-13',
-                summary:'金河马奖',
-                benefitDesc:'荣获年度最佳演员'
-            },{
-                benefitTime:'2008-12-11',
-                summary:'金马奖',
-                benefitDesc:'荣获年度最佳配角'
-            },{
-                benefitTime:'2005-11-13',
-                summary:'百花奖',
-                benefitDesc:'提名年度最佳演员'
-            },],
+            tableData: [],
         }
     },
     methods:{

@@ -179,8 +179,9 @@
                     </el-table>
                 </div>
             </div>
+            <!-- 作品 -->
             <div class="works">
-                <p class="works-title">作品（与XXX相关的，共有XXX部作品）</p>
+                <p class="works-title">{{"作品（与" + loginName + "相关的，共有" + productionNumber +"部作品）"}}</p>
                 <p class="works-title more-works" @click="moreWorks">添加作品</p>
                 <div class="works-box">
                     <Works v-for="(data,index) in worksData" :data='data' :key='index'></Works>
@@ -208,7 +209,7 @@
             </div>
             <!-- 弹窗 -->
             <Dialog :showDialog='2' @getBenefit='getUserBenefit' @getHonor='getUserHonor' ref='dialog'></Dialog>
-            <ExpDialog ref='expDialog' :data='JobInfo'></ExpDialog>
+            <ExpDialog @getUserJobInfo='getUserJobInfo' ref='expDialog' :data='JobInfo'></ExpDialog>
             <ChoseWorks ref='choseWorks'></ChoseWorks>
         </div>
     </div>
@@ -273,6 +274,9 @@ export default {
                 certificateTime:'',
                 magnumOpus:''
             },
+            tableData2: [],
+            loginName: '', // 当前用户名
+            productionNumber: '', // 当前用户关联作品数
             sexSelect: [
                 {label: '男',value: '1'},
                 {label: '女',value: '2'},
@@ -310,6 +314,7 @@ export default {
     },
     mounted(){
         this.init()
+        this.loginName = Until.getUser().user.nickName
     },
     methods:{
         //初始化页面
@@ -361,15 +366,15 @@ export default {
             this.$refs.expDialog.openExp()
         },
         editSurePass(){         //确认修改密码
-            this.$refs.ruleForm.validate((valid) => {
-                if(valid) {
-                    console.log(this.ruleForm)
-                    this.modifyPwd(this.ruleForm)
-                } else {
-                    return
-                }
-            })
-            // this.$router.push({path:'/MakeSure'})
+            // this.$refs.ruleForm.validate((valid) => {
+            //     if(valid) {
+            //         console.log(this.ruleForm)
+            //         this.modifyPwd(this.ruleForm)
+            //     } else {
+            //         return
+            //     }
+            // })
+            this.$router.push({path:'/MakeSure'})
         },
         // 修改密码
         modifyPwd(form_data) {
@@ -449,6 +454,7 @@ export default {
             this.Http.post(this.Action.getProduction, data).then((res) => {
                 console.log(res.list)
                 this.worksData = res.list
+                this.productionNumber = res.total
             }).catch((err) => {
                 console.log(err)
             })
