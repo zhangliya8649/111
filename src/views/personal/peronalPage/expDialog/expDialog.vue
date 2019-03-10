@@ -27,6 +27,7 @@
                     </el-form-item>
                 </el-form>
                 <div class="table">
+                    <!--点击编辑，编辑状态未出现
                     <el-table
                     :data="tableData"
                     height='216'
@@ -73,6 +74,26 @@
                                 <el-button v-else @click="edit(scope.row, scope.$index, false)" type="text">取消</el-button>
                             </template>
                         </el-table-column>
+                    </el-table>-->
+                    <el-table :data="tableData" class="tb-edit" height='216' style="width: 100%" highlight-current-row>
+                        <el-table-column label="时间点" width="250" prop="workTime">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.workTime" placeholder="请选择日期" @change="handleEdit(scope.$index, scope.row)"></el-input>
+                                <span>{{scope.row.workTime}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="描述" width="300" prop="content">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.content" placeholder="请输入描述" @change="handleEdit(scope.$index, scope.row)"></el-input>
+                                <span>{{scope.row.content}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="操作" prop='action' align="center">
+                            <template slot-scope="scope">
+                                <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                                <el-button size="small" type="danger" @click="del(scope.$index, tableData)">删除</el-button>
+                            </template>
+                        </el-table-column>
                     </el-table>
                 </div>
                 <div class="timeLineBox" v-if="msg.length > 0">
@@ -96,7 +117,8 @@ export default {
     created() {
       setTimeout(() => {
         this.tableData = this.jobInfo.concat([]);
-        this.initEditShow(this.tableData);
+        this.msg = this.jobInfo.concat([]);
+       // this.initEditShow(this.tableData);
       }, 200)
     },
 
@@ -135,6 +157,18 @@ export default {
         }
     },
     methods:{
+        handleCurrentChange(row, event, column) {
+
+            console.log(row, event, column, event.currentTarget)
+        },
+        handleEdit(index, row) {
+            //row.isEdit = true;
+            console.log(index, row);
+        },
+        handleDelete(index, row) {
+            console.log(index, row);
+        },
+        /*
         initEditShow(arr) {
           arr.forEach((item) => {
             item.isEdit = false;
@@ -146,35 +180,32 @@ export default {
            row.isEdit = true;
            console.log(row.isEdit);
            console.log(index);
-        },
+        },*/
 
         makeSure(){         //提交
-            this.$refs['form'].validate((valid) => {
-              if(valid) {
-                let data = {
-                    celebrityId: Until.getUserSmallInfo().id,
-                    workLifeJson: JSON.stringify(tableData),
-                    token:Until.getUserToken()
-                }
-                this.Http.post(this.Action.addWork, data).then((res) => {
-                    this.$emit('jobInfo', res.list);
-                    this.$message({
-                        type:'success',
-                        message:'提交成功'
-                    });
-                    this.beforeClose();
-                }).catch((err) => {
-                    this.beforeClose();
-                })
-              }
+            let data = {
+                celebrityId: Until.getUserSmallInfo().id,
+                workLifeJson: JSON.stringify(this.tableData),
+                token:Until.getUserToken()
+            }
+            this.Http.post(this.Action.addWork, data).then((res) => {
+                this.$emit('jobInfo', res.list);
+                console.log(this);
+                console.log(this.jobInfo);
+                this.$message({
+                    type:'success',
+                    message:'提交成功'
+                });
+                this.beforeClose();
+            }).catch((err) => {
+                this.beforeClose();
             })
         },
 
         openExp(){          //打开弹窗
             this.dialogFormVisible = true;
             this.tableData = this.jobInfo.concat([]);
-            this.initEditShow(this.tableData);
-            console.log(this.tableData);
+            //this.initEditShow(this.tableData);
         },
 
         add(){              //添加
@@ -185,7 +216,7 @@ export default {
                     workTime:Until.timestampToTime(this.form.time),
                     content:this.form.info
                 }
-               // this.form.time = '';
+                this.form.time = '';
                 this.form.info = '';
                 this.tableData.push(addMsg);
                 this.msg.push(addMsg);
@@ -196,7 +227,6 @@ export default {
         del(index, rows){              //删除
             rows.splice(index,1);
             this.msg.splice(index,1);
-            console.log(this.tableData);
         },
 
         //获取用户从业信息
@@ -267,5 +297,18 @@ export default {
                 margin-left: 20px;
             }
         }
+    }
+</style>
+<style>
+  .tb-edit .el-input  {
+        display: none
+    }
+
+    .tb-edit .current-row .el-input  {
+        display: block
+    }
+
+    .tb-edit .current-row .el-input+span {
+        display: none
     }
 </style>
