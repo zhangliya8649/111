@@ -78,7 +78,7 @@ export default {
           }else{
             return true
           }
-        }, 
+        },
         login(){
             if(this.checkForm()){
               let data = {
@@ -88,9 +88,6 @@ export default {
                 imgCode: this.imgCode,
               }
               this.Http.post(this.Action.phoneLogin,data).then((res) => {
-                if(res.data){
-                  Until.ErrorCode(res.data.code)
-                }else{
                   this.$message({
                     type:'success',
                     message:'登陆成功'
@@ -98,9 +95,8 @@ export default {
                   sessionStorage.setItem('userInfo',JSON.stringify(res))
                   this.$store.commit('setUserInfo')
                   this.$router.push({path:'/Personal'})
-                }
               }).catch((err) => {
-
+                Until.ErrorCode(err.code);
               })
             }
         },

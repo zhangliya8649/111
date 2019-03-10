@@ -97,6 +97,9 @@ export default {
                   this.$store.commit('setUserInfo');
                   //获取身份
                   getUserIdentity(this);
+                  this.$router.push({
+                    path: '/'
+                  })
               }).catch((err) => {
                 this.$message({
                   type:'error',

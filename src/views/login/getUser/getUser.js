@@ -12,9 +12,9 @@ export function getUserIdentity(arg) {
         // token: 'af219a9aa8e7444cb81ac947b17e14f4'
     }
     http.post(getUserid_byid, data).then((res) => {
-        console.log(res.smallInfo)
         if(res.smallInfo) {
-            sessionStorage.setItem('userSmallInfo', JSON.stringify(res.smallInfo))
+            sessionStorage.setItem('userSmallInfo', JSON.stringify(res.smallInfo));
+            /*
             // 1.未认证
             if(res.smallInfo.claimState == 1) {
                 _this.$router.push({
@@ -32,7 +32,7 @@ export function getUserIdentity(arg) {
                 _this.$router.push({
                     path: '/Personal'
                 })
-            }
+            }*/
         } else {
             _this.$message.error('身份认证错误!')
         }

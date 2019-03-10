@@ -137,14 +137,13 @@ export default {
     methods:{
         initEditShow(arr) {
           arr.forEach((item) => {
-            item.isEdit = true;
+            item.isEdit = false;
           })
         },
 
         //修改
         edit(row, index, cg) {
-           this.$set(row.isEdit, true);
-          // row.isEdit = false;
+           row.isEdit = true;
            console.log(row.isEdit);
            console.log(index);
         },

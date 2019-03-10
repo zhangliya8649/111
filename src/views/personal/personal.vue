@@ -7,7 +7,7 @@
                 </div>
             </div>
         </div>
-        <childPage :is='curPage'></childPage>
+        <childPage :is='curPage' :userState='claimState'></childPage>
         <MyCollection v-if="this.active == 1"></MyCollection>
         <MessageCenter v-if="this.active == 2"></MessageCenter>
     </div>
@@ -45,15 +45,20 @@ export default {
     },
 
     created() {
-       let type = Until.getUser().user.userType;
-       let pageType;
-       for(let key in childPages) {
-        pageType = childPages[key];
-        for(let i = 0; i < pageType.length; i++) {
-          if(type == pageType[i]) {
-            this.curPage = key;
+       this.claimState = Until.getUser().user.claimState;
+       this.type = Until.getUser().user.userType;
+       if(this.claimState == 1) {
+          this.$router.push({path: '/MakeSure'});
+       }else {
+          let pageType;
+          for(let key in childPages) {
+           pageType = childPages[key];
+           for(let i = 0; i < pageType.length; i++) {
+             if(this.type == pageType[i]) {
+               this.curPage = key;
+             }
+           }
           }
-        }
        }
     },
 

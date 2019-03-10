@@ -48,8 +48,9 @@ export default {
   //个人中心
   // 1.根据用户id查看资料
   userInfo:'/c10/celebrity/get/by_id',
-  companyInfo: '/c10/company/get/by_id',   //查企业负责人信息
-  companyBenefit: '/c10/company/get/benefit',   //查企业负责人信息
+  normalInfo: '/c10/user/get/by_id',
+  companyInfo: '/c10/company/get/by_id',   //查企业负责人基本信息信息
+  companyBenefit: '/c10/company/get/benefit',   //查企业负责人社会公益
   //2.获取用户个人公益
   benefit:'/c10/celebrity/get/benefit',
   //3.用户从业信息
@@ -71,6 +72,7 @@ export default {
   modifyPwd: '/c10/user/modify/pwd',
   // 补全个人信息
   updatePersonInfo: '/c10/celebrity/update',
+  updateNormalInfo: '/c10/user/modify/user/info',
   // 根据名字获取电影名
   getSubject: '/c10/subject/list',
   // 人物关联添加作品

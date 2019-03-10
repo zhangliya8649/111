@@ -41,7 +41,7 @@
             <!-- 面板 -->
             <div class="papel">
                 <div class="btn">
-                    <el-button class="papelBtn" @click="addInfo(2)">添加案例</el-button>
+                    <el-button class="papelBtn" @click="addInfo(2)" v-if='userState == 3'>添加案例</el-button>
                 </div>
                 <p class="title">社会公益</p>
                 <div class="content table">
@@ -66,17 +66,19 @@
                     </el-table>
                 </div>
             </div>
+            <resetPwd/>
             <!-- 弹窗 -->
             <Dialog :showDialog='2' @getBenefit='getCompanyBenefit' ref='dialog'></Dialog>
         </div>
     </div>
 </template>
 <script>
-let works = require('../../../assets/img/video.png')
 import Dialog from './dialog/dialog'
+import resetPwd from './resetPwd/resetPwd'
 import Until from '../../../until/until.js'
 export default {
-    components:{Dialog},
+    components:{Dialog, resetPwd},
+    props: ['userState'],
     data(){
         return{
             basicInfo: {
@@ -117,12 +119,12 @@ export default {
             this.Http.post(this.Action.companyBenefit,data).then((res) => {
                 this.tableData = res.list
             }).catch((err) => {
-                console.log(err)
+                Until.ErrorCode(err.code);
             })
         },
     },
     mounted(){
-        this.init()
+        this.init();
     }
 }
 </script>
@@ -133,6 +135,7 @@ export default {
                 width: 100%;
                 border: 1px solid #DCDFE6;
                 padding-bottom: 25px;
+                padding-top: 32px;
                 margin-bottom: 20px;
                 .btn{
                     display: flex;

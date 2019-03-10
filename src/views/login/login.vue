@@ -36,7 +36,6 @@ import SpapLogin from './spapLogin/spapLogin'
     methods: {
       toggleLogin(num){
         this.loginNum = num;
-        console.log('0111')
       },
       checkNum(){
         if(this.$route.query.num){
