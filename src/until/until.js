@@ -1,7 +1,7 @@
 import {Message} from 'element-ui'
 class Util {
     constructor(){
-  
+
     }
     //获取token
     getUser(){
@@ -35,7 +35,7 @@ class Util {
         }
       }
       return newobj;
-    }   
+    }
     //时间戳转换时间
     timestampToTime(timeStamp){
       let date = new Date(timeStamp)
@@ -45,7 +45,7 @@ class Util {
       // let h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':'
       // let m = date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':'
       // let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
-      return Y + M + D 
+      return Y + M + D
     }
 
 
@@ -110,7 +110,7 @@ class Util {
         });break;
         case 10015 : Message({
           type:'error',
-          message:'原密码错误'
+          message:'密码错误'
         });break;
         case 10016 : Message({
           type:'error',
@@ -134,6 +134,6 @@ class Util {
         });break;
       }
     }
-    
+
   }
   export default new Util()

@@ -1,6 +1,6 @@
 <template>
     <div class="dialog">
-        <el-dialog :title="addexp.title" :visible.sync="dialogFormVisible" center width='984px' :before-close='beforeClose'>
+        <el-dialog :title="addexp.title" :visible.sync="dialogFormVisible" center width='984px' @closed='beforeClose'>
             <el-form :model="form" ref='form' :rules='rules' label-position='right'>
                 <el-form-item label="时间点:" label-width='60px' prop='time'>
                     <el-date-picker
@@ -27,7 +27,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button class="dialogBtn" @click="beforeClose">取 消</el-button>
-                <el-button class="dialogBtn submit" type="primary" @click="submitForm('ruleForm')">提 交</el-button>
+                <el-button class="dialogBtn submit" type="primary" @click="submitForm('form')">提 交</el-button>
             </div>
         </el-dialog>
     </div>
@@ -112,7 +112,6 @@ export default {
                         token:Until.getUser().token
                     }
                     this.Http.post(this.Action.addHonor,data).then((res) => {
-                        console.log(res);
                         this.$message({
                             type:'success',
                             message:'添加成功'
@@ -123,14 +122,21 @@ export default {
                     })
                   }else{
                     let data = {
-                        celebrityId:Until.getUserSmallInfo().id,
                         benefitTime:this.form.time,
                         summary:this.form.abstract,
                         benefitDesc:this.form.des,
                         type:this.type,
                         token:Until.getUser().token
                     }
-                    this.Http.post(this.Action.addBenefit,data).then((res) => {
+                    let action;
+                    if(this.type == 2) {
+                      data.companyId = Until.getUserSmallInfo().id;
+                      action = this.Action.addCompanyBenefit;
+                    }else if(this.type == 1) {
+                      data.celebrityId = Until.getUserSmallInfo().id;
+                      action = this.Action.addBenefit;
+                    }
+                    this.Http.post(action, data).then((res) => {
                         this.$message({
                             type:'success',
                             message:'添加成功'
@@ -147,7 +153,7 @@ export default {
 
         openDialog(num){
             this.num = num;
-            if(num == '1'){//判断按钮类型
+           if(num == '1'){//判断按钮类型
                 this.addexp = {title:'添加个人荣誉',abstract:'添加荣誉摘要',des:'添加荣誉描述'}
             }else{
                 this.addexp = {title:'添加社会公益案例',abstract:'添加公益摘要',des:'添加公益描述'}

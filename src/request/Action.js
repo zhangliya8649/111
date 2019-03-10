@@ -48,6 +48,8 @@ export default {
   //个人中心
   // 1.根据用户id查看资料
   userInfo:'/c10/celebrity/get/by_id',
+  companyInfo: '/c10/company/get/by_id',   //查企业负责人信息
+  companyBenefit: '/c10/company/get/benefit',   //查企业负责人信息
   //2.获取用户个人公益
   benefit:'/c10/celebrity/get/benefit',
   //3.用户从业信息
@@ -56,6 +58,7 @@ export default {
   userHonor:'/c10/celebrity/get/honor',
   //5.添加个人公益
   addBenefit:'/c10/celebrity/add/benefit',
+  addCompanyBenefit:'/c10/company/add/benefit',
   //6.添加个人荣誉
   addHonor:'/c10/celebrity/add/honor',
   // 添加从业信息
@@ -70,7 +73,7 @@ export default {
   updatePersonInfo: '/c10/celebrity/update',
   // 根据名字获取电影名
   getSubject: '/c10/subject/list',
-  // 人物关联添加作品 
+  // 人物关联添加作品
   personAddSub:'/c10/celebrity/relative/subject',
   //认证信息
   // 1.搜索名称

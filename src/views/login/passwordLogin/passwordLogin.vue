@@ -89,23 +89,18 @@ export default {
                 imgCode:this.imgCode
               }
               this.Http.post(this.Action.passwordLogin,data).then((res) => {
-                if(res.data){
-                  Until.ErrorCode(res.data.code)
-                }else{
                   this.$message({
                     type:'success',
                     message:'登陆成功'
-                  })
-                  sessionStorage.setItem('userInfo',JSON.stringify(res))
-                  this.$store.commit('setUserInfo')
+                  });
+                  sessionStorage.setItem('userInfo',JSON.stringify(res));
+                  this.$store.commit('setUserInfo');
                   //获取身份
-                  getUserIdentity(this)
-                  // this.$router.push({path:'/Personal'})
-                }
-              }).catch((res) => {
+                  getUserIdentity(this);
+              }).catch((err) => {
                 this.$message({
                   type:'error',
-                  message:err
+                  message: '错误：' + err.desc
                 })
               })
             }

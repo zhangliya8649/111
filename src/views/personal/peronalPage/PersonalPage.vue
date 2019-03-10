@@ -212,7 +212,7 @@
             </div>
             <!-- 弹窗 -->
             <Dialog :showDialog='2' @getBenefit='getUserBenefit' @getHonor='getUserHonor' ref='dialog'></Dialog>
-            <ExpDialog @getUserJobInfo='getUserJobInfo' ref='expDialog' :data='JobInfo'></ExpDialog>
+            <ExpDialog @getUserJobInfo='getUserJobInfo' ref='expDialog' :jobInfo='msg'></ExpDialog>
             <ChoseWorks ref='choseWorks'></ChoseWorks>
             <el-dialog
               id="dialog"
@@ -321,8 +321,6 @@ export default {
             },
             msg:[                                       //时间轴数据
             ],
-            //从业信息
-            JobInfo:[],
             pwdDialog: false
         }
     },
@@ -378,15 +376,13 @@ export default {
             this.$refs.expDialog.openExp()
         },
         editSurePass(){         //确认修改密码
-            // this.$refs.ruleForm.validate((valid) => {
-            //     if(valid) {
-            //         console.log(this.ruleForm)
-            //         this.modifyPwd(this.ruleForm)
-            //     } else {
-            //         return
-            //     }
-            // })
-            this.$router.push({path:'/MakeSure'})
+            this.$refs.ruleForm.validate((valid) => {
+                if(valid) {
+                    this.modifyPwd(this.ruleForm)
+                } else {
+                    return
+                }
+            })
         },
         // 修改密码
         modifyPwd(form_data) {
@@ -450,7 +446,7 @@ export default {
                 token:Until.getUser().token
             }
             this.Http.post(this.Action.jobInfo,data).then((res) => {
-                this.msg = res.list
+                this.msg = res.list;
             }).catch((err) => {
                 console.log(err)
             })
@@ -475,7 +471,6 @@ export default {
                 pageNum: 1,
             }
             this.Http.post(this.Action.getProduction, data).then((res) => {
-                console.log(res.list)
                 this.worksData = res.list
                 this.productionNumber = res.total
             }).catch((err) => {

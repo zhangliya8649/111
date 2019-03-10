@@ -118,7 +118,6 @@ export default {
                 pageNum: 1,
             }
             this.Http.post(this.Action.getSubject, data).then((res) => {
-                console.log(res)
                 this.works = res.list
                 this.current = res.page
                 this.total = res.total
@@ -141,6 +140,13 @@ export default {
         makeSure(){     //提交
             let arr = []
             let choseWorks = this.tableData
+            if(choseWorks.length < 1) {
+              this.$message({
+                  message: '请选择要添加的作品',
+                  type: 'success'
+              });
+              return;
+            }
             for(let i = 0, length = choseWorks.length; i < length; i ++) {
                 arr.push({
                     celebrityId: Until.getUserSmallInfo().id,
@@ -152,19 +158,20 @@ export default {
                 celebritySubjectJson: JSON.stringify(arr),
                 token: Until.getUser().token
             }
-            console.log(data)
             this.Http.post(this.Action.personAddSub, data).then(res => {
                 this.$message({
                     message: '提交成功',
                     type: 'success'
-                })
+                });
+                this.dialogFormVisible = false;
+            }).catch((err) => {
+              Until.ErrorCode(err.code);
             })
         },
         openDialog(num){        //打开弹窗
             this.dialogFormVisible = true
         },
         chose(item,index){            //选择作品
-            console.log(item, index)
             if(this.active.includes(index)){
                 let num = this.active.indexOf(index)
                 this.active.splice(num,1)
@@ -173,7 +180,6 @@ export default {
                 this.active.push(index)
                 this.choseWorks.push(item)
             }
-            console.log(this.choseWorks)
             this.setAddTable()
         },
         // 设置添加表格

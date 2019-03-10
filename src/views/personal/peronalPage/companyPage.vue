@@ -6,35 +6,35 @@
                 <div class="content">
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">公司名称：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.celebrityName}}</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.name}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">电话：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.sex}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.phone ? basicInfo.phone : '无'}}</div></el-col>
                         <el-col :span="4"><div class="grid-content bg-purple">网址：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.age}}</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.URL}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">邮箱：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.nationality}}</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.email}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">地址：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.agency}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.address}}</div></el-col>
                         <el-col :span="4"><div class="grid-content bg-purple">营业期限：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.position}}</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.busnissTerm}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">工商注册号：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.education}}</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.commercialNumber}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">组织机构代码：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.occupation}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.organizingCode}}</div></el-col>
                         <el-col :span="4"><div class="grid-content bg-purple">统一社会信用代码：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.politics}}</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.creditCode}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">纳税人识别号：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.workingYear}}</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.taxpayerID}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">人员规模：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.certificate}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.staffSize}}</div></el-col>
                         <el-col :span="4"><div class="grid-content bg-purple">简介：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.certificateTime}}</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.companyDesc}}</div></el-col>
                     </el-row>
                 </div>
             </div>
@@ -47,6 +47,7 @@
                 <div class="content table">
                     <el-table
                         :data="tableData"
+                        height = '216'
                         style="width: 100%">
                         <el-table-column
                             prop="benefitTime"
@@ -63,7 +64,7 @@
                             label="描述">
                         </el-table-column>
                     </el-table>
-                </div>  
+                </div>
             </div>
             <!-- 弹窗 -->
             <Dialog :showDialog='2' @getBenefit='getCompanyBenefit' ref='dialog'></Dialog>
@@ -79,19 +80,6 @@ export default {
     data(){
         return{
             basicInfo: {
-                celebrityName: '',
-                sex:'',
-                age: '',
-                nationality:'',
-                agency:'',
-                position:'',
-                education:'',
-                occupation:"",
-                politics:'',
-                workingYear:'',
-                certificate:'',
-                certificateTime:'',
-                magnumOpus:''
             },
             //表格数据
             tableData: [],
@@ -105,28 +93,29 @@ export default {
         },
          //弹窗
         addInfo(num){
-            this.$refs.dialog.openDialog(num)
+            this.$refs.dialog.openDialog(num, true);
         },
         //获取用户信息
         getCompanyInfo(){
             let data = {
-                celebrityId:Until.getUser().user.id,
-                identityType:Until.getUser().user.userType
+                companyId: Until.getUserSmallInfo().id,
+                type: Until.getUser().user.userType,
+                token: Until.getUser().token
             }
-            this.Http.post(this.Action.userInfo,data).then((res) => {
-                console.log(res)
+            this.Http.post(this.Action.companyInfo,data).then((res) => {
+                this.basicInfo = res.company;
             }).catch((err) => {
-                console.log(err)
+                Until.ErrorCode(err.code);
             })
         },
         //获取用户社会公益
         getCompanyBenefit(){
             let data = {
-                celebrityId:Until.getUser().user.id,
-                token:Until.getUser().token
+                companyId: Until.getUserSmallInfo().id,
+                token: Until.getUser().token
             }
-            this.Http.post(this.Action.benefit,data).then((res) => {
-                this.tableData2 = res.list
+            this.Http.post(this.Action.companyBenefit,data).then((res) => {
+                this.tableData = res.list
             }).catch((err) => {
                 console.log(err)
             })
@@ -194,6 +183,6 @@ export default {
                 .table{
                     margin-left: 22px;
                 }
-            }  
+            }
         }
 </style>
