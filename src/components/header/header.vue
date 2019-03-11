@@ -12,6 +12,9 @@
           <li class='credit'>
             <router-link to='/credit'>信用中心</router-link>
           </li>
+          <li class='credit'>
+            <router-link to='/creditRule'>信用规范</router-link>
+          </li>
           <li class="user" v-if="$store.getters.isLogin">
             <router-link to="/personal">{{$store.getters.getUserName ? $store.getters.getUserName.user.nickName : ''}}</router-link>
             <span>|</span>
@@ -25,7 +28,7 @@
         </ul>
       </div>
     </div>
-    <el-dialog 
+    <el-dialog
     id="dialog"
     title="提示"
     :visible.sync="dialogVisible"

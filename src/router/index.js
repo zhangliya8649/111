@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '../views/home/home.vue'
 import Login from '../views/login/login.vue'
 import Credit from '../views/credit/credit.vue'
+import CreditRule from '../views/creditRule/creditRule.vue'
 import works from '../views/credit/works/works.vue'
 import hotPeople from '../views/credit/people/hotPeople/people.vue'
 import moviePeople from '../views/credit/people/moviePeople/moviePeople.vue'
@@ -80,6 +81,11 @@ const router = new Router({
       component: worksDetail
     },
     {
+      path: '/creditRule',
+      name: 'creditRule',
+      component: CreditRule
+    },
+    {
       path: '/credit/people',
       name: 'peopleDetail',
       component: peopleDetail
@@ -93,7 +99,7 @@ const router = new Router({
       path: '/Personal',
       name: 'Personal',
       component: Personal,
-      meta: { 
+      meta: {
         requireAuth: true
       },
     },
@@ -101,7 +107,7 @@ const router = new Router({
       path: '/MakeSure',
       name: 'MakeSure',
       component: MakeSure,
-      meta: { 
+      meta: {
         requireAuth: true
       },
     },
@@ -126,5 +132,5 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
-}) 
+})
 export default router
