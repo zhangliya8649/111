@@ -51,6 +51,7 @@
 </template>
 <script>
 import Until from '../../../until/until.js'
+import md5 from 'md5'
 export default {
     data(){
         return{
@@ -113,7 +114,7 @@ export default {
               let data = {
                 phone: this.phone,
                 code:this.phoneCode,
-                pwd:this.password,
+                pwd:md5(this.password),
                 imgId:this.imgId,
                 imgCode:this.imgCode
               }
