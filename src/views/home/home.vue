@@ -193,6 +193,7 @@
             height: 48px;
             line-height: 48px;
             outline: none;
+            font-size: 16px;
           }
           .search-icon {
             float: right;

@@ -90,6 +90,7 @@
             font-size: 24px;
             a {
               color: #4a4a4a;
+              font-weight: bold;
             }
             .operator {
               padding-left: 15px;

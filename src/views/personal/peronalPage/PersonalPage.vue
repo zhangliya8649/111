@@ -3,7 +3,7 @@
         <div class="Personal-content w1180">
             <div class="papel">
                 <div class="btn">
-                    <el-button class="papelBtn" @click="editBasic" v-if='userState == 3'>补全信息</el-button>
+                    <el-button class="papelBtn" @click="editBasic">补全信息</el-button>
                 </div>
                 <p class="title">基本信息</p>
                 <div class="content" v-if='showBasicInfo'>
@@ -119,7 +119,7 @@
             </div>
             <div class="papel">
                 <div class="btn">
-                    <el-button class="papelBtn" @click="addExp">添加经历</el-button>
+                    <el-button class="papelBtn" @click="addExp" v-if='userState == 3'>添加经历</el-button>
                 </div>
                 <p class="title">从业信息（执业经历）</p>
                 <div class="content exp">
@@ -378,15 +378,19 @@ export default {
     .Personal-content{
             margin-top: 30px;
             .papel{
+                position: relative;
                 width: 100%;
                 border: 1px solid #DCDFE6;
                 padding-bottom: 25px;
-                padding-top: 32px;
+                padding-top: 40px;
                 margin-bottom: 20px;
                 .btn{
                     display: flex;
                     justify-content: flex-end;
                     .papelBtn{
+                        position: absolute;
+                        top: 0;
+                        right: 0;
                         height: 40px;
                         width: 128px;
                         background-color: #F58523;

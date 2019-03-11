@@ -204,6 +204,7 @@
       }
       .con {
         text-indent: 28px;
+        line-height: 22px;
       }
     }
     .people-detail {

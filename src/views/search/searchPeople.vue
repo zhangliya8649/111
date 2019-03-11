@@ -100,6 +100,7 @@
             font-size: 24px;
             a {
               color: #4a4a4a;
+              font-weight: bold;
             }
             .operator {
               padding-left: 15px;
@@ -116,8 +117,12 @@
             }
           }
           .list {
+            width: 100%;
             height: 22px;
             line-height: 22px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             font-size: 14px;
             span {
               a {
@@ -154,6 +159,7 @@
             margin-top: 33px;
             text-align: center;
             font-size: 86px;
+            font-weight: lighter;
           }
           .icon-txt {
             height: 25px;

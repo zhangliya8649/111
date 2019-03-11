@@ -16,7 +16,7 @@
       <div v-for='(item, index) in dataObj.list' :key='index'>
          <search-works v-bind:list='item'></search-works>
       </div>
-      <el-pagination background layout='prev, pager, next' :total='dataObj.total' @current-change='changeCurrentPage' v-if='dataObj.total && dataObj.total > 10'></el-pagination>
+      <el-pagination background layout='prev, pager, next' :total='dataObj.total' :current-page='param.pageNum' @current-change='changeCurrentPage' v-if='dataObj.total && dataObj.total > 10'></el-pagination>
       <div class='no-result' v-if='!dataObj.total'>
         暂无查询数据
       </div>
@@ -109,8 +109,15 @@
 
       //搜索
       searchResultByKey() {
+        let param = {};
         this.param.subjectName = this.searchKey;
-        this.getList(this.param);
+        if(this.searchKey == '') {
+          param = this.param;
+        }else {
+          param = Object.assign(param, this.param);
+          param.pageNum = 1;
+        }
+        this.getList(param);
       },
 
       //搜索作品列表
