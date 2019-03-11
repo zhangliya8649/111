@@ -7,7 +7,7 @@
       <div class='menu'>
         <ul class='clear'>
           <li class='home'>
-            <router-link to='/'>首页</router-link>
+            <router-link to='/' exact>首页</router-link>
           </li>
           <li class='credit'>
             <router-link to='/credit'>信用中心</router-link>

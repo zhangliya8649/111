@@ -77,7 +77,7 @@
   .search-par {
     .search-people {
         box-sizing: border-box;
-        height: 246px;
+        height: 238px;
         border: 1px solid #DCDFE6;
         padding-top: 23px;
         padding-bottom: 23px;
@@ -100,9 +100,9 @@
           .tit {
             margin-bottom: 33px;
             font-size: 18px;
-            font-weight: bold;
             a {
               color: #4a4a4a;
+              font-weight: bold;
             }
           }
           .list {

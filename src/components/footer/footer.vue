@@ -10,7 +10,7 @@
         <div class='copyright'>
           <span>版权所有 © 2014-2016</span>
           <span>北京时信互联网络科技有限公司</span>
-          <span>京公网安备 11010502033657号</span>
+          <a href='https://www.spap.com/' target='blank'><span>京公网安备 11010502033657号</span></a>
           <span>京ICP备</span>
         </div>
       </div>
@@ -54,7 +54,9 @@
           margin-bottom: 12px;
         }
         .copyright {
-
+          a {
+            color: #fff;
+          }
         }
     }
     .code {

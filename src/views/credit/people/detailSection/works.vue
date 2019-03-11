@@ -121,11 +121,13 @@ export default {
             font-size: 16px;
             a {
               display: block;
+              width: 180px;
               height: 270px;
               margin-bottom: 16px;
+              border: 1px solid #e6e6e6;
             }
             img {
-              width: 180px;
+              width: 100%;
             }
             div {
               width: 100%;

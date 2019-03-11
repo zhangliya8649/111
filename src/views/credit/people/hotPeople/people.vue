@@ -10,7 +10,7 @@
       <div v-for='(item, index) in dataObj.list' :key='index'>
          <search-people v-bind:list='item'></search-people>
       </div>
-      <el-pagination background layout='prev, pager, next' :total='dataObj.total' @current-change='changeCurrentPage' v-if='dataObj.total && dataObj.total > 10'></el-pagination>
+      <el-pagination background layout='prev, pager, next' :total='dataObj.total' :current-page='param.pageNum' @current-change='changeCurrentPage' v-if='dataObj.total && dataObj.total > 10'></el-pagination>
       <div class='no-result' v-if='!dataObj.total'>
         暂无查询数据
       </div>
@@ -59,8 +59,19 @@
       },
 
       searchResultByKey() {
-        this.param.searchName = this.searchKey;
-        this.getList(this.param);
+        let param = {};
+        if(this.searchKey == '') {
+          this.param.searchName = this.searchKey;
+          param = this.param;
+          console.log(this.param.pageNum);
+        }else {
+          param = {
+            searchName: this.searchKey,
+            tags: 1,
+            pageNum: 1
+          }
+        }
+        this.getList(param);
       },
 
       //分页

@@ -101,10 +101,7 @@ export default {
                     path: '/'
                   })
               }).catch((err) => {
-                this.$message({
-                  type:'error',
-                  message: '错误：' + err.desc
-                })
+                Until.ErrorCode(err.code);
               })
             }
         },

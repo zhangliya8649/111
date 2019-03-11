@@ -7,7 +7,8 @@
                 <input type='text' placeholder='请输入手机号' v-model="phone" @blur="checkPhone">
               </div>
               <div class='form-list code'>
-                <input type='text' placeholder='请输入您看到的验证码' v-model="imgCode">
+                <div class='icon ver-icon'></div>
+                <input type='text' placeholder='请输入验证码' v-model="imgCode">
                 <div class='img-code'><img :src="codeImg"></div>
                 <div class='get-code' @click="changeImg">看不清？换一张</div>
               </div>
@@ -43,7 +44,7 @@
                 </div>
                 <div class='password-login' @click="passwordLogin">
                   <div class='password-icon'></div>
-                  账号密码登陆
+                  手机号快捷登陆
                 </div>
               </div>
            </div>
@@ -67,7 +68,7 @@ export default {
     },
     methods:{
         checkPhone(){
-          
+
         },
         //表单验证
         checkForm(){
@@ -299,7 +300,7 @@ export default {
           }
           input {
             padding-left: 20px;
-            width: 180px;
+            width: 132px;
             margin-right: 10px;
           }
           .img-code {
