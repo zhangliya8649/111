@@ -29,7 +29,9 @@
     id="dialog"
     title="提示"
     :visible.sync="dialogVisible"
-    width="20%" >
+    width="20%" 
+    custom-class='header-dialog'
+    >
     <span>是否退出登录</span>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -46,7 +48,7 @@ import Until from '../../until/until.js'
       return{
         userName:'',   //用户信息
         isLogin:false,      //是否登陆
-        dialogVisible:false,//显示提示
+        dialogVisible: false,//显示提示
       }
     },
     methods: {
@@ -171,7 +173,7 @@ import Until from '../../until/until.js'
     #dialog{
       .el-dialog{
         .el-dialog__body{
-          padding: 0 30px!important;
+          // padding: 0 30px!important;
           text-align: center;
         }
         .btn{

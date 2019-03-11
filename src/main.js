@@ -7,6 +7,7 @@ import Action from './request/Action'
 import Http from './request/http'
 import Vuex from 'vuex'
 import store from './vuex/store'
+import './assets/css/reset.css'
 
 
 Vue.use(Vuex)
