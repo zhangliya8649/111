@@ -285,7 +285,7 @@ export default {
                 celebrityJson: JSON.stringify(this.basicInfo),
                 token: Until.getUser().token
             }
-            this.Http.post(this.Action.updatePersonInfo, data).then(res => {
+            this.Http.post(this.Action.updatePersonInfo, data).then((res) => {
                 this.getUserInfo()
                 this.$message({
                     message: '修改成功',

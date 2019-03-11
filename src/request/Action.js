@@ -29,6 +29,9 @@ export default {
   SearchCompanyHonorById: '/c10/company/get/honor',   //查询公司荣誉
   SearchCompanyCreditById: '/c10/company/get/credit', //查询公司失信信息
 
+  // 信用规范查询
+  SearchCreditRule: '/c10/credit/norm/list',
+
   //图片验证码
   imgCode:'/c10/account/img/code/get',
 
