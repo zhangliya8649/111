@@ -46,11 +46,15 @@ export default {
           (res) => {
               // token失效
               if(res.data.code == 10017) {
-                store.commit('signOut')
-                resolve(res.data.data)
+                store.commit('signOut');
+                resolve(res.data.data);
+                Message({
+                  type:'error',
+                  message:'token已失效，请重新登录！'
+                })
               }
               if (res.data.code == 200) {
-                  resolve(res.data.data)
+                  resolve(res.data.data);
               } else {
                  reject(res.data);
               }

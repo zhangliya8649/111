@@ -116,7 +116,7 @@
               <div class='login-shadow-par' v-if='!this.$store.state.isLogin'>
                 <div class='login-shadow'>
                   <div class='s-tip'>登录后，可查看该艺人的详细信息</div>
-                  <div class='s-btn'>登录</div>
+                  <div class='s-btn'><router-link to='/login'>登录</router-link></div>
                 </div>
               </div>
               <div class="papel" id='jobDetail'>
@@ -329,7 +329,6 @@ export default {
             }
           }
           .list {
-            height: 22px;
             line-height: 22px;
             font-size: 14px;
             opacity: 0.8;
@@ -535,7 +534,9 @@ export default {
                   margin-right: auto;
                   line-height: 40px;
                   background: #f58523;
-                  color: #fff;
+                  a {
+                    color: #fff;
+                  }
                 }
               }
             }

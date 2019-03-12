@@ -28,19 +28,19 @@
          <div class='title-desc'>大数据展示文案说明</div>
          <ul class='con clear center'>
             <li class='company-num'>
-              <p class='num'><span>768{{homeObj.companyCount}}</span>+</p>
+              <p class='num'><span>{{homeObj.companyCount}}</span>+</p>
               <p class='name'>参与影视公司数量</p>
             </li>
             <li class='actor-num'>
-              <p class='num'><span>1233{{homeObj.movieCount}}</span>+</p>
+              <p class='num'><span>{{homeObj.celebrityCount}}</span>+</p>
               <p class='name'>在线影视演艺演员人数</p>
             </li>
             <li class='works-num'>
-              <p class='num'><span>8778{{homeObj.copyCount}}</span>+</p>
+              <p class='num'><span>{{homeObj.copyCount}}</span>+</p>
               <p class='name'>作品库存量</p>
             </li>
             <li class=''>
-              <p class='num'><span>152{{homeObj.personCount}}</span>+</p>
+              <p class='num'><span>{{homeObj.subjectCount}}</span>+</p>
               <p class='name'>奖惩信息</p>
             </li>
          </ul>
@@ -90,6 +90,7 @@
     },
 
     created: function() {
+      this.getHomeData();
       window.onhashchange = ()=> {
         this.changeTab();
       };

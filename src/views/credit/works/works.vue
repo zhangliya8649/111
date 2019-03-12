@@ -48,8 +48,8 @@
                    {name: '全部', type: ''},
                    {name: '电影', type: 'movie'},
                    {name: '电视剧', type: 'tv'},
-                   {name: '动画片', type: 'movie'},
-                   {name: '纪录片', type: 'movie'}
+                   {name: '动画片', type: 'cartoon'},
+                   {name: '纪录片', type: 'docFilm'}
                  ]
           },
           {
@@ -64,9 +64,9 @@
             title: '演出',
             con: [
                    {name: '全部', type: ''},
-                   {name: '舞台剧', type: ''},
-                   {name: '歌曲', type: ''},
-                   {name: '曲艺', type: ''}
+                   {name: '舞台剧', type: 'stagePlay'},
+                   {name: '歌曲', type: 'song'},
+                   {name: '曲艺', type: 'folkArt'}
                  ]
           }
         ]
