@@ -3,56 +3,50 @@
       <div class='rule-tit'>
         <div class='w1180'>
           <p>影视行业信用信息服务平台信用管理规定（试行）</p>
-          <span v-for="(tab, index) in tabs" :key='index' :class="curIndex == index ? 'active' : ''" @click='tabMenu(index)'>{{tab.name}}</span>
+          <span v-for="(tab, index) in tabs" :key='index' :class="curIndex == index ? 'active' : ''" @click='tabMenu(index)'>{{tab.title}}</span>
         </div>
       </div>
       <div class='rule-con'>
         <div class='w1180'>
-          <child :is='curRule' :content='content'></child>
+          <RuleCon :content='content'></RuleCon>
         </div>
       </div>
   </div>
 </template>
 
 <script>
-  import Red from './red/red'
-  import Gray from './gray/gray'
-  import Black from './black/black'
+  import RuleCon from './ruleCon/ruleCon'
   export default {
     name: 'creditRule',
     components: {
-      Red,
-      Gray,
-      Black
+      RuleCon
     },
     data() {
       return {
         curIndex: 0,
-        curRule: 'Red',
         content: '',
         tabs: [
+        /*
           {name: '红名单', childCom: 'Red'},
           {name: '黑名单', childCom: 'Black'},
-          {name: '灰名单', childCom: 'Gray'}
+          {name: '灰名单', childCom: 'Gray'}*/
         ]
       }
     },
     methods: {
       tabMenu(index) {
         this.curIndex = index;
-        this.curRule = this.tabs[index].childCom;
-        this.getContent(index + 1);
+        this.content = this.tabs[index].content;
       },
 
-      getContent(index) {
+      getContent() {
         this.Http.post(this.Action.SearchCreditRule).then((res) => {
-            let list = res.list;
-            for(let i = 0; i < list.length; i++) {
-              if(list[i].id == index) {
-                this.content = list[i].content;
-                break;
+            for(let i = 0; i < res.list.length; i++) {
+              if(res.list[i].isShow == 2) {
+                this.tabs.push(res.list[i]);
               }
             }
+            this.content = this.tabs[0].content;
         }).catch((err) => {
 
         })
@@ -62,6 +56,7 @@
     created() {
 
     },
+
     mounted() {
       this.getContent();
     }
@@ -99,7 +94,7 @@
       }
     }
     .rule-con {
-      height: 300px;
+      min-height: 395px;
       padding-top: 25px;
       padding-bottom: 82px;
     }

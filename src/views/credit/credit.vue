@@ -73,6 +73,7 @@
 
 <style lang='less' scoped>
   .child-router {
+    min-height: 568px;
     padding-bottom: 30px;
     background: #fff;
   }

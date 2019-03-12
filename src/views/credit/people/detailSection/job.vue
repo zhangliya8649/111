@@ -6,7 +6,7 @@
 </template>
 <script>
 import TimeLine from '../../../personal/peronalPage/timeLine/timeLine'
-
+import Until from '../../../../until/until.js'
 
 export default {
     components:{TimeLine},
@@ -22,7 +22,7 @@ export default {
     created: function() {
         //赋值
         this.id = this.$route.query.id;
-        this.token = this.$store.state.token;
+        this.token = Until.getUser().token;
 
         //查询人物基本信息
         if(this.$store.state.isLogin) {

@@ -50,7 +50,7 @@ export default {
                 resolve(res.data.data);
                 Message({
                   type:'error',
-                  message:'token已失效，请重新登录！'
+                  message:'登录超时，请重新登录！'
                 })
               }
               if (res.data.code == 200) {

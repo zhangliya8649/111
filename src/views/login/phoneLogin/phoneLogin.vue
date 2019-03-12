@@ -94,7 +94,7 @@ export default {
                   })
                   sessionStorage.setItem('userInfo',JSON.stringify(res))
                   this.$store.commit('setUserInfo')
-                  this.$router.push({path:'/Personal'})
+                  this.$router.push({path:'/'})
               }).catch((err) => {
                 Until.ErrorCode(err.code);
               })
@@ -130,13 +130,7 @@ export default {
             imgId : this.imgId,
             imgCode : this.imgCode
           }
-          this.Http.post(this.Action.getPhoneCode,data).then((res) => {
-            if(res){
-              this.$message({
-                type:'error',
-                message:'图片验证码错误'
-              })
-            }else{
+          this.Http.post(this.Action.getPhoneCode, data).then((res) => {
               this.getCode = false
               let timeInter = setInterval(() => {
                 this.seconds--
@@ -145,9 +139,8 @@ export default {
                   clearInterval(timeInter)
                 }
               },1000)
-            }
           }).catch((res) => {
-
+            Until.ErrorCode(res.code);
           })
         },
         //获取图片验证码
@@ -156,10 +149,7 @@ export default {
             this.codeImg = res.imgPath
             this.imgId = res.imgId
           }).catch((err) => {
-            this.$message({
-              type:'error',
-              message:err
-            })
+            Until.ErrorCode(res.code);
           });
         },
         //换一张

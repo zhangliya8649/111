@@ -22,15 +22,14 @@
     </div>
 </template>
 <script>
-
+import Until from '../../../../until/until.js'
 
 export default {
     components:{},
 
     data(){
         return{
-            honorDetail: [
-            ],
+            honorDetail: [],
         }
     },
 
@@ -39,7 +38,7 @@ export default {
     created: function() {
         //赋值
         this.id = this.$route.query.id;
-        this.token = this.$store.state.token;
+        this.token = Until.getUser().token;
 
         //查询人物基本信息
         if(this.$store.state.isLogin) {
@@ -60,7 +59,11 @@ export default {
        //公司荣誉
        getHonorDetail(param) {
          this.Http.post(this.Action.SearchCompanyHonorById, param).then((data) => {
-           this.tableData1 = data.list;
+           for(let i = 0; i < data.list.length; i++) {
+            if(data.list[i].isShow == 2) {
+              this.honorDetail.push(data.list[i]);
+            }
+           }
          }).catch((err) => {
            console.log(err);
          })

@@ -22,15 +22,14 @@
     </div>
 </template>
 <script>
-
+import Until from '../../../../until/until.js'
 
 export default {
     components:{},
 
     data(){
         return{
-            creditDetail: [
-            ],
+            creditDetail: [],
         }
     },
 
@@ -39,7 +38,7 @@ export default {
     created: function() {
         //赋值
         this.id = this.$route.query.id;
-        this.token = this.$store.state.token;
+        this.token = Until.getUser().token;
 
         //查询人物基本信息
         if(this.$store.state.isLogin) {
@@ -47,7 +46,7 @@ export default {
             celebrityId: this.id,
             token: this.token
           };
-          this.getDetail('creditDetail', param);
+          this.getDetail(param);
         }
 
     },
@@ -58,20 +57,12 @@ export default {
 
     methods:{
         //获取人物详情基本信息
-        getDetail(type, param) {
-          let typeObj = {
-            'basicDetail': 'SearchPersonById',
-            'jobDetail': 'SearchPersonWorkById',
-            'honorDetail': 'SearchPersonHonorById',
-            'benefitDetail': 'SearchPersonBenefitById',
-            'creditDetail': 'SearchPersonCreditById',
-            'worksDetail' : 'SearchWorkNumById'
-          }
-          this.Http.post(this.Action[typeObj[type]], param).then((data) => {
-            this[type] = type == 'basicDetail' ? data.celebrity : data.list;
-            if(type == 'worksDetail') {
-              this.workTotal = data.total;
-              this[type] = this[type].length > 6 ? this[type].slice(0, 6) : this[type];
+        getDetail(param) {
+          this.Http.post(this.Action.SearchPersonCreditById, param).then((data) => {
+            for(let i = 0; i < data.list.length; i++) {
+              if(data.list[i].isShow == 2) {
+                this.creditDetail.push(data.list[i]);
+              }
             }
           }).catch((err) => {
             console.log(err);

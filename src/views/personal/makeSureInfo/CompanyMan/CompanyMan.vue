@@ -13,7 +13,7 @@
                 @click="certification(scope.row)"
                 type="text"
                 size="small"
-              >未认证</el-button>
+              >去认证</el-button>
               <el-button v-if="scope.row.claimState === 2" type="text" size="small">认证中</el-button>
               <el-button v-if="scope.row.claimState === 3" type="text" size="small">已认证</el-button>
             </template>
