@@ -9,39 +9,39 @@
                 <div class="content" v-if='showBasicInfo'>
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">姓名：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.celebrityName}}</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.celebrityName ? basicInfo.celebrityName : '&nbsp'}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">性别：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.sex}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.sex ? basicInfo.sex : '&nbsp'}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">年龄：</div></el-col>
-                        <el-col :span="5"><div class="grid-content bg-purple">{{basicInfo.age}}</div></el-col>
+                        <el-col :span="5"><div class="grid-content bg-purple">{{basicInfo.age ? basicInfo.age : '&nbsp'}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">祖籍：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.nationality}}</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.nationality ? basicInfo.nationality : '&nbsp'}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">公司：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.agency}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.agency ? basicInfo.agency : '&nbsp'}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">职务：</div></el-col>
-                        <el-col :span="5"><div class="grid-content bg-purple">{{basicInfo.position}}</div></el-col>
+                        <el-col :span="5"><div class="grid-content bg-purple">{{basicInfo.position ? basicInfo.position : '&nbsp'}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">学历：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.education}}</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.education ? basicInfo.education : '&nbsp'}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">职业：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.occupation}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.occupation ? basicInfo.occupation : '&nbsp'}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">政治面貌：</div></el-col>
-                        <el-col :span="5"><div class="grid-content bg-purple">{{basicInfo.politics}}</div></el-col>
+                        <el-col :span="5"><div class="grid-content bg-purple">{{basicInfo.politics ? basicInfo.politics : '&nbsp'}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">执业时间：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.workingYear}}</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.workingYear ? basicInfo.workingYear : '&nbsp'}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">职业证书：</div></el-col>
-                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.certificate}}</div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">{{basicInfo.certificate ? basicInfo.certificate : '&nbsp'}}</div></el-col>
                         <el-col :span="3"><div class="grid-content bg-purple">证书时间：</div></el-col>
-                        <el-col :span="5"><div class="grid-content bg-purple">{{basicInfo.certificateTime}}</div></el-col>
+                        <el-col :span="5"><div class="grid-content bg-purple">{{basicInfo.certificateTime ? basicInfo.certificateTime : '&nbsp'}}</div></el-col>
                     </el-row>
                     <el-row :gutter="20" class="row">
                         <el-col :span="3"><div class="grid-content bg-purple">代表作品：</div></el-col>
-                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.magnumOpus}}</div></el-col>
+                        <el-col :span="4"><div class="grid-content bg-purple">{{basicInfo.magnumOpus ? basicInfo.magnumOpus : '&nbsp'}}</div></el-col>
                     </el-row>
                 </div>
                 <div class="content" v-else>
