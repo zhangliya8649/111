@@ -1,5 +1,5 @@
 <template>
-  <div class="outer">
+  <div class="outer w1180">
     <div class="personalInfo Box">
       <p class="title">个人信息</p>
       <el-form
@@ -12,8 +12,8 @@
       >
         <el-row>
           <el-col :span="8">
-            <el-form-item label="昵称" prop="name">
-              <el-input v-model="personalInfo.name" style="width:240px"></el-input>
+            <el-form-item label="昵称" prop="nickName">
+              <el-input v-model="personalInfo.nickName" style="width:240px"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -33,8 +33,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="电话" prop="telphone">
-              <el-input v-model="personalInfo.telphone" style="width:240px"></el-input>
+            <el-form-item label="电话" prop="phone">
+              <el-input v-model="personalInfo.phone" :disabled='true' style="width:240px"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8"></el-col>
@@ -204,16 +204,37 @@ export default {
       }
     };
   },
+  mounted() {
+    console.log(111);
+    this.getUserInfo();
+  },
   methods: {
+    //获取用户信息
+     getUserInfo(){
+         let data = {
+             id: Until.getUserSmallInfo().id,
+             token: Until.getUser().token
+         }
+         this.Http.post(this.Action.normalInfo, data).then((res) => {
+             // 处理sex性别
+             res.baseInfo.sex == 1 ? res.baseInfo.sex = '男' : res.baseInfo.sex = '女'
+             this.personalInfo = res.baseInfo;
+             this.personalInfo.phone = this.personalInfo.phone.substr(0, 4) + '****' + this.personalInfo.phone.substr(7, 11);
+             // 缓存数据,克隆
+             this.cacheBasicInfo = Until.cloneObj(res.baseInfo);
+         }).catch((err) => {
+             console.log(err)
+         })
+     },
     editPersonal(formName) {
       //确认修改个人信息
       this.$refs[formName].validate(valid => {
         if (valid) {
           let data = {
-            nickName: this.personalInfo.name,
+            nickName: this.personalInfo.nickName,
             sex: this.personalInfo.sex,
             age: this.personalInfo.age,
-            telphone: this.personalInfo.telphone,
+            phone: this.personalInfo.phone,
             userType: this.active,
             token: Until.getUser().token
           };
@@ -236,7 +257,7 @@ export default {
           message: "提交成功",
           type: "success"
         });
-      }).catch(() => {Until.ErrorCode(err.code)});
+      }).catch((err) => {Until.ErrorCode(err.code)});
     },
     editPass(formName) {
       // 确认修改密码
@@ -307,4 +328,9 @@ export default {
     box-sizing: border-box;
   }
 }
+</style>
+<style>
+  .el-input {
+    position: static;
+  }
 </style>

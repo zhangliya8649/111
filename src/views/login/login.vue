@@ -2,12 +2,6 @@
   <div>
     <div class='bg'>
         <div class='bg-par w1180 clear'>
-          <!-- <img src='../../assets/login/yxc-bg1.jpg' title='影信查' />
-          <img src='../../assets/login/yxc-bg2.jpg' title='影信查' />
-          <img src='../../assets/login/yxc-bg3.jpg' title='影信查' />
-          <img src='../../assets/login/yxc-bg4.jpg' title='影信查' />
-          <img src='../../assets/login/yxc-bg5.jpg' title='影信查' />
-          <img src='../../assets/login/yxc-bg6.jpg' title='影信查' /> -->
           <PasswordLogin v-if="loginNum == 0" @toggleLogin='toggleLogin'></PasswordLogin>
           <SpapLogin v-if="loginNum == 1" @toggleLogin='toggleLogin'></SpapLogin>
           <PhoneLogin v-if="loginNum == 2" @toggleLogin='toggleLogin'></PhoneLogin>

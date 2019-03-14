@@ -75,7 +75,6 @@ export default {
   modifyPwd: '/c10/user/modify/pwd',
   // 补全个人信息
   updatePersonInfo: '/c10/celebrity/update',
-  updateNormalInfo: '/c10/user/modify/user/info',
   // 根据名字获取电影名
   getSubject: '/c10/subject/list',
   // 人物关联添加作品
@@ -90,7 +89,8 @@ export default {
   searchCompany: '/c10/company/list',
 
   // 上传文件
-  upload: '/c10/upload',
+  upload: '/c10/file/upload',
+  uploadImg: '/c10/img/upload',
   // 提交公司证认证
   companyCertificate: '/c10/company/certificate',
   // 非业内人士资料修改

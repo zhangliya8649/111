@@ -11,7 +11,7 @@
         <div class='desc'>
           <div class='tit'>
               <a href='javascript:;' @click='openDetail(list.id, list.identityType)'>{{list.celebrityName}}</a>
-              <router-link to='/register' class='operator' v-if='list.claimState == 1'>未认领</router-link>
+              <a href='javascript:;' class='operator' @click='makeSure' v-if='list.claimState == 1'>未认领</a>
               <span class='operator' v-else-if='list.claimState == 2'>审核中</span>
               <span class='operator' v-else-if='list.claimState == 3'>已认领</span>
           </div>
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import Until from '../../until/until.js'
   export default {
     name: 'searchPeople',
 
@@ -64,6 +65,20 @@
           path: '/credit/people',
           query: {id: id, type: type}
         });
+      },
+      makeSure() {
+        if(Until.getUserToken()) {
+          if(Until.getUser().user.claimState != 1) {
+            this.$message.error("您已认领过，请勿重复认领");
+            return;
+          }else {
+            this.$router.push({
+              path: '/personal'
+            });
+          }
+        }else {
+          this.$message.error("请您先去登录");
+        }
       }
     }
   }

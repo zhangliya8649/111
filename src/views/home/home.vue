@@ -1,13 +1,14 @@
 <template>
   <div>
     <div class='bg'>
-        <div class='bg-par w1180 clear'>
+        <div class='bg-par'>
           <img src='../../assets/home/yxc-bg1.jpg' alt='影信查' />
           <img src='../../assets/home/yxc-bg2.jpg' alt='影信查' />
           <img src='../../assets/home/yxc-bg3.jpg' alt='影信查' />
           <img src='../../assets/home/yxc-bg4.jpg' alt='影信查' />
           <img src='../../assets/home/yxc-bg5.jpg' alt='影信查' />
           <img src='../../assets/home/yxc-bg6.jpg' alt='影信查' />
+          <img src='../../assets/home/yxc-bg7.jpg' alt='影信查' />
         </div>
         <div class='search-par'>
            <div class='title'>影视行业信用信息服务平台</div>
@@ -156,13 +157,10 @@
     position: relative;
     width: 100%;
     height: 724px;
-    background-image: url('../../assets/home/yxc-bg.png');
-    background-repeat: no-repeat;
-    background-position: top center;
-    background-size: 1920px 724px;
     .bg-par {
-      width: 1200px;
+      width: 100%;
       img {
+        width: 100%;
         display: block;
       }
     }

@@ -1,6 +1,24 @@
 <template>
   <div>
-    <div class="companyMan" v-if="find">
+    <div class="search-box">
+      <div class='w1180 clear'>
+        <div class="search">
+          <i slot="prefix" class="el-input__icon el-icon-search"></i>
+          <input
+            type="text"
+            class="input"
+            placeholder="请输入您的公司名称后选择对应公司进行认证"
+            v-model="searchName"
+            @keyup.delete='search'
+            @keyup.enter='search'
+          >
+          <el-button class="search-btn" @click="search">搜索</el-button>
+        </div>
+        <span class="findNot findNot-txt" @click="findNot">查询后未找到？</span>
+      </div>
+    </div>
+    <!--查询到的数据-->
+    <div class="companyMan w1180" v-if="find">
       <div class="companyInfo">
         <el-table :data="tableData" style="width: 100%">
           <el-table-column prop="name" label="公司名称" width="250"></el-table-column>
@@ -13,14 +31,21 @@
                 @click="certification(scope.row)"
                 type="text"
                 size="small"
-              >去认证</el-button>
-              <el-button v-if="scope.row.claimState === 2" type="text" size="small">认证中</el-button>
-              <el-button v-if="scope.row.claimState === 3" type="text" size="small">已认证</el-button>
+              ><a href='#auth'>去认证</a></el-button>
             </template>
           </el-table-column>
         </el-table>
+        <el-pagination
+          small
+          layout="prev, pager, next"
+          :total="total"
+          :current-page='pageNum'
+          @current-change='changeCurrentPage'
+          v-if='total > 10'>
+        </el-pagination>
       </div>
-      <div class="companyCertification" v-if="companyCertific">
+      <!--去认证上传-->
+      <div class="companyCertification" id='auth'>
         <p class="certification">企业认证</p>
         <div class="certificationBox">
           <div class="certificationLeft">
@@ -57,19 +82,7 @@
         </div>
       </div>
     </div>
-    <div class="companyMan" v-else>
-      <div class="companyInfo">
-        <el-table :data="tableData1" style="width: 100%">
-          <el-table-column prop="name" label="公司名称" width="250"></el-table-column>
-          <el-table-column prop="class" label="公司信用评级" width="180"></el-table-column>
-          <el-table-column prop="address" label="公司地址" width="550"></el-table-column>
-          <el-table-column prop="action" label="操作" align="center">
-            <template slot-scope="scope">
-              <el-button @click="handleClick2(scope.row)" type="text" size="small">去认证</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
+    <div class="companyMan w1180" v-else>
       <!-- 没有查询到的上传 -->
       <div class="findNot">
         <el-form
@@ -126,7 +139,7 @@
   </div>
 </template>
 <script>
-import Upload from "./upload/upload";
+import Upload from "./upload/upload.vue";
 import Until from "../../../../until/until.js";
 export default {
   components: { Upload },
@@ -147,19 +160,14 @@ export default {
       }
     };
     return {
+      pageNum: 1,
+      searchName: '',
+      total: 0,
       file: [],
       find: true, //是否查询到公司
       actionUrl: "", //上传地址
       token: "",
       tableData: [],
-      tableData1: [
-        {
-          //未查询到占位
-          name: "xxx",
-          class: "0级",
-          address: "xxxxxxxxx"
-        }
-      ],
       findCompany: {
         //天眼查公司
         name: "",
@@ -171,8 +179,9 @@ export default {
         name: [{ validator: validateName, trigger: "blur" }],
         url: [{ validator: validateUrl, trigger: "blur" }]
       },
-      companyCertific: false, //点击认证按钮显示
-      currentRow: ""
+     // companyCertific: false, //点击认证按钮显示
+      //currentRow: "",
+      fileJson: []
     };
   },
   mounted() {
@@ -180,9 +189,13 @@ export default {
     this.token = {
       token: Until.getUserToken()
     };
+    this.search();
   },
   beforeDestroy() {
     this.clear();
+  },
+  watch: {
+    active: 'watchType'
   },
   methods: {
     handleRemove(file, fileList) {
@@ -203,16 +216,17 @@ export default {
     },
     // 成功回调
     handleAvatarSuccess(res, file) {
-      console.log(res, file);
       if (res.code === 200) {
-        this.file.push(res.data.url);
+        let fileObj = {};
+        fileObj.filePath = res.data.url;
+        fileObj.fileName = res.data.fileName;
+        this.fileJson.push(fileObj);
       }
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log(this.file.length);
-          if (this.file.length >= 3) {
+          if (this.file.length == 2) {
             this.eyeCompany();
           } else {
             this.$message.error("请上传必要文件和图片");
@@ -229,7 +243,8 @@ export default {
         url: this.findCompany.url,
         companyName: this.findCompany.name,
         identityType: this.active,
-        filePath: "[" + this.file + "]",
+        imgPath: "[" + this.file + "]",
+        filePath: JSON.stringify(this.fileJson),
         token: Until.getUserToken()
       };
       this.Http.post(this.Action.eyeCompany, data)
@@ -239,6 +254,19 @@ export default {
             message: "提交成功"
           });
           this.find = true;
+          this.clear();
+
+          //提交审核成功之后，更新下当前用户的缓存信息
+          /*
+          根据返回信息判断状态
+          变成已审核
+          跳转到个人中心
+          sessionStorage.setItem('userInfo',JSON.stringify(res));
+          sessionStorage.setItem('userSmallInfo', JSON.stringify(res.smallInfo));
+          this.$router.push({
+            path: '/personal'
+          });
+          */
         })
         .catch(err => {
           Until.ErrorCode(err.code);
@@ -252,25 +280,27 @@ export default {
       this.find = !this.find;
     },
     // 企业认证(不是新增)开关
+    /*
     companyCertificSwitch() {
       this.companyCertific = false;
-    },
+    },*/
     certification(row) {
       //认证按钮
-      this.companyCertific = !this.companyCertific;
       this.row = row;
-      console.log(this.row);
     },
     // 提交认证
     submitCertification() {
-      console.log("提交");
-      console.log(this.file.length);
-      if (this.file.length >= 3) {
+      if(!this.row) {
+        this.$message.error("请选择您要认领的公司");
+        return;
+      }
+      if (this.file.length == 2) {
         let data = {
           companyId: this.row.id,
           companyName: this.row.name,
           identityType: this.active,
-          filePath: "[" + this.file + "]",
+          imgPath: "[" + this.file + "]",
+          filePath: JSON.stringify(this.fileJson),
           token: Until.getUserToken()
         };
         this.Http.post(this.Action.companyCertificate, data)
@@ -280,7 +310,10 @@ export default {
               message: "提交成功",
               type: "success"
             });
-            this.certification();
+            this.clear();
+            this.$router.push({
+              path: '/Personal'
+            });
           })
           .catch(err => {
             Until.ErrorCode(err.code);
@@ -297,25 +330,49 @@ export default {
       //取消查找
       this.find = true;
     },
-    // type: 类型 searchName: 搜索内容
-    search(type, searchName) {
+    watchType(newType, oldType) {
+      if(newType != oldType) {
+        this.pageNum = 1;
+        this.searchName = '';
+        this.clear();
+        let data = {
+          type: this.active,
+          name: this.searchName,
+          pageNum: 1,
+          claimState: 1
+        };
+        this.getList(data);
+      }
+    },
+    //搜索内容
+    search() {
       this.clear();
-      this.find = true;
       //找到公司
-      console.log(type, searchName);
       let data = {
-        type,
-        name: searchName,
-        pageNum: 1
+        type: this.active,
+        name: this.searchName,
+        pageNum: 1,
+        claimState: 1
       };
-      this.Http.post(this.Action.searchCompany, data).then(res => {
-        this.tableData = res.list;
+      if(this.searchName == '') { data.pageNum = this.pageNum; }
+      this.getList(data);
+    },
+    getList(param) {
+      this.Http.post(this.Action.searchCompany, param).then(res => {
+        if(res.list.length > 0) {
+          this.total = res.total;
+          this.tableData = res.list;
+          this.find = true;
+        }
+      }).catch((err) => {
+
       });
     },
     clear() {
       //清空信息
       this.tableData = [];
       this.file = [];
+      this.fileJson = [];
       this.findCompany = {
         name: "",
         url: ""
@@ -328,15 +385,84 @@ export default {
     // 保存上传图片的url数组
     saveIDCard(files) {
       this.file = files;
+    },
+    //分页
+    changeCurrentPage(val) {
+      this.pageNum = val;
+      let data = {
+        type: this.active,
+        name: this.searchName,
+        pageNum: this.pageNum,
+        claimState: 1
+      };
+      this.getList(data);
     }
   }
 };
 </script>
 <style lang="less" scoped>
+.search-box {
+  width: 100%;
+  height: 56px;
+  display: inline-block;
+  background-color: #faf8f7;
+  padding-bottom: 30px;
+  .search {
+    width: 840px;
+    height: 100%;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    float: left;
+    .el-icon-search {
+      height: 100%;
+      width: 56px;
+      margin-top: 10px;
+      font-size: 21px;
+      color: #000;
+    }
+    .input {
+      outline: none;
+      border: none;
+      height: 56px;
+      width: 100%;
+    }
+    .search-btn {
+      height: 56px;
+      width: 148px;
+      background-color: #f58523;
+      border-color: #f58523;
+      color: #fff;
+      border-radius: 0;
+    }
+  }
+}
+.findNot {
+  font-family: PingFang-SC-Medium;
+  font-size: 16px;
+  color: #666666;
+  letter-spacing: 0;
+  margin-left: 20px;
+  margin-top: 35px;
+}
+.findNot-txt {
+  float: left;
+  height: 22px;
+  line-height: 22px;
+  cursor: pointer;
+  vertical-align: bottom;
+}
 .companyMan {
   margin-top: 40px;
   .companyInfo {
     margin-bottom: 60px;
+    table {
+      button {
+        a {
+          color: #409EFF;
+        }
+      }
+    }
   }
   .companyCertification {
     .certification {

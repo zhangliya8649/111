@@ -35,6 +35,7 @@
 <script>
 import Upload from "./upload/upload";
 import Until from "../../../../until/until.js";
+import api from "../../../../request/api.js";
 let gou = require("../../../../assets/img/gou.png");
 export default {
   props: ["userMsg", "userType", "index"],
@@ -59,15 +60,23 @@ export default {
       let data = {
         celebrityId: this.userMsg[this.index].id,
         celebrityName: this.userMsg[this.index].celebrityName,
-        filePath: "[" + this.file + "]",
+        imgPath: "[" + this.file + "]",
+        filePath:'',
         userType: this.userType,
         token: Until.getUserToken()
       };
-      this.Http.post(this.Action.claimUser, data).then(res => {
+      api.post(this.Action.claimUser, data).then(res => {
         this.DialogVisible = false;
         this.uploadOver = true;
         this.$message.success('提交成功')
         this.$emit("editClaim", this.index);
+        /*
+        sessionStorage.setItem('userInfo',JSON.stringify(res));
+        sessionStorage.setItem('userSmallInfo', JSON.stringify(res.smallInfo));
+        this.$router.push({
+          path: '/personal'
+        });
+        */
       }).catch((err) => {
         Until.ErrorCode(err.code);
         this.DialogVisible = false;

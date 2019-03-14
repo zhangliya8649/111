@@ -86,7 +86,7 @@ export default {
                userType: 5,
                token: Until.getUser().token
            }
-           this.Http.post(this.Action.updateNormalInfo, data).then(res => {
+           this.Http.post(this.Action.outer, data).then(res => {
                this.getUserInfo();
                this.$message({
                    message: '修改成功',

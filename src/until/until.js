@@ -92,6 +92,10 @@ class Util {
           type:'error',
           message:'图片验证码错误'
         });break;
+        case 10007 : Message({
+          type:'error',
+          message:'参数错误'
+        });break;
         case 10011 : Message({
           type:'error',
           message:'手机号无效'

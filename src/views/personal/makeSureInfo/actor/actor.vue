@@ -1,7 +1,22 @@
 <template>
     <div>
-        <div class="actor">
-            <p class="title">认领您的信息</p>
+        <div class="search-box">
+          <div class='w1180'>
+             <div class="search">
+               <i slot="prefix" class="el-input__icon el-icon-search"></i>
+               <input
+                 type="text"
+                 class="input"
+                 placeholder="请输入艺人的姓名"
+                 v-model="searchName"
+                 @keyup.enter='search'
+                 @keyup.delete='search'
+               >
+               <el-button class="search-btn" @click="search">搜索</el-button>
+             </div>
+          </div>
+        </div>
+        <div class="actor w1180">
             <div class="userInfo-box" v-for="(userInfo,index) in searchMsg" :key='index'>
                 <div class="userInfo">
                     <div class="userInfo-left">
@@ -13,12 +28,6 @@
                                 <div>
                                     <span class="userName">{{userInfo.celebrityName}}</span>
                                     <button v-if="userInfo.claimState == 1" class="goSure" @click="goSure(index)">去认领</button>
-                                    <span class="notSure" v-if="userInfo.claimState == 2">
-                                        <img :src="notSureIcon" class="notSureIcon"><span class="suring">审核中...</span>
-                                    </span>
-                                    <span class="notSure" v-if="userInfo.claimState == 3">
-                                        <img :src="SuredIcon" class="notSureIcon"><span class="sured">已审核</span>
-                                    </span>
                                 </div>
                             </div>
                             <div class="selfInfo-center">
@@ -64,8 +73,9 @@
                     </div>
                 </div>
             </div>
+            <el-pagination background layout='prev, pager, next' :total='total' :current-page='pageNum' @current-change='changeCurrentPage' v-if='total > 10'></el-pagination>
         </div>
-        <Dialog ref='dialog' :userMsg='searchMsg' :userType='identityType' :index='index' @editClaim='editClaim'></Dialog>
+        <Dialog ref='dialog' :userMsg='searchMsg' :userType='type' :index='index' @editClaim='editClaim'></Dialog>
     </div>
 </template>
 <script>
@@ -75,55 +85,130 @@ let SuredIcon = require('../../../../assets/img/sured.png')
 let classIcon = require('../../../../assets/img/class.png')
 let goalIcon = require('../../../../assets/img/goal.png')
 let notIcon = require('../../../../assets/img/not.png')
-import Dialog from '../dialog/dialog' 
+import Dialog from '../dialog/dialog'
 import Until from '../../../../until/until.js'
 export default {
     components:{Dialog},
     data(){
         return{
             index:0,        //当前点击的用户
-            identityType:2,     //当前用户类别
-            input:'',   //双向绑定搜索
-            searchMsg:[
-            ], 
+            searchMsg:[],
             notSureIcon: notSureIcon,   //未认领图标
             SuredIcon: SuredIcon,   //未认领图标
             classIcon: classIcon,   //信用等级图标
             goalIcon: goalIcon,   //表彰图标
             notIcon: notIcon,   //失信信息图标
+            pageNum: 1,
+            searchName: '',
+            total: 0
         }
     },
-    beforeDestroy() {
-        this.clear()
+    watch: {
+      type: 'watchType'
     },
+    props: ['type'],
+
+    beforeDestroy() {
+        this.clear();
+    },
+
+    mounted() {
+      this.search();
+    },
+
     methods:{
         goSure(index){       //认领
-            this.$refs.dialog.showDialog()
-            this.index = index
+            this.$refs.dialog.showDialog();
+            this.index = index;
         },
-        search(num,name){       //找到人
+        getList(param) {
+           this.Http.post(this.Action.searchActor, param).then((res) => {
+                this.total = res.total;
+                this.searchMsg = res.list;
+           }).catch((err) => {
+                Until.ErrorCode(err.code);
+           })
+        },
+        watchType(newType, oldType) {
+          if(newType != oldType) {
+            this.pageNum = 1;
+            this.searchName = '';
+            this.searchMsg = [];
             let data = {
-                celebrityName:name,
-                identityType:num,
-                pageNum:1
+                celebrityName: this.searchName,
+                identityType: this.type,
+                pageNum: 1,
+                claimState: 1
             }
-            this.Http.post(this.Action.searchActor,data).then((res) => {
-                this.searchMsg = res.list    
-            }).catch((err) => {
-                Until.ErrorCode(err.code)
-            })
-            this.identityType = num
+            this.getList(data);
+          }
+        },
+        search(){       //找到人
+            let data = {
+                celebrityName: this.searchName,
+                identityType: this.type,
+                pageNum: 1,
+                claimState: 1
+            }
+            if(this.searchName == '') { data.pageNum = this.pageNum; }
+            this.getList(data);
         },
         clear(){            //清空信息
-            this.searchMsg = []
+            this.searchMsg = [];
         },
         editClaim(index){        //修改认领信息
             this.searchMsg[index].claimState = 2
+        },
+        //分页
+        changeCurrentPage(val) {
+          this.pageNum = val;
+          let data = {
+              celebrityName: this.searchName,
+              identityType: this.type,
+              pageNum: this.pageNum,
+              claimState: 1
+          }
+          this.getList(data);
         }
     }
 }
 </script>
 <style lang="less" scoed>
+    .search-box {
+      width: 100%;
+      height: 56px;
+      display: inline-block;
+      background-color: #faf8f7;
+      padding-bottom: 30px;
+      .search {
+        width: 840px;
+        height: 100%;
+        background-color: #fff;
+        display: flex;
+        justify-content: space-between;
+        .el-icon-search {
+          height: 100%;
+          width: 56px;
+          margin-top: 10px;
+          font-size: 21px;
+          color: #000;
+        }
+        .input {
+          outline: none;
+          border: none;
+          height: 56px;;
+          width: 100%;
+        }
+        .search-btn {
+          height: 56px;
+          width: 148px;
+          background-color: #f58523;
+          border-color: #f58523;
+          color: #fff;
+          border-radius: 0;
+        }
+      }
+    }
     .actor{
             padding-top: 50px;
             margin-bottom: 20px;
@@ -272,8 +357,8 @@ export default {
                                 font-family: PingFang-SC-Medium;
                                 color: #9B9B9B;
                                 line-height: 20px;
-                                font-size: 16px; 
-                                .reword{   
+                                font-size: 16px;
+                                .reword{
                                     letter-spacing: 12px;
                                 }
                             }
@@ -282,4 +367,7 @@ export default {
                 }
             }
         }
+</style>
+<style>
+  @import '../../../page.css'
 </style>

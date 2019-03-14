@@ -73,15 +73,15 @@ export default {
             var data = new FormData()
             data.append('file', imgObj)
             data.append('token', Until.getUserToken())
-            api.post(this.Action.upload, data).then(res => {
-                console.log(res.url)
+            api.post(this.Action.uploadImg, data).then((res) => {
                 if(res.url) {
                     resolve(res.url)
                 }
-                reject('')
+            }).catch(() => {
+              reject('');
             })
         })
-        return url 
+        return url
     },
   }
 };
