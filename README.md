@@ -1,6 +1,7 @@
 # filmcreditinquiry
 
 > 影视信用查询
+技术vue+element-ui
 
 ## Build Setup
 
